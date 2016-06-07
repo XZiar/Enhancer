@@ -69,13 +69,13 @@ $(document).ready(function()
 						</thead>
 						<tbody id="tasklist">
 							<c:set var="tstatus" value="${fn:split('待审核,报名中,报名截止,进行中,已完结', ',')}" />
-							<c:forEach var="t" items="${tasks }">
+							<c:forEach var="t" items="${tasks}">
 								<tr>
-									<td class="ttitle" data-tid="<c:out value='${t.TID} '/>">
+									<td class="ttitle" data-tid="<c:out value='${t.tid} '/>">
 										<c:out value='${t.title} '/>
 									</td>
 									<td><c:out value='${tstatus[t.status]}'/></td>
-									<td data-uid='c:out value="${t.UID} "/>'>
+									<td data-uid='c:out value="${t.uid} "/>'>
 										<c:out value='${t.launcher} '/>
 									</td>
 									<td class="ttime"><c:out value='${t.time_start} '/></td>

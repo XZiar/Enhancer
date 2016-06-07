@@ -29,7 +29,7 @@ $(document).ready(function()
 	</div>
 	<div class="g_4 quick_stats" data-url="mytasks">
 		<div class="big_stats users_stats">
-			<c:out value="${obj.task_progress}"/>
+			<c:out value="${obj.task_ongoing}"/>
 		</div>
 		<h5 class="stats_info">进行中任务数</h5>
 	</div>

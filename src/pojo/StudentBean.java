@@ -70,7 +70,7 @@ public class StudentBean extends UserBean
 	{
 		this.time_enter = time_enter;
 	}
-	public void setSinitTime(String time)
+	public void setStime_enter(String time)
 	{
 		if(time == null)
 		{

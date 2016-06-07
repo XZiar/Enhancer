@@ -191,7 +191,7 @@ $(document).ready(function()
 							<div class="line_grid half">
 								<div class="g_3"><span class="label">身份证号<span class="must">*</span></span></div>
 								<div class="g_9">
-									<input type="tel" name="stu.ID" placeholder="身份证号" pattern="^[0-9]{17}[0-9,x,X]$" class="simple_field" data-type="id" required>
+									<input type="tel" name="stu.id_person" placeholder="身份证号" pattern="^[0-9]{17}[0-9,x,X]$" class="simple_field" data-type="id" required>
 									<div class="field_alert"></div>
 								</div>
 							</div>
@@ -205,14 +205,14 @@ $(document).ready(function()
 							<div class="line_grid half">
 								<div class="g_3"><span class="label">入学时间<span class="must">*</span></span></div>
 								<div class="g_9">
-									<input type="month" name="stu.sinitTime" class="simple_field" required>
+									<input type="month" name="stu.stime_enter" class="simple_field" required>
 									<div class="field_alert"></div>
 								</div>
 							</div>
 							<div class="line_grid half">
 								<div class="g_3"><span class="label">学号<span class="must">*</span></span></div>
 								<div class="g_9">
-									<input type="tel" name="stu.studentID" class="simple_field" required>
+									<input type="tel" name="stu.id_student" class="simple_field" required>
 									<div class="field_alert"></div>
 								</div>
 							</div>
@@ -253,14 +253,14 @@ $(document).ready(function()
 							<div class="line_grid half">
 								<div class="g_3"><span class="label">负责人姓名<span class="must">*</span></span></div>
 								<div class="g_9">
-									<input type="text" name="cpn.legal_name" placeholder="负责人姓名" class="simple_field" required>
+									<input type="text" name="cpn.name_legal" placeholder="负责人姓名" class="simple_field" required>
 									<div class="field_alert"></div>
 								</div>
 							</div>
 							<div class="line_grid half">
 								<div class="g_3"><span class="label">负责人身份证号<span class="must">*</span></span></div>
 								<div class="g_9">
-									<input type="tel" name="cpn.legal_ID" pattern="^[0-9]{17}[0-9,x,X]$" placeholder="负责人身份证号" class="simple_field" data-type="id" required>
+									<input type="tel" name="cpn.id_legal" pattern="^[0-9]{17}[0-9,x,X]$" placeholder="负责人身份证号" class="simple_field" data-type="id" required>
 									<div class="field_alert"></div>
 								</div>
 							</div>
@@ -289,7 +289,7 @@ $(document).ready(function()
 								<div class="g_3"><span class="label">上传法人证件照</span></div>
 								<div class="g_9">
 									<div class="uploader" id="uniform-undefined">
-										<input type="file" class="simple_form" name="cpn.img_ID.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg">
+										<input type="file" class="simple_form" name="cpn.img_id.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg">
 										<span class="filename">请选择图片文件</span>
 										<span class="action" id="upimg"></span>
 									</div>
@@ -302,7 +302,7 @@ $(document).ready(function()
 								<div class="g_3"><span class="label">上传公司营业执照</span></div>
 								<div class="g_9">
 									<div class="uploader" id="uniform-undefined">
-										<input type="file" class="simple_form" name="cpn.img_CoLtd.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg">
+										<input type="file" class="simple_form" name="cpn.img_coltd.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg">
 										<span class="filename">请选择图片文件</span>
 										<span class="action" id="upimg"></span>
 									</div>
