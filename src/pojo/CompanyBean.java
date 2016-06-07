@@ -5,10 +5,10 @@ import java.io.InputStream;
 
 public class CompanyBean extends UserBean
 {
-	private String legal_name;
-	private String legal_ID;
-	private ImgBean img_ID;
-	private ImgBean img_CoLtd;
+	private String name_legal;
+	private String id_legal;
+	private ImgBean img_id;
+	private ImgBean img_coltd;
 	private String cel;
 	private String tel;
 	private String addr;
@@ -16,58 +16,62 @@ public class CompanyBean extends UserBean
 	
 	public CompanyBean()
 	{
-		this.gender = true;
 	}
 	
-	public String getLegal_name()
+	public CompanyBean(AccountBean account)
 	{
-		return legal_name;
+		super(account);
 	}
-	public void setLegal_name(String legal_name)
+	
+	public String getName_legal()
 	{
-		this.legal_name = legal_name;
+		return name_legal;
 	}
-	public String getLegal_ID()
+	public void setName_legal(String name_legal)
 	{
-		return legal_ID;
+		this.name_legal = name_legal;
 	}
-	public void setLegal_ID(String legal_ID)
+	public String getId_legal()
 	{
-		this.legal_ID = legal_ID;
+		return id_legal;
+	}
+	public void setId_legal(String id_legal)
+	{
+		this.id_legal = id_legal;
 	}
 	
 	public ImgBean getImg_ID()
 	{
-		return img_ID;
+		return img_id;
 	}
 	public void setImg_ID(ImgBean img_ID)
 	{
-		this.img_ID = img_ID;
+		this.img_id = img_ID;
 	}
-	public InputStream getPic_ID()
+	public InputStream getPic_id()
 	{
-		return new ByteArrayInputStream(img_ID.getData());
+		return new ByteArrayInputStream(img_id.getData());
 	}
-	public void setPic_ID(byte[] data)
+	public void setPic_id(byte[] data)
 	{
-		img_ID = new ImgBean(data);
+		img_id = new ImgBean(data);
 	}
 	
-	public ImgBean getImg_CoLtd()
+	public ImgBean getImg_coltd()
 	{
-		return img_CoLtd;
+		return img_coltd;
 	}
-	public void setImg_CoLtd(ImgBean img_CoLtd)
+	public void setImg_coltd(ImgBean img_coltd)
 	{
-		this.img_CoLtd = img_CoLtd;
+		this.img_coltd = img_coltd;
 	}
-	public InputStream getPic_CoLtd()
+	public InputStream getPic_coltd()
 	{
-		return new ByteArrayInputStream(img_CoLtd.getData());
+		return new ByteArrayInputStream(img_coltd.getData());
 	}
-	public void setPic_CoLtd(byte[] data)
+	public void setPic_coltd(byte[] data)
 	{
-		img_CoLtd = new ImgBean(data);
+		img_coltd = new ImgBean(data);
 	}
 	
 	public String getCel()

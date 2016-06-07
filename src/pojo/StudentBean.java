@@ -4,19 +4,47 @@ import java.util.regex.Pattern;
 
 public class StudentBean extends UserBean
 {
-	private String ID;
+	private boolean gender;
+	private String id_person;
 	private String school;
-	private String studentID;
-	private int initTime;
+	private String id_student;
+	private int time_enter;
 	
-	
-	public String getID()
+	public StudentBean()
 	{
-		return ID;
+		
 	}
-	public void setID(String iD)
+	
+	public StudentBean(AccountBean account)
 	{
-		ID = iD;
+		super(account);
+	}
+
+	public Boolean getGender()
+	{
+		return gender;
+	}
+
+	public void setGender(Boolean gender)
+	{
+		this.gender = gender;
+	}
+
+	public void setSgender(String gender)
+	{
+		if ("true".equals(gender))
+			this.gender = true;
+		else if ("false".equals(gender))
+			this.gender = false;
+	}
+	
+	public String getId_person()
+	{
+		return id_person;
+	}
+	public void setId_person(String id_person)
+	{
+		this.id_person = id_person;
 	}
 	public String getSchool()
 	{
@@ -26,39 +54,39 @@ public class StudentBean extends UserBean
 	{
 		this.school = school;
 	}
-	public String getStudentID()
+	public String getId_student()
 	{
-		return studentID;
+		return id_student;
 	}
-	public void setStudentID(String studentID)
+	public void setId_student(String id_student)
 	{
-		this.studentID = studentID;
+		this.id_student = id_student;
 	}
-	public int getInitTime()
+	public int getTime_enter()
 	{
-		return initTime;
+		return time_enter;
 	}
-	public void setInitTime(int initTime)
+	public void setTime_enter(int time_enter)
 	{
-		this.initTime = initTime;
+		this.time_enter = time_enter;
 	}
 	public void setSinitTime(String time)
 	{
 		if(time == null)
 		{
-			initTime = 0;
+			time_enter = 0;
 			System.out.println("null");
 			return;
 		}
 		if(Pattern.matches("^[1,2][0,9][0-9]{2}-(([0][1-9])|([1][0-2]))$", time) == false)
 		{
 			System.out.println("false");
-			initTime = 0;
+			time_enter = 0;
 			return;
 		}
 		Integer dy = Integer.parseInt(time.substring(0, 4));
 		Integer dm = Integer.parseInt(time.substring(5, 7));
-		initTime = dy * 100 + dm;
-		System.out.println(initTime);
+		time_enter = dy * 100 + dm;
+		System.out.println(time_enter);
 	}
 }

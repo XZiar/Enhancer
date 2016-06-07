@@ -1,89 +1,55 @@
 package pojo;
 
-public class UserBean
+public class UserBean extends AccountBean
 {
-	protected int UID = -1;
-	protected String un = "";
-	protected String pwd = "";
 	protected String name = "";
-	protected Boolean gender = null;
 	protected String describe = "";
-	protected int people = 1;
 	protected int score = 0;
-	protected int task_finish = 0, task_progress = 0;
-	
+	protected int task_finish = 0, task_ongoing = 0;
+
 	public UserBean()
 	{
-		
+
 	}
-	public UserBean(String un,String pwd)
+
+	public UserBean(AccountBean account)
+	{
+		super(account);
+	}
+	
+	public UserBean(String un, String pwd)
 	{
 		this.un = un;
 		this.pwd = pwd;
 	}
-	public UserBean(int UID, int people)
+
+	public UserBean(int uid, int people, String name, String describe,
+			int score, int task_finish, int task_ongoing)
 	{
-		this.UID = UID;
-		this.people = people;
-	}
-	public UserBean(int UID, int people, String name, Boolean gender, String describe,
-			int score, int task_finish, int task_progress)
-	{
-		this.UID = UID;
-		this.people = people;
+		setUid(uid);
 		setName(name);
-		setGender(gender);
 		setDescribe(describe);
 		setScore(score);
 		setTask_finish(task_finish);
-		setTask_progress(task_progress);
+		setTask_ongoing(task_ongoing);
 	}
+
 	public void copy(UserBean user)
 	{
-		this.UID = user.UID;
-		this.people = user.people;
+		this.uid = user.uid;
 		setName(user.name);
-		setGender(user.gender);
 		setDescribe(user.describe);
 		setScore(user.score);
 		setTask_finish(user.task_finish);
-		setTask_progress(user.task_progress);
-	}
-	
-	public int getUID()
-	{
-		return UID;
+		setTask_ongoing(user.task_ongoing);
 	}
 
-	public void setUID(int uID)
-	{
-		UID = uID;
-	}
 
-	public String getUn()
-	{
-		return un;
-	}
-	public void setUn(String un)
-	{
-		this.un = un;
-	}
-	public String getPwd()
-	{
-		return pwd;
-	}
-	public void setPwd(String pwd)
-	{
-		this.pwd = pwd;
-	}
 	public int getPeople()
 	{
-		return people;
+		return 1;
 	}
-	public void setPeople(int people)
-	{
-		this.people = people;
-	}
+
 	public String getName()
 	{
 		return name;
@@ -94,24 +60,8 @@ public class UserBean
 		this.name = name;
 	}
 
-	public Boolean getGender()
-	{
-		return gender;
-	}
-
-	public void setGender(Boolean gender)
-	{
-		this.gender = gender;
-	}
-
-	public void setSgender(String gender)
-	{
-		if("true".equals(gender))
-			this.gender = true;
-		else if("false".equals(gender))
-			this.gender = false;
-	}
 	
+
 	public String getDescribe()
 	{
 		return describe;
@@ -142,14 +92,13 @@ public class UserBean
 		this.task_finish = task_finish;
 	}
 
-	public int getTask_progress()
+	public int getTask_ongoing()
 	{
-		return task_progress;
+		return task_ongoing;
 	}
 
-	public void setTask_progress(int task_progress)
+	public void setTask_ongoing(int task_ongoing)
 	{
-		this.task_progress = task_progress;
+		this.task_ongoing = task_ongoing;
 	}
 }
-
