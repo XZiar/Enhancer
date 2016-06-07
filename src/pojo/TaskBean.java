@@ -2,135 +2,167 @@ package pojo;
 
 public class TaskBean
 {
-	public class TaskStatus
+	public enum Status
 	{
-		public final static int oncheck = 0,
-						onapply = 1,
-						onliscene = 2,
-						ongoing = 3,
-						onfinish = 4;
+		oncheck, onapply, onliscene, ongoing, onfinish;
 	}
-	private int TID = -1;
-	private int UID = -1;
+
+	private int tid = -1;
+	private int uid = -1;
 	private String launcher;
 	private long time_start;
-	private int time_last,time_modify;
+	private int time_last, time_modify;
 	private int applycount;
-	private int status;
+	private Status status;
 	private int payment;
 	private String title;
 	private String describe;
-	private int limit_people,limit_score;
-	
+	private int limit_people, limit_score;
+
 	public TaskBean()
 	{
 	}
-	public TaskBean(int TID)
+
+	public TaskBean(int tid)
 	{
-		this.TID = TID;
+		setTid(tid);
 	}
-	
-	
-	public int getTID()
+
+	public int getTid()
 	{
-		return TID;
+		return tid;
 	}
-	public void setTID(int tID)
+
+	public void setTid(int tid)
 	{
-		TID = tID;
+		this.tid = tid;
 	}
-	public int getUID()
+
+	public int getUid()
 	{
-		return UID;
+		return uid;
 	}
-	public void setUID(int uID)
+
+	public void setUid(int uid)
 	{
-		UID = uID;
+		this.uid = uid;
 	}
+
 	public long getTime_start()
 	{
 		return time_start;
 	}
+
 	public void setTime_start(long time_start)
 	{
 		this.time_start = time_start;
 	}
+
 	public int getTime_last()
 	{
 		return time_last;
 	}
+
 	public void setTime_last(int time_last)
 	{
 		this.time_last = time_last;
 	}
+
 	public int getTime_modify()
 	{
 		return time_modify;
 	}
+
 	public void setTime_modify(int time_modify)
 	{
 		this.time_modify = time_modify;
 	}
+
 	public int getApplycount()
 	{
 		return applycount;
 	}
+
 	public void setApplycount(int applycount)
 	{
 		this.applycount = applycount;
 	}
-	public int getStatus()
+
+	public Status getTaskStatus()
 	{
 		return status;
 	}
-	public void setStatus(int status)
+
+	public void setTaskStatus(Status status)
 	{
 		this.status = status;
 	}
+
+	public int getStatus()
+	{
+		return status.ordinal();
+	}
+
+	public void setStatus(int status)
+	{
+		this.status = Status.values()[status];
+	}
+
 	public int getPayment()
 	{
 		return payment;
 	}
+
 	public void setPayment(int payment)
 	{
 		this.payment = payment;
 	}
+
 	public String getTitle()
 	{
 		return title;
 	}
+
 	public void setTitle(String title)
 	{
 		this.title = title;
 	}
+
 	public String getDescribe()
 	{
 		return describe;
 	}
+
 	public void setDescribe(String describe)
 	{
 		this.describe = describe;
 	}
+
 	public int getLimit_people()
 	{
 		return limit_people;
 	}
+
 	public void setLimit_people(int limit_people)
 	{
 		this.limit_people = limit_people;
 	}
+
 	public int getLimit_score()
 	{
 		return limit_score;
 	}
+
 	public void setLimit_score(int limit_score)
 	{
 		this.limit_score = limit_score;
 	}
+
 	public String getLauncher()
 	{
 		return launcher;
 	}
+
 	public void setLauncher(String launcher)
 	{
 		this.launcher = launcher;

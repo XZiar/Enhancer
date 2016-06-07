@@ -183,12 +183,13 @@ public class UserDao
 		}
 	}
 
-	public String addUser(UserBean user) throws SQLException
+	public UserBean addUser(UserBean user) throws SQLException
 	{
 		final String sql_addUser = "insert into UserBasicInfo (uid,name,describe) values(?,?,?)";
 		final String sql_addStudent = "insert into StudentInfo (uid,gender,id_person,school,id_student,time_enter) values(?,?,?,?,?,?)";
 		final String sql_addCompany = "insert into CompanyInfo (uid,name_legal,id_legal,pic_id,pic_coltd,cel,tel,addr) values(?,?,?,?,?,?,?,?)";
 		final String sql_addGroup = "insert into GroupInfo (guid,muid,role) values(?,?,?)";
+		addAccount(user);
 		try (PreparedStatement ps1 = conn.prepareStatement(sql_addUser);
 				PreparedStatement ps2 = conn.prepareStatement(sql_addStudent);
 				PreparedStatement ps3 = conn.prepareStatement(sql_addCompany);
@@ -247,7 +248,7 @@ public class UserDao
 				break;
 			}
 		}
-		return "null";
+		return user;
 	}
 
 }

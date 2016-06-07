@@ -11,7 +11,6 @@ import pojo.AccountBean;
 import pojo.CompanyBean;
 import pojo.StudentBean;
 import pojo.TaskBean;
-import pojo.TaskBean.TaskStatus;
 import pojo.UserBean;
 import util.ServRes;
 import util.ServRes.Result;
@@ -20,14 +19,14 @@ public class TaskService
 {
 	public ServRes<TaskBean> GetTask(int tid)
 	{
-		if(tid < 0)
+		if (tid < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			TaskBean task = taskdao.FindTaskByTID(tid);
-			if(task == null)
+			TaskBean task = taskdao.queryTask(tid);
+			if (task == null)
 				return new ServRes<>(Result.nonexist);
 			else
 			{
@@ -44,16 +43,16 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<ArrayList<TaskBean>> GetTasks(int from)
 	{
-		if(from < 0)
+		if (from < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.GetTasks(from, 10, "");
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(from, 10, "");
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -66,14 +65,14 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
-	public ServRes<ArrayList<TaskBean>> GetTasksByCompany(UserBean user)
+
+	public ServRes<ArrayList<TaskBean>> GetTasksByCompany(CompanyBean cpn)
 	{
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.FindTaskByUID(user.getUid());
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(cpn);
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -86,14 +85,14 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
-	public ServRes<ArrayList<TaskBean>> GetTasksByStudent(UserBean user)
+
+	public ServRes<ArrayList<TaskBean>> GetTasksByStudent(StudentBean stu)
 	{
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.FindApplyTaskByUID(user.getUid());
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu);
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -106,24 +105,25 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<ArrayList<UserBean>> GetApplyersByTID(UserBean user, int tid)
 	{
-		if(CompanyBean.class != user.getClass())
+		if (CompanyBean.class != user.getClass())
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		UserDao userdao = new UserDao(conn);
 		try
 		{
-			TaskBean task = taskdao.FindTaskByTID(tid);
-			if(task == null)
+			TaskBean task = taskdao.queryTask(tid);
+			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			if(task.getUID() != user.getUid())
+			if (task.getUid() != user.getUid())
 				return new ServRes<>(Result.unsatisfy);
-			if(task.getStatus() != TaskStatus.oncheck && task.getStatus() != TaskStatus.onapply)
+			if (task.getTaskStatus() != TaskBean.Status.oncheck
+					&& task.getTaskStatus() != TaskBean.Status.onapply)
 				return new ServRes<>(Result.error);
-			//start get ***
+			// start get ***
 			ArrayList<UserBean> users = userdao.queryApplicants(tid);
 			return new ServRes<>(users);
 		}
@@ -137,16 +137,16 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<Integer> PostTask(TaskBean task, UserBean user)
 	{
-		if(user.getPeople() != 0)//not company
+		if (user.getAccountRole() != AccountBean.Role.company)// not company
 			return new ServRes<>(Result.unsatisfy);
 		Connection conn = DaoBase.getConnection(false);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			int tid = taskdao.AddTask(task, user);
+			int tid = taskdao.addTask(task, (CompanyBean)user).getTid();
 			conn.commit();
 			return new ServRes<>(tid);
 		}
@@ -168,7 +168,7 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<Boolean> Apply(int uid, int tid, String des)
 	{
 		Boolean rolled = false;
@@ -178,21 +178,21 @@ public class TaskService
 		try
 		{
 			ArrayList<Integer> aps = taskdao.GetApplicants(tid);
-			if(aps.indexOf(uid) != -1)
+			if (aps.indexOf(uid) != -1)
 				return new ServRes<>(Result.exist);
 			ServRes<TaskBean> res1 = GetTask(tid);
 			UserBean user = userdao.queryUser(new AccountBean(uid));
-			if(user == null || res1.toEnum() != Result.success)
+			if (user == null || res1.toEnum() != Result.success)
 				return new ServRes<>(Result.error);
 			TaskBean task = res1.getData();
-			
-			if(task.getLimit_people() > user.getPeople())
+
+			if (task.getLimit_people() > user.getPeople())
 				return new ServRes<>(Result.unsatisfy);
-		
-			//add applicant
+
+			// add applicant
 			conn.setAutoCommit(false);
 			rolled = true;
-			if(taskdao.AddApplicant(tid, uid, des) != 1)
+			if (taskdao.addApplicant(tid, uid, des) != 1)
 				return new ServRes<>(Result.error);
 			conn.commit();
 			return new ServRes<>(true);
@@ -200,11 +200,11 @@ public class TaskService
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			if(true == rolled)
+			if (true == rolled)
 			{
 				try
 				{
-				conn.rollback();
+					conn.rollback();
 				}
 				catch (SQLException e1)
 				{
@@ -218,38 +218,39 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<Boolean> AcceptApply(int uid, int tid, UserBean user)
 	{
 		boolean rolled = false;
-		if(CompanyBean.class != user.getClass())
+		if (CompanyBean.class != user.getClass())
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			TaskBean task = taskdao.FindTaskByTID(tid);
-			if(task == null)
+			TaskBean task = taskdao.queryTask(tid);
+			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			if(task.getUID() != user.getUid())//not own this task
+			if (task.getUid() != user.getUid())// not own this task
 				return new ServRes<>(Result.unsatisfy);
-			if(task.getStatus() != TaskStatus.oncheck && task.getStatus() != TaskStatus.onapply)
+			if (task.getTaskStatus() != TaskBean.Status.oncheck
+					&& task.getTaskStatus() != TaskBean.Status.onapply)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
 			conn.setAutoCommit(false);
 			rolled = true;
-			taskdao.AcceptApply(tid, uid);
+			taskdao.acceptApply(tid, uid);
 			conn.commit();
 			return new ServRes<>(true);
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			if(rolled)
+			if (rolled)
 			{
 				try
 				{
-				conn.rollback();
+					conn.rollback();
 				}
 				catch (SQLException e1)
 				{
@@ -263,38 +264,38 @@ public class TaskService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<Boolean> ComfirmApply(int tid, UserBean user)
 	{
 		boolean rolled = false;
-		if(StudentBean.class != user.getClass())
+		if (StudentBean.class != user.getClass())
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			TaskBean task = taskdao.FindTaskByTID(tid);
-			if(task == null)
+			TaskBean task = taskdao.queryTask(tid);
+			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			if(task.getUID() != user.getUid())//not own this task
+			if (task.getUid() != user.getUid())// not own this task
 				return new ServRes<>(Result.unsatisfy);
-			if(task.getStatus() != TaskStatus.onliscene)
+			if (task.getTaskStatus() != TaskBean.Status.onliscene)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
 			conn.setAutoCommit(false);
 			rolled = true;
-			taskdao.ComfirmApply(tid, user.getUid(),task.getUID());
+			taskdao.comfirmApply(tid, user.getUid(), task.getUid());
 			conn.commit();
 			return new ServRes<>(true);
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			if(rolled)
+			if (rolled)
 			{
 				try
 				{
-				conn.rollback();
+					conn.rollback();
 				}
 				catch (SQLException e1)
 				{
