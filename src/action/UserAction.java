@@ -1,5 +1,6 @@
 package action;
 
+import pojo.AccountBean.Role;
 import pojo.CompanyBean;
 import pojo.StudentBean;
 import pojo.UserBean;
@@ -48,9 +49,15 @@ public class UserAction extends ActionUtil
 		if(OnMethod("GET","register.jsp"))
 			return;
 		if(stu == null)
+		{
 			user = cpn;
+			user.setAccountRole(Role.company);
+		}
 		else
+		{
 			user = stu;
+			user.setAccountRole(Role.student);
+		}
 		ServRes<UserBean> res = userServ.Register(user);
 		switch(res.toEnum())
 		{

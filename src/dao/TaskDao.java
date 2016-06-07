@@ -78,8 +78,8 @@ public class TaskDao
 			throws SQLException
 	{
 		final String sql_queryRangeTasks = "select top " + size
-				+ " * from TaskInfo where tid not in (select top " + from
-				+ " TID from Task order by time_start desc) order by time_start";
+				+ " * from TaskSimpleData where tid not in (select top " + from
+				+ " TID from TaskSimpleData order by time_start desc) order by time_start";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeTasks))
 		{
 			ResultSet rs = ps.executeQuery();
@@ -112,7 +112,8 @@ public class TaskDao
 
 	public TaskBean addTask(TaskBean task, CompanyBean cpn) throws SQLException
 	{
-		final String sql_info = "insert into TaskInfo (uid,title,time_start,time_modify) values(?,?,?,0)";
+		final String sql_info = "insert into TaskInfo (uid,title,time_start,time_modify,status) values(?,?,?,0,"
+				+ TaskBean.Status.oncheck.ordinal() + ")";
 		final String sql_detail = "insert into TaskDetail (tid,describe,payment,limit_people,limit_score,time_last) values(?,?,?,?,?,?)";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql_info,
 				Statement.RETURN_GENERATED_KEYS);
@@ -128,7 +129,7 @@ public class TaskDao
 			rs.next();
 			task.setTid(rs.getInt(1));
 
-			ps2.setInt(1, task.getUid());
+			ps2.setInt(1, task.getTid());
 			ps2.setString(2, task.getDescribe());
 			ps2.setInt(3, task.getPayment());
 			ps2.setInt(4, task.getLimit_people());

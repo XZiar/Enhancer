@@ -76,7 +76,7 @@ $(document).ready(function()
 			var ext = this.files[0].name;
 			ext = ext.substr(ext.lastIndexOf(".")).toLowerCase();
 			var allowExt = ".jpg,.jpeg,.png";
-			if(allowExt.indexOf(ext) <= 0)
+			if(allowExt.indexOf(ext) < 0)
 			{
 				alert("图片格式不正确，请处理后重新选择");
 			}
@@ -289,7 +289,7 @@ $(document).ready(function()
 								<div class="g_3"><span class="label">上传法人证件照</span></div>
 								<div class="g_9">
 									<div class="uploader" id="uniform-undefined">
-										<input type="file" class="simple_form" name="cpn.img_id.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg">
+										<input type="file" class="simple_form" name="cpn.img_id.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg, image/jpg">
 										<span class="filename">请选择图片文件</span>
 										<span class="action" id="upimg"></span>
 									</div>
@@ -302,7 +302,7 @@ $(document).ready(function()
 								<div class="g_3"><span class="label">上传公司营业执照</span></div>
 								<div class="g_9">
 									<div class="uploader" id="uniform-undefined">
-										<input type="file" class="simple_form" name="cpn.img_coltd.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg">
+										<input type="file" class="simple_form" name="cpn.img_coltd.img" size="27" style="opacity: 0;" accept="image/png, image/jpeg, image/jpg">
 										<span class="filename">请选择图片文件</span>
 										<span class="action" id="upimg"></span>
 									</div>

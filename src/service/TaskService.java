@@ -12,6 +12,7 @@ import pojo.CompanyBean;
 import pojo.StudentBean;
 import pojo.TaskBean;
 import pojo.UserBean;
+import pojo.AccountBean.Role;
 import util.ServRes;
 import util.ServRes.Result;
 
@@ -150,7 +151,7 @@ public class TaskService
 			conn.commit();
 			return new ServRes<>(tid);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			try
@@ -181,7 +182,7 @@ public class TaskService
 			if (aps.indexOf(uid) != -1)
 				return new ServRes<>(Result.exist);
 			ServRes<TaskBean> res1 = GetTask(tid);
-			UserBean user = userdao.queryUser(new AccountBean(uid));
+			UserBean user = userdao.queryUser(new AccountBean(uid, Role.student));
 			if (user == null || res1.toEnum() != Result.success)
 				return new ServRes<>(Result.error);
 			TaskBean task = res1.getData();
@@ -197,7 +198,7 @@ public class TaskService
 			conn.commit();
 			return new ServRes<>(true);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			if (true == rolled)
@@ -243,7 +244,7 @@ public class TaskService
 			conn.commit();
 			return new ServRes<>(true);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			if (rolled)
@@ -288,7 +289,7 @@ public class TaskService
 			conn.commit();
 			return new ServRes<>(true);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			if (rolled)

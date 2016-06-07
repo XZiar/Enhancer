@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import dao.DaoBase;
 import dao.UserDao;
 import pojo.AccountBean;
+import pojo.AccountBean.Role;
 import pojo.StudentBean;
 import pojo.UserBean;
 import util.ServRes;
@@ -24,7 +25,7 @@ public class UserService
 		{
 			ArrayList<UserBean> users = new ArrayList<>();
 			StudentBean student = (StudentBean) userdao
-					.queryUser(new AccountBean(uid));
+					.queryUser(new AccountBean(uid, Role.student));
 			users.add(student);
 			users.addAll(userdao.queryGroups(student, true));
 			return new ServRes<>(users);
@@ -83,7 +84,7 @@ public class UserService
 			conn.commit();
 			return new ServRes<>(Result.success);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			try
@@ -149,7 +150,7 @@ public class UserService
 			conn.commit();
 			return new ServRes<>(user);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			try

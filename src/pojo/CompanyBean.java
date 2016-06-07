@@ -40,13 +40,13 @@ public class CompanyBean extends UserBean
 		this.id_legal = id_legal;
 	}
 	
-	public ImgBean getImg_ID()
+	public ImgBean getImg_id()
 	{
 		return img_id;
 	}
-	public void setImg_ID(ImgBean img_ID)
+	public void setImg_id(ImgBean img_id)
 	{
-		this.img_id = img_ID;
+		this.img_id = img_id;
 	}
 	public InputStream getPic_id()
 	{

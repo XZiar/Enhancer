@@ -32,7 +32,7 @@ public class UserDao
 		{
 			ps.setInt(1, uid);
 			ResultSet rs = ps.executeQuery();
-			if (rs.next())
+			if (!rs.next())
 				return null;
 			AccountBean account = new AccountBean();
 			DataInject.RSToObj(rs, account);
@@ -47,7 +47,7 @@ public class UserDao
 		{
 			ps.setString(1, un);
 			ResultSet rs = ps.executeQuery();
-			if (rs.next())
+			if (!rs.next())
 				return null;
 			AccountBean account = new AccountBean();
 			DataInject.RSToObj(rs, account);
@@ -93,6 +93,8 @@ public class UserDao
 		{
 			ps.setInt(1, user.getUid());
 			ResultSet rs = ps.executeQuery();
+			if (!rs.next())
+				return null;
 			DataInject.RSToObj(rs, user);
 			return user;
 		}
@@ -168,7 +170,8 @@ public class UserDao
 
 	public AccountBean addAccount(AccountBean account) throws SQLException
 	{
-		final String sql_addAccout = "insert into Account (un,pwd,role) values(?,?,?)";
+		final String sql_addAccout = "insert into AccountInfo (un,pwd,role,status) values(?,?,?,"
+				+ AccountBean.Status.unchecked.ordinal() + ")";
 		try (PreparedStatement ps = conn.prepareStatement(sql_addAccout,
 				Statement.RETURN_GENERATED_KEYS))
 		{
@@ -177,7 +180,8 @@ public class UserDao
 			ps.setInt(3, account.getRole());
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
-			rs.next();
+			if (!rs.next())
+				throw new SQLException("no result set");
 			account.setUid(rs.getInt(1));
 			return account;
 		}
