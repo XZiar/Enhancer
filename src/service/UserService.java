@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import dao.DaoBase;
 import dao.UserDao;
+import pojo.AccountBean;
+import pojo.AccountBean.Role;
+import pojo.StudentBean;
 import pojo.UserBean;
 import util.ServRes;
 import util.ServRes.Result;
@@ -13,14 +16,18 @@ import util.ServRes.Result;
 public class UserService
 {
 	UserDao userdao = null;
-	
+
 	public ServRes<ArrayList<UserBean>> GetMyApplicants(int uid)
 	{
 		Connection conn = DaoBase.getConnection(true);
 		userdao = new UserDao(conn);
 		try
 		{
-			ArrayList<UserBean> users = userdao.GetAllApplicantByUID(uid);
+			ArrayList<UserBean> users = new ArrayList<>();
+			StudentBean student = (StudentBean) userdao
+					.queryUser(new AccountBean(uid, Role.student));
+			users.add(student);
+			users.addAll(userdao.queryGroups(student, true));
 			return new ServRes<>(users);
 		}
 		catch (SQLException e)
@@ -33,21 +40,19 @@ public class UserService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<UserBean> Login(String un, String pwd)
 	{
 		Connection conn = DaoBase.getConnection(true);
 		userdao = new UserDao(conn);
 		try
 		{
-			UserBean user = userdao.GetAccountByUserName(un);
-			if(user == null)
+			AccountBean account = userdao.queryAccount(un);
+			if (account == null)
 				return new ServRes<>(Result.wrongun);
-			else if(pwd.equals(user.getPwd()))
+			else if (pwd.equals(account.getPwd()))
 			{
-				user = userdao.GetUserByUID(user.getUID());
-				user.setUn(un);
-				user.setPwd(pwd);
+				UserBean user = userdao.queryUser(account);
 				return new ServRes<>(user);
 			}
 			else
@@ -65,7 +70,7 @@ public class UserService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<UserBean> Register(UserBean user)
 	{
 		Connection conn = DaoBase.getConnection(false);
@@ -73,16 +78,13 @@ public class UserService
 		try
 		{
 			System.out.println("register:" + user.getClass().getName());
-			if(userdao.GetAccountByUserName(user.getUn())!=null)
+			if (userdao.queryAccount(user.getUn()) != null)
 				return new ServRes<>(Result.exist);
-			String ans = userdao.AddUser(user);
-			if("error".equals(ans))
-				return new ServRes<>(Result.error);
-			
+			userdao.addUser(user);
 			conn.commit();
 			return new ServRes<>(Result.success);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			try
@@ -100,14 +102,14 @@ public class UserService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<UserBean> GetUserInfo(int uid)
 	{
 		Connection conn = DaoBase.getConnection(true);
 		userdao = new UserDao(conn);
 		try
 		{
-			UserBean user = userdao.GetUserByUID(uid);
+			UserBean user = userdao.queryUser(userdao.queryAccount(uid));
 			return new ServRes<>(user);
 		}
 		catch (SQLException e)
@@ -120,34 +122,35 @@ public class UserService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
-	public ServRes<UserBean> ChangeInfo(UserBean user, String oldpwd, String newpwd, String des)
+
+	public ServRes<UserBean> ChangeInfo(UserBean user, String oldpwd,
+			String newpwd, String des)
 	{
 		Connection conn = DaoBase.getConnection(false);
 		userdao = new UserDao(conn);
 		try
 		{
-			if(!"".equals(newpwd))
+			if (!"".equals(newpwd))
 			{
-				//change password
-				UserBean acc = userdao.GetAccountByUID(user.getUID());
-				if(acc == null)
+				// change password
+				AccountBean account = userdao.queryAccount(user.getUid());
+				if (account == null)
 					return new ServRes<>(Result.nonexist);
-				if(!acc.getPwd().equals(oldpwd))
+				if (!account.getPwd().equals(oldpwd))
 					return new ServRes<>(Result.wrongpwd);
-				acc.setPwd(newpwd);
-				if(userdao.SetAccountByUID(acc) != 1)
+				account.setPwd(newpwd);
+				if (userdao.updateAccount(account) != -1)
 					return new ServRes<>(Result.error);
 				user.setPwd(newpwd);
 			}
 			user.setDescribe(des);
-			if(userdao.SetUserByUID(user) != 1)
+			if (userdao.updateUser(user) != 1)
 				return new ServRes<>(Result.error);
-			
+
 			conn.commit();
 			return new ServRes<>(user);
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			try

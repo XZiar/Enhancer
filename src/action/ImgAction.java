@@ -23,9 +23,9 @@ public class ImgAction extends ActionUtil
 		switch(obj)
 		{
 		case "id":
-			istream = cpn.getPic_ID();break;
+			istream = cpn.getPic_id();break;
 		case "coltd":
-			istream = cpn.getPic_CoLtd();break;
+			istream = cpn.getPic_coltd();break;
 		}
 		return "success";
 	}

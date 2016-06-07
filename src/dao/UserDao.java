@@ -6,8 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
+import pojo.AccountBean;
 import pojo.CompanyBean;
 import pojo.GroupBean;
 import pojo.StudentBean;
@@ -17,246 +19,240 @@ import util.DataInject;
 public class UserDao
 {
 	Connection conn = null;
-	
+
 	public UserDao(Connection c)
 	{
 		conn = c;
 	}
-	
-	public UserBean GetUserByUID(int uid) throws SQLException
+
+	public AccountBean queryAccount(int uid) throws SQLException
 	{
-		final String sql1 = "select * from UserInfo where UID=?";
-		final String sql2 = "select * from CompanyInfo where UID=?";
-		final String sql3 = "select * from StudentInfo where UID=?";
-		try(PreparedStatement ps1 = conn.prepareStatement(sql1);
-			PreparedStatement ps2 = conn.prepareStatement(sql2);
-			PreparedStatement ps3 = conn.prepareStatement(sql3);)
+		final String sql_queryAccount = "select * from AccountInfo where uid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryAccount))
 		{
-			ps1.setInt(1, uid);
-			ps2.setInt(1, uid);
-			ps3.setInt(1, uid);
-			ResultSet rs1 = ps1.executeQuery();
-			ResultSet rs2 = null;
-			if(!rs1.next())//no match
+			ps.setInt(1, uid);
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next())
 				return null;
-			
-			UserBean user;
-			int pn = rs1.getInt("people");
-			if(pn < 0)//admin
+			AccountBean account = new AccountBean();
+			DataInject.RSToObj(rs, account);
+			return account;
+		}
+	}
+
+	public AccountBean queryAccount(String un) throws SQLException
+	{
+		final String sql_queryAccount = "select * from AccountInfo where un=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryAccount))
+		{
+			ps.setString(1, un);
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next())
+				return null;
+			AccountBean account = new AccountBean();
+			DataInject.RSToObj(rs, account);
+			return account;
+		}
+	}
+
+	public UserBean queryUser(AccountBean account) throws SQLException
+	{
+		UserBean user = null;
+		String sql_query = null;
+		switch (account.getAccountRole())
+		{
+		case admin:
+			user = new UserBean(account);
+			user.setName(user.getUn());
+			return user;
+		case student:
+			sql_query = "select * from StudentData where uid=?";
+			user = new StudentBean(account);
+			break;
+		case company:
+			sql_query = "select * from CompanyData where uid=?";
+			user = new CompanyBean(account);
+			break;
+		case group:
+			sql_query = "select * from UserBasicInfo where uid=?";
+			final String sql_queryGroup = "select muid,role from GroupInfo where guid=?";
+			user = new GroupBean(account);
+			try (PreparedStatement ps = conn.prepareStatement(sql_queryGroup))
 			{
-				user = new UserBean();
+				ps.setInt(1, user.getUid());
+				ResultSet rs = ps.executeQuery();
+				((GroupBean) (user)).getMembers().clear();
+				while (rs.next())
+				{
+					((GroupBean) (user)).addMember(rs.getInt(0), rs.getInt(1));
+				}
 			}
-			else if(pn == 0)//company
-			{
-				user = new CompanyBean();
-				rs2 = ps2.executeQuery();
-			}
-			else if(pn == 1)//student
-			{
-				user = new StudentBean();
-				rs2 = ps3.executeQuery();
-			}
-			else//group
-			{
-				user = new GroupBean();
-			}
-			DataInject.RSToObj(rs1, user);
-			
-			if(rs2 != null && rs2.next())
-			{
-				DataInject.RSToObj(rs2, user);
-			}
+			break;
+		}
+		try (PreparedStatement ps = conn.prepareStatement(sql_query))
+		{
+			ps.setInt(1, user.getUid());
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next())
+				return null;
+			DataInject.RSToObj(rs, user);
 			return user;
 		}
 	}
-	
-	public UserBean GetAccountByUserName(String un) throws SQLException
+
+	public ArrayList<GroupBean> queryGroups(StudentBean stu, boolean isLeader)
+			throws SQLException
 	{
-		final String sql = "select UID,pwd from Account where un=?";
-		try(PreparedStatement ps = conn.prepareStatement(sql))
+		String sql_queryGroups;
+		if (isLeader)
+			sql_queryGroups = "select guid from GroupInfo where muid=? and role="
+					+ GroupBean.Role.leader.ordinal();
+		else
+			sql_queryGroups = "select guid from GroupInfo where muid=?";
+		ArrayList<GroupBean> groups = new ArrayList<>();
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryGroups);)
 		{
-			ps.setString(1, un);
-			ResultSet rs=ps.executeQuery();
-			if(!rs.next())//no match
-				return null;
-			else
+			ps.setInt(1, stu.getUid());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
 			{
-				UserBean user = new UserBean(un,rs.getString(2));
-				user.setUID(rs.getInt(1));
-				return user;
+				GroupBean group = (GroupBean) queryUser(
+						queryAccount(rs.getInt(1)));
+				groups.add(group);
 			}
 		}
+		return groups;
 	}
-	
-	public UserBean GetAccountByUID(int uid) throws SQLException
+
+	public ArrayList<UserBean> queryApplicants(int tid) throws SQLException
 	{
-		final String sql = "select un,pwd from Account where UID=?";
-		try(PreparedStatement ps = conn.prepareStatement(sql))
+		final String sql_queryApplicants = "select uid from TaskApply where tid=?";
+		ArrayList<UserBean> aps = new ArrayList<>();
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryApplicants))
 		{
-			ps.setInt(1, uid);
-			ResultSet rs=ps.executeQuery();
-			if(!rs.next())//no match
-				return null;
-			else
+			ps.setInt(1, tid);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
 			{
-				UserBean user = new UserBean(rs.getString(1),rs.getString(2));
-				user.setUID(uid);
-				return user;
-			}
-		}
-	}
-	
-	public int SetAccountByUID(UserBean user) throws SQLException
-	{
-		final String sql = "update Account set un=? , pwd=? where UID=?";
-		try(PreparedStatement ps = conn.prepareStatement(sql))
-		{
-			ps.setInt(3, user.getUID());
-			ps.setString(1, user.getUn());
-			ps.setString(2, user.getPwd());
-			return ps.executeUpdate();
-		}
-	}
-	
-	public int SetUserByUID(UserBean user) throws SQLException
-	{
-		final String sql = "update UserInfo set describe=? where UID=?";
-		try(PreparedStatement ps = conn.prepareStatement(sql))
-		{
-			ps.setInt(2, user.getUID());
-			ps.setString(1, user.getDescribe());
-			return ps.executeUpdate();
-		}
-	}
-	
-	public ArrayList<UserBean> GetAllApplicantByUID(int uid) throws SQLException
-	{
-		final String sql1 = "select gUID from GroupTable where mUID=? and role=1";
-		ArrayList<UserBean> users = new ArrayList<>();
-		try(PreparedStatement ps1 = conn.prepareStatement(sql1);)
-		{
-			ps1.setInt(1, uid);
-			ResultSet rs1 = ps1.executeQuery();
-			while(rs1.next())
-			{
-				int guid = rs1.getInt(1);
-				users.add(GetUserByUID(guid));
-			}
-		}
-		users.add(GetUserByUID(uid));//self
-		return users;
-	}
-	
-	public ArrayList<UserBean> GetApplicantsDetailByTID(int tid) throws SQLException
-	{
-		final String sql1 = "select ui.UID,name,people,ta.describe from UserInfo ui,TaskApply ta where ui.UID=ta.UID and TID=?";
-		try(PreparedStatement ps1 = conn.prepareStatement(sql1))
-		{
-			ArrayList<UserBean> aps = new ArrayList<>();
-			ps1.setInt(1, tid);
-			ResultSet rs1 = ps1.executeQuery();
-			while(rs1.next())
-			{
-				UserBean user = new UserBean();
-				DataInject.RSToObj(rs1, user);
+				AccountBean account = queryAccount(rs.getInt(1));
+				UserBean user = (UserBean) queryUser(account);
 				aps.add(user);
 			}
-			return aps;
+		}
+		return aps;
+	}
+
+	public int updateAccount(AccountBean account) throws SQLException
+	{
+		final String sql_updAccount = "update AccountInfo set un=? , pwd=? , role=? , status=? where uid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_updAccount))
+		{
+			ps.setInt(5, account.getUid());
+			ps.setString(1, account.getUn());
+			ps.setString(2, account.getPwd());
+			ps.setInt(3, account.getRole());
+			ps.setInt(4, account.getStatus());
+			return ps.executeUpdate();
 		}
 	}
-	
-	private Integer IncUID() throws SQLException
+
+	public int updateUser(UserBean user) throws SQLException
 	{
-		final String sql1 = "select _val from CountLimit where _key='UID'";
-		final String sql2 = "update CountLimit set _val=_val+1 where _key='UID'";
-		int uid;
-		try(PreparedStatement ps1 = conn.prepareStatement(sql1);
-			PreparedStatement ps2 = conn.prepareStatement(sql2);)
-			{
-				ResultSet rs1 = ps1.executeQuery();
-				if(!rs1.next())//no match
-					return null;
-				else
-				{
-					uid = rs1.getInt(1);
-					ps2.executeUpdate();
-				}
-			}
-		return uid;
-	}
-	public String AddUser(UserBean user) throws SQLException
-	{
-		final String sql1 = "insert into Account (UID,un,pwd) values(?,?,?)";
-		final String sql2 = "insert into UserInfo (UID,name,gender,people,describe) values(?,?,?,?,?)";
-		final String sql3 = "insert into StudentInfo (UID,name,ID,school,studentID,initTime) values(?,?,?,?,?,?)";
-		final String sql4 = "insert into CompanyInfo (UID,name,legal_name,legal_ID,cel,tel,addr,pic_ID,pic_CoLtd) values(?,?,?,?,?,?,?,?,?)";
-		Integer uid = IncUID();
-		System.out.println("uid="+uid);
-		if(uid == null)
-			return "error";
-		try(PreparedStatement ps1 = conn.prepareStatement(sql1);
-			PreparedStatement ps2 = conn.prepareStatement(sql2);
-			PreparedStatement ps3 = conn.prepareStatement(sql3);
-			PreparedStatement ps4 = conn.prepareStatement(sql4);)
+		final String sql_updUser = "update UserBasicInfo set name=? , describe=? where uid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_updUser))
 		{
-			ps1.setInt(1, uid);
-			ps2.setInt(1, uid);
-			ps1.setString(2, user.getUn());
-			ps1.setString(3, user.getPwd());
-			ps2.setString(2, user.getName());
-			ps2.setBoolean(3, user.getGender());
-			ps2.setString(5, "这个人很懒，暂时不提供简介设置");
-			if(user.getClass() == StudentBean.class)
+			ps.setInt(3, user.getUid());
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getDescribe());
+			return ps.executeUpdate();
+		}
+	}
+
+	public AccountBean addAccount(AccountBean account) throws SQLException
+	{
+		final String sql_addAccout = "insert into AccountInfo (un,pwd,role,status) values(?,?,?,"
+				+ AccountBean.Status.unchecked.ordinal() + ")";
+		try (PreparedStatement ps = conn.prepareStatement(sql_addAccout,
+				Statement.RETURN_GENERATED_KEYS))
+		{
+			ps.setString(1, account.getUn());
+			ps.setString(2, account.getPwd());
+			ps.setInt(3, account.getRole());
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if (!rs.next())
+				throw new SQLException("no result set");
+			account.setUid(rs.getInt(1));
+			return account;
+		}
+	}
+
+	public UserBean addUser(UserBean user) throws SQLException
+	{
+		final String sql_addUser = "insert into UserBasicInfo (uid,name,describe) values(?,?,?)";
+		final String sql_addStudent = "insert into StudentInfo (uid,gender,id_person,school,id_student,time_enter) values(?,?,?,?,?,?)";
+		final String sql_addCompany = "insert into CompanyInfo (uid,name_legal,id_legal,pic_id,pic_coltd,cel,tel,addr) values(?,?,?,?,?,?,?,?)";
+		final String sql_addGroup = "insert into GroupInfo (guid,muid,role) values(?,?,?)";
+		addAccount(user);
+		try (PreparedStatement ps1 = conn.prepareStatement(sql_addUser);
+				PreparedStatement ps2 = conn.prepareStatement(sql_addStudent);
+				PreparedStatement ps3 = conn.prepareStatement(sql_addCompany);
+				PreparedStatement ps4 = conn.prepareStatement(sql_addGroup);)
+		{
+			ps1.setInt(1, user.getUid());
+			ps1.setString(2, user.getName());
+			ps1.setString(3, user.getDescribe());
+			ps1.executeUpdate();
+			switch (user.getAccountRole())
 			{
-				ps2.setInt(4, 1);
-				ps3.setInt(1, uid);
-				ps3.setString(2, user.getName());
+			case student:
 				StudentBean stu = (StudentBean) user;
-				ps3.setString(3, stu.getID());
-				ps3.setString(4, stu.getSchool());
-				ps3.setString(5, stu.getStudentID());
-				ps3.setInt(6, stu.getInitTime());
-				
+				ps2.setInt(1, stu.getUid());
+				ps2.setBoolean(2, stu.getGender());
+				ps2.setString(3, stu.getId_person());
+				ps2.setString(4, stu.getSchool());
+				ps2.setString(5, stu.getId_student());
+				ps2.setInt(6, stu.getTime_enter());
 				ps2.executeUpdate();
-				ps1.executeUpdate();
-				ps3.executeUpdate();
-			}
-			else if(user.getClass() == CompanyBean.class)
-			{
-				ps2.setInt(4, 0);
-				ps4.setInt(1, uid);
-				ps4.setString(2, user.getName());
+				break;
+			case company:
 				CompanyBean cpn = (CompanyBean) user;
-				ps4.setString(3, cpn.getLegal_name());
-				ps4.setString(4, cpn.getLegal_ID());
-				ps4.setString(5, cpn.getCel());
-				ps4.setString(6, cpn.getTel());
-				ps4.setString(7, cpn.getAddr());
-				try(InputStream p_id = cpn.getPic_ID();
-					InputStream	p_coltd = cpn.getPic_CoLtd();)
+				ps3.setInt(1, cpn.getUid());
+				ps3.setString(2, cpn.getName_legal());
+				ps3.setString(3, cpn.getId_legal());
+				try (InputStream p_id = cpn.getPic_id();
+						InputStream p_coltd = cpn.getPic_coltd();)
 				{
-					if(p_id != null)
-						ps4.setBinaryStream(8, p_id);
+					if (p_id != null)
+						ps3.setBinaryStream(4, p_id);
 					else
-						ps4.setObject(8, null);
-					if(p_coltd != null)
-						ps4.setBinaryStream(9, p_coltd);
+						ps3.setObject(4, null);
+					if (p_coltd != null)
+						ps3.setBinaryStream(5, p_coltd);
 					else
-						ps4.setObject(9, null);
-					
-					ps2.executeUpdate();
-					ps1.executeUpdate();
-					ps4.executeUpdate();
+						ps3.setObject(5, null);
 				}
 				catch (IOException e)
 				{
 					e.printStackTrace();
 				}
+				ps3.setString(6, cpn.getCel());
+				ps3.setString(7, cpn.getTel());
+				ps3.setString(8, cpn.getAddr());
+				ps3.executeUpdate();
+				break;
+			case group:
+				GroupBean group = (GroupBean) user;
+				ps4.setInt(1, group.getUid());
+				ps4.setInt(2, group.getLeaderID());
+				ps4.setInt(3, GroupBean.Role.leader.ordinal());
+				ps4.executeUpdate();
+				break;
+			default:
+				break;
 			}
-			else
-				return "error";
-			user.setUID(uid);
 		}
-		return "true";
+		return user;
 	}
+
 }

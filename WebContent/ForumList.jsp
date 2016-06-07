@@ -51,11 +51,11 @@ $(document).ready(function()
 							<s:set name="tstatus" value="{'待审核','报名中','报名截止','进行中','已完结'}"/>
 							<s:iterator value="tasks" id='t'> 
 							    <tr>
-									<td class="ttitle" data-id='<s:property value="#t.TID"/>'>
+									<td class="ttitle" data-id='<s:property value="#t.tid"/>'>
 										<s:property value='#t.title'/>
 									</td>
 									<td><s:property value='#tstatus[#t.status]'/></td>
-									<td data-id='<s:property value="#t.UID"/>'>
+									<td data-id='<s:property value="#t.uid"/>'>
 										<s:property value='#t.launcher'/>
 									</td>
 									<td class="ttime"><s:property value='#t.time_start'/></td>

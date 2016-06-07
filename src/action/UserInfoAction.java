@@ -72,7 +72,7 @@ public class UserInfoAction extends ActionUtil
 		ServRes<ArrayList<TaskBean>> res = null;
 		if(CompanyBean.class == user.getClass())
 		{
-			res = taskServ.GetTasksByCompany(user);
+			res = taskServ.GetTasksByCompany((CompanyBean) user);
 			if(res.toEnum() == Result.success)
 			{
 				tasks = res.getData();
@@ -81,7 +81,7 @@ public class UserInfoAction extends ActionUtil
 		}
 		else if(StudentBean.class == user.getClass())
 		{
-			res = taskServ.GetTasksByStudent(user);
+			res = taskServ.GetTasksByStudent((StudentBean) user);
 			if(res.toEnum() == Result.success)
 			{
 				tasks = res.getData();

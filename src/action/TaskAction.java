@@ -97,7 +97,7 @@ public class TaskAction extends ActionUtil
 			{
 				Response(false,"unlogin");return;
 			}
-			ServRes<ArrayList<UserBean>> res = userServ.GetMyApplicants(user.getUID());
+			ServRes<ArrayList<UserBean>> res = userServ.GetMyApplicants(user.getUid());
 			switch(res.toEnum())
 			{
 			case success:
@@ -105,7 +105,7 @@ public class TaskAction extends ActionUtil
 				for(UserBean u : res.getData())
 				{
 					HashMap<String,Object> appl = new HashMap<>();
-					appl.put("uid", u.getUID());
+					appl.put("uid", u.getUid());
 					appl.put("name", u.getName());
 					appl.put("people", u.getPeople());
 					applicants.add(appl);
@@ -155,7 +155,7 @@ public class TaskAction extends ActionUtil
 			for(UserBean u : res.getData())
 			{
 				HashMap<String,Object> appl = new HashMap<>();
-				appl.put("uid", u.getUID());
+				appl.put("uid", u.getUid());
 				appl.put("name", u.getName());
 				appl.put("people", u.getPeople());
 				appl.put("des", u.getDescribe());

@@ -161,7 +161,7 @@ $(document).ready(function()
 	</div>
 	<div class="theme-popover-mask"></div>
 	
-	<input type="hidden" name="tid" value='<c:out value="${task.TID }"/>'/>
+	<input type="hidden" name="tid" value='<c:out value="${task.tid }"/>'/>
 	
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
