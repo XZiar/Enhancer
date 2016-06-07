@@ -31,6 +31,11 @@ public class AccountBean
 		setPwd(account.getPwd());
 	}
 	
+	public AccountBean(int uid)
+	{
+		setUid(uid);
+	}
+
 	public Role getAccountRole()
 	{
 		return role;

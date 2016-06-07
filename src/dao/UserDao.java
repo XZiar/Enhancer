@@ -114,8 +114,8 @@ public class UserDao
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				AccountBean account = queryAccount(rs.getInt(1));
-				GroupBean group = (GroupBean) queryUser(account);
+				GroupBean group = (GroupBean) queryUser(
+						queryAccount(rs.getInt(1)));
 				groups.add(group);
 			}
 		}
@@ -154,7 +154,7 @@ public class UserDao
 		}
 	}
 
-	public int updUser(UserBean user) throws SQLException
+	public int updateUser(UserBean user) throws SQLException
 	{
 		final String sql_updUser = "update UserBasicInfo set name=? , describe=? where uid=?";
 		try (PreparedStatement ps = conn.prepareStatement(sql_updUser))

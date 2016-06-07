@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import dao.DaoBase;
 import dao.TaskDao;
 import dao.UserDao;
+import pojo.AccountBean;
 import pojo.CompanyBean;
 import pojo.StudentBean;
 import pojo.TaskBean;
@@ -72,7 +73,7 @@ public class TaskService
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.FindTaskByUID(user.getUID());
+			ArrayList<TaskBean> tasks = taskdao.FindTaskByUID(user.getUid());
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -92,7 +93,7 @@ public class TaskService
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.FindApplyTaskByUID(user.getUID());
+			ArrayList<TaskBean> tasks = taskdao.FindApplyTaskByUID(user.getUid());
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -118,12 +119,12 @@ public class TaskService
 			TaskBean task = taskdao.FindTaskByTID(tid);
 			if(task == null)
 				return new ServRes<>(Result.nonexist);
-			if(task.getUID() != user.getUID())
+			if(task.getUID() != user.getUid())
 				return new ServRes<>(Result.unsatisfy);
 			if(task.getStatus() != TaskStatus.oncheck && task.getStatus() != TaskStatus.onapply)
 				return new ServRes<>(Result.error);
 			//start get ***
-			ArrayList<UserBean> users = userdao.GetApplicantsDetailByTID(tid);
+			ArrayList<UserBean> users = userdao.queryApplicants(tid);
 			return new ServRes<>(users);
 		}
 		catch (SQLException e)
@@ -180,7 +181,7 @@ public class TaskService
 			if(aps.indexOf(uid) != -1)
 				return new ServRes<>(Result.exist);
 			ServRes<TaskBean> res1 = GetTask(tid);
-			UserBean user = userdao.GetUserByUID(uid);
+			UserBean user = userdao.queryUser(new AccountBean(uid));
 			if(user == null || res1.toEnum() != Result.success)
 				return new ServRes<>(Result.error);
 			TaskBean task = res1.getData();
@@ -230,7 +231,7 @@ public class TaskService
 			TaskBean task = taskdao.FindTaskByTID(tid);
 			if(task == null)
 				return new ServRes<>(Result.nonexist);
-			if(task.getUID() != user.getUID())//not own this task
+			if(task.getUID() != user.getUid())//not own this task
 				return new ServRes<>(Result.unsatisfy);
 			if(task.getStatus() != TaskStatus.oncheck && task.getStatus() != TaskStatus.onapply)
 				return new ServRes<>(Result.wrongstatus);
@@ -275,14 +276,14 @@ public class TaskService
 			TaskBean task = taskdao.FindTaskByTID(tid);
 			if(task == null)
 				return new ServRes<>(Result.nonexist);
-			if(task.getUID() != user.getUID())//not own this task
+			if(task.getUID() != user.getUid())//not own this task
 				return new ServRes<>(Result.unsatisfy);
 			if(task.getStatus() != TaskStatus.onliscene)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
 			conn.setAutoCommit(false);
 			rolled = true;
-			taskdao.ComfirmApply(tid, user.getUID(),task.getUID());
+			taskdao.ComfirmApply(tid, user.getUid(),task.getUID());
 			conn.commit();
 			return new ServRes<>(true);
 		}

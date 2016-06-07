@@ -139,7 +139,7 @@ public class TaskDao
 		{
 			ps1.setInt(1, tid);
 			ps2.setInt(1, tid);
-			ps1.setInt(2, user.getUID());
+			ps1.setInt(2, user.getUid());
 			ps1.setString(3, task.getTitle());
 			ps1.setString(4, user.getName());
 			Long time = System.currentTimeMillis();
