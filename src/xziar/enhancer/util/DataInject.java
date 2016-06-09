@@ -1,4 +1,4 @@
-package util;
+package xziar.enhancer.util;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;

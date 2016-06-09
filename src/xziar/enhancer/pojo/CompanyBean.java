@@ -1,4 +1,4 @@
-package pojo;
+package xziar.enhancer.pojo;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

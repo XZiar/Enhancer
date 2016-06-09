@@ -1,4 +1,4 @@
-package pojo;
+package xziar.enhancer.pojo;
 
 import java.io.File;
 import java.io.FileInputStream;

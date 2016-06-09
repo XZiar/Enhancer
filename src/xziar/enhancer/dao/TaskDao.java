@@ -1,4 +1,4 @@
-package dao;
+package xziar.enhancer.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import pojo.CompanyBean;
-import pojo.StudentBean;
-import pojo.TaskBean;
-import util.DataInject;
+import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.pojo.StudentBean;
+import xziar.enhancer.pojo.TaskBean;
+import xziar.enhancer.util.DataInject;
 
 public class TaskDao
 {

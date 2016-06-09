@@ -1,4 +1,4 @@
-package action;
+package xziar.enhancer.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -1,13 +1,13 @@
-package action;
+package xziar.enhancer.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import pojo.TaskBean;
-import pojo.UserBean;
-import service.TaskService;
-import service.UserService;
-import util.ServRes;
+import xziar.enhancer.pojo.TaskBean;
+import xziar.enhancer.pojo.UserBean;
+import xziar.enhancer.service.TaskService;
+import xziar.enhancer.service.UserService;
+import xziar.enhancer.util.ServRes;
 
 public class TaskAction extends ActionUtil
 {

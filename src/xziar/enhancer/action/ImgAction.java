@@ -1,8 +1,8 @@
-package action;
+package xziar.enhancer.action;
 
 import java.io.InputStream;
 
-import pojo.CompanyBean;
+import xziar.enhancer.pojo.CompanyBean;
 
 
 public class ImgAction extends ActionUtil

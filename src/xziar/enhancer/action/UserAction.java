@@ -1,11 +1,11 @@
-package action;
+package xziar.enhancer.action;
 
-import pojo.AccountBean.Role;
-import pojo.CompanyBean;
-import pojo.StudentBean;
-import pojo.UserBean;
-import service.UserService;
-import util.ServRes;
+import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.pojo.StudentBean;
+import xziar.enhancer.pojo.UserBean;
+import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.service.UserService;
+import xziar.enhancer.util.ServRes;
 
 public class UserAction extends ActionUtil
 {

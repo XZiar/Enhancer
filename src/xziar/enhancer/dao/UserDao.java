@@ -1,4 +1,4 @@
-package dao;
+package xziar.enhancer.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import pojo.AccountBean;
-import pojo.CompanyBean;
-import pojo.GroupBean;
-import pojo.StudentBean;
-import pojo.UserBean;
-import util.DataInject;
+import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.pojo.GroupBean;
+import xziar.enhancer.pojo.StudentBean;
+import xziar.enhancer.pojo.UserBean;
+import xziar.enhancer.util.DataInject;
 
 public class UserDao
 {

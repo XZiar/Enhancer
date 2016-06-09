@@ -1,4 +1,4 @@
-package pojo;
+package xziar.enhancer.pojo;
 
 public class TaskBean
 {

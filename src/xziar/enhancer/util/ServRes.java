@@ -1,4 +1,4 @@
-package util;
+package xziar.enhancer.util;
 
 public class ServRes<T>
 {

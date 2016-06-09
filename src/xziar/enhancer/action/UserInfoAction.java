@@ -1,15 +1,15 @@
-package action;
+package xziar.enhancer.action;
 
 import java.util.ArrayList;
 
-import pojo.CompanyBean;
-import pojo.StudentBean;
-import pojo.TaskBean;
-import pojo.UserBean;
-import service.TaskService;
-import service.UserService;
-import util.ServRes;
-import util.ServRes.Result;
+import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.pojo.StudentBean;
+import xziar.enhancer.pojo.TaskBean;
+import xziar.enhancer.pojo.UserBean;
+import xziar.enhancer.service.TaskService;
+import xziar.enhancer.service.UserService;
+import xziar.enhancer.util.ServRes;
+import xziar.enhancer.util.ServRes.Result;
 
 public class UserInfoAction extends ActionUtil
 {

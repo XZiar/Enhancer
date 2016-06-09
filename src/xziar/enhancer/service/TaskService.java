@@ -1,20 +1,20 @@
-package service;
+package xziar.enhancer.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dao.DaoBase;
-import dao.TaskDao;
-import dao.UserDao;
-import pojo.AccountBean;
-import pojo.CompanyBean;
-import pojo.StudentBean;
-import pojo.TaskBean;
-import pojo.UserBean;
-import pojo.AccountBean.Role;
-import util.ServRes;
-import util.ServRes.Result;
+import xziar.enhancer.dao.DaoBase;
+import xziar.enhancer.dao.TaskDao;
+import xziar.enhancer.dao.UserDao;
+import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.pojo.StudentBean;
+import xziar.enhancer.pojo.TaskBean;
+import xziar.enhancer.pojo.UserBean;
+import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.util.ServRes;
+import xziar.enhancer.util.ServRes.Result;
 
 public class TaskService
 {
