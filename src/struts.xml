@@ -18,7 +18,7 @@
             <result name="null">todo.jsp</result>
         </global-results>
         
-        <action name="img" class="action.ImgAction" method="Basic">
+        <action name="img" class="xziar.enhancer.action.ImgAction" method="Basic">
 			<result name="success" type="stream">
     			<param name="contentType">image/*</param>  
 				<param name="inputName">istream</param>  

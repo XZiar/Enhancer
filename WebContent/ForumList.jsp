@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="pojo.TaskBean,pojo.UserBean" %>
+<%@ page import="xziar.enhancer.pojo.TaskBean,xziar.enhancer.pojo.UserBean" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
 <html>
