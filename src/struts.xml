@@ -25,6 +25,8 @@
 				<param name="bufferSize">65536</param>
     		</result>
     	</action>
+    	<action name="tester" class="xziar.enhancer.action.TestAction" method="dir">
+		</action>
 		<action name="login" class="xziar.enhancer.action.UserAction" method="Login">
 		</action>
 		<action name="register" class="xziar.enhancer.action.UserAction" method="Register">
