@@ -1,8 +1,10 @@
 package xziar.enhancer.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.dao.ImageDao;
+import xziar.enhancer.pojo.ImgBean;
 
 public class ImgAction extends ActionUtil
 {
@@ -11,21 +13,10 @@ public class ImgAction extends ActionUtil
 
 	public String Basic()
 	{
-		CompanyBean cpn = (CompanyBean) session.getAttribute("user");
-		if (obj == null || cpn == null)
-		{
+		ImgBean img = ImageDao.readImage(obj);
+		if(img.getData() == null)
 			return "error";
-		}
-
-		switch (obj)
-		{
-		case "id":
-			istream = cpn.getPic_id();
-			break;
-		case "coltd":
-			istream = cpn.getPic_coltd();
-			break;
-		}
+		istream = new ByteArrayInputStream(img.getData());
 		return "success";
 	}
 

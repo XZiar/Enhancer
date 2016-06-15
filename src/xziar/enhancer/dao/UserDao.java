@@ -1,7 +1,5 @@
 package xziar.enhancer.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -100,8 +98,7 @@ public class UserDao
 		}
 	}
 
-	public ArrayList<GroupBean> queryGroups(StudentBean stu, boolean isLeader)
-			throws SQLException
+	public ArrayList<GroupBean> queryGroups(StudentBean stu, boolean isLeader) throws SQLException
 	{
 		String sql_queryGroups;
 		if (isLeader)
@@ -116,8 +113,7 @@ public class UserDao
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				GroupBean group = (GroupBean) queryUser(
-						queryAccount(rs.getInt(1)));
+				GroupBean group = (GroupBean) queryUser(queryAccount(rs.getInt(1)));
 				groups.add(group);
 			}
 		}
@@ -220,22 +216,10 @@ public class UserDao
 				ps3.setInt(1, cpn.getUid());
 				ps3.setString(2, cpn.getName_legal());
 				ps3.setString(3, cpn.getId_legal());
-				try (InputStream p_id = cpn.getPic_id();
-						InputStream p_coltd = cpn.getPic_coltd();)
-				{
-					if (p_id != null)
-						ps3.setBinaryStream(4, p_id);
-					else
-						ps3.setObject(4, null);
-					if (p_coltd != null)
-						ps3.setBinaryStream(5, p_coltd);
-					else
-						ps3.setObject(5, null);
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				cpn.setPic_id(ImageDao.addImage(cpn.getImg_id()));
+				ps3.setString(4, cpn.getPic_id());
+				cpn.setPic_coltd(ImageDao.addImage(cpn.getImg_coltd()));
+				ps3.setString(5, cpn.getPic_coltd());
 				ps3.setString(6, cpn.getCel());
 				ps3.setString(7, cpn.getTel());
 				ps3.setString(8, cpn.getAddr());

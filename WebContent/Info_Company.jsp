@@ -43,7 +43,7 @@ $(document).ready(function()
 			<h4 class="widget_header_title wwIcon i_16_tables">法人照片</h4>
 		</div>
 		<div class="widget_contents noPadding">
-			<img src="img?obj=id" alt="id" style="max-width: 100%;">
+			<img src="img?obj=<c:out value="${obj.pic_id}"/>" alt="id" style="max-width: 100%;">
 		</div>
 	</div>
 	<div class="g_6">
@@ -51,7 +51,7 @@ $(document).ready(function()
 			<h4 class="widget_header_title wwIcon i_16_tables">企业执照</h4>
 		</div>
 		<div class="widget_contents noPadding">
-			<img src="img?obj=coltd" alt="coltd" style="max-width: 100%;">
+			<img src="img?obj=<c:out value="${obj.pic_coltd}"/>" alt="coltd" style="max-width: 100%;">
 		</div>
 	</div>	
 

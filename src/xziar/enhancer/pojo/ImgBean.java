@@ -43,7 +43,7 @@ public class ImgBean
 		}
 	}
 
-	public void readImg(InputStream ins) throws IOException
+	public void setSimg(InputStream ins) throws IOException
 	{
 		data = new byte[ins.available()];
 		ins.read(data);

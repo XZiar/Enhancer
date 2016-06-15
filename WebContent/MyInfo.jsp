@@ -52,7 +52,7 @@ $(document).ready(function()
 		typer = 1;
 		utypename = "学生";
 	}
-	else if(user.getClass() == CompanyBean.class)//student
+	else if(user.getClass() == CompanyBean.class)//company
 	{
 		typer = 2;
 		utypename = "企业";

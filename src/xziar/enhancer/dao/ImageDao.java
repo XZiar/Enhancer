@@ -1,6 +1,7 @@
-package xziar.enhancer.service;
+package xziar.enhancer.dao;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -14,7 +15,7 @@ import org.apache.struts2.ServletActionContext;
 
 import xziar.enhancer.pojo.ImgBean;
 
-public class ImageService
+public class ImageDao
 {
 	private static final Path imgDir;
 	public static final char[] hexArray = "0123456789ABCDEF".toCharArray();
@@ -79,10 +80,10 @@ public class ImageService
 		try
 		{
 			File f = Files.createFile(imgDir.resolve(fname + ".png")).toFile();
-			System.out.println("suppose: " + f.getName());
-			FileOutputStream os = new FileOutputStream(f);
-			os.write(data);
-			os.close();
+			//System.out.println("suppose: " + f.getName());
+			FileOutputStream fos = new FileOutputStream(f);
+			fos.write(data);
+			fos.close();
 		}
 		catch (FileAlreadyExistsException e)
 		{
@@ -93,6 +94,17 @@ public class ImageService
 			return null;
 		}
 		return fname;
+	}
+
+	public static ImgBean readImage(String fname)
+	{
+		//System.out.println("read suppose: " + imgDir.resolve(fname + ".png"));
+		File f = imgDir.resolve(fname + ".png").toFile();
+		ImgBean img = new ImgBean();
+		if(f.exists())
+			img.setImg(f);
+		img.setImgFileName(f.getName());
+		return img;
 	}
 
 }
