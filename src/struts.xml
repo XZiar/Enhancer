@@ -76,7 +76,8 @@
 		</action>
 		<action name="addpost" class="xziar.enhancer.action.ForumAction" method="PostPost">
 		</action>
-		
+		<action name="addreply" class="xziar.enhancer.action.ForumAction" method="PostReply">
+		</action>
 	</package>
 
 </struts>

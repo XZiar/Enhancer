@@ -62,7 +62,6 @@ public class PostDao
 		final String sql_queryRangePosts = "select top " + size
 				+ " pid,type,uid,title,time_post,poster from PostData where pid not in (select top "
 				+ from + " pid from PostData order by time_post desc) order by time_post";
-		System.out.println(sql_queryRangePosts);
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangePosts))
 		{
 			ResultSet rs = ps.executeQuery();
@@ -83,6 +82,7 @@ public class PostDao
 		final String sql_queryRangeReplys = "select top " + size
 				+ " * from ReplyData where pid=? AND rid not in (select top " + from
 				+ " pid from ReplyData order by time_reply desc) order by time_reply";
+		System.out.println(sql_queryRangeReplys);
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeReplys))
 		{
 			ps.setInt(1, post.getPid());

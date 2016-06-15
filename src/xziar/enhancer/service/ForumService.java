@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import xziar.enhancer.dao.DaoBase;
 import xziar.enhancer.dao.PostDao;
-import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.PostBean;
+import xziar.enhancer.pojo.ReplyBean;
 import xziar.enhancer.pojo.UserBean;
 import xziar.enhancer.util.ServRes;
 import xziar.enhancer.util.ServRes.Result;
@@ -62,6 +62,28 @@ public class ForumService
 			DaoBase.close(conn, null, null);
 		}
 	}
+	
+	public ServRes<ArrayList<ReplyBean>> GetReplys(PostBean post, int from)
+	{
+		if (from < 0)
+			return new ServRes<>(Result.error);
+		Connection conn = DaoBase.getConnection(true);
+		PostDao postdao = new PostDao(conn);
+		try
+		{
+			ArrayList<ReplyBean> replys = postdao.queryReplys(from, 10, post, "");
+			return new ServRes<>(replys);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
 
 	public ServRes<ArrayList<PostBean>> GetTasksByUser(UserBean user)
 	{
@@ -92,6 +114,35 @@ public class ForumService
 			int pid = postdao.addPost(post, user).getPid();
 			conn.commit();
 			return new ServRes<>(pid);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			try
+			{
+				conn.rollback();
+			}
+			catch (SQLException e1)
+			{
+				e1.printStackTrace();
+			}
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+	
+	public ServRes<Integer> PostReply(ReplyBean reply, UserBean user)
+	{
+		Connection conn = DaoBase.getConnection(false);
+		PostDao postdao = new PostDao(conn);
+		try
+		{
+			int rid = postdao.addReply(reply, user).getRid();
+			conn.commit();
+			return new ServRes<>(rid);
 		}
 		catch (Exception e)
 		{

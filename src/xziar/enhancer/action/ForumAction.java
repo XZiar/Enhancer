@@ -3,6 +3,7 @@ package xziar.enhancer.action;
 import java.util.ArrayList;
 
 import xziar.enhancer.pojo.PostBean;
+import xziar.enhancer.pojo.ReplyBean;
 import xziar.enhancer.pojo.UserBean;
 import xziar.enhancer.service.ForumService;
 import xziar.enhancer.service.UserService;
@@ -15,7 +16,9 @@ public class ForumAction extends ActionUtil
 	int from = 0;
 	String des = "ÔÝÎÞ";
 	PostBean post;
+	ReplyBean reply;
 	ArrayList<PostBean> posts;
+	ArrayList<ReplyBean> replys;
 
 	ForumService forumServ = new ForumService();
 	UserService userServ = new UserService();
@@ -31,11 +34,24 @@ public class ForumAction extends ActionUtil
 			return "404";
 		case success:
 			post = res.getData();
-			return "success";
+			break;
 		case error:
 		default:
 			return "error";
 		}
+		ServRes<ArrayList<ReplyBean>> res2 = forumServ.GetReplys(post, from);
+		switch (res.toEnum())
+		{
+		case nonexist:
+			return "404";
+		case success:
+			replys = res2.getData();
+			break;
+		case error:
+		default:
+			return "error";
+		}
+		return "success";
 	}
 
 	public String List()
@@ -81,9 +97,37 @@ public class ForumAction extends ActionUtil
 			Response(false, "error");
 			return;
 		}
-
 	}
 
+	public void PostReply()
+	{
+		if (OnMethod("get", null))
+		{
+			Response(false, "error");
+			return;
+		}
+		UserBean user = (UserBean) session.getAttribute("user");
+		if (user == null)
+		{
+			Response(false, "unlogin");
+			return;
+		}
+		ServRes<Integer> res = forumServ.PostReply(reply, user);
+		switch (res.toEnum())
+		{
+		case unsatisfy:
+			Response(false, "nopermission");
+			return;
+		case success:
+			Response(true, res.getData().toString());
+			return;
+		case error:
+		default:
+			Response(false, "error");
+			return;
+		}
+	}
+	
 	public PostBean getPost()
 	{
 		return post;
@@ -92,6 +136,16 @@ public class ForumAction extends ActionUtil
 	public void setPost(PostBean post)
 	{
 		this.post = post;
+	}
+
+	public ReplyBean getReply()
+	{
+		return reply;
+	}
+
+	public void setReply(ReplyBean reply)
+	{
+		this.reply = reply;
 	}
 
 	public void setPid(int pid)
@@ -117,5 +171,10 @@ public class ForumAction extends ActionUtil
 	public ArrayList<PostBean> getPosts()
 	{
 		return posts;
+	}
+
+	public ArrayList<ReplyBean> getReplys()
+	{
+		return replys;
 	}
 }
