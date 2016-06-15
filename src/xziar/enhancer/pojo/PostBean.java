@@ -4,6 +4,7 @@ public class PostBean
 {
 	private int pid = -1;
 	private int uid = -1;
+	private int replycount;
 	private int type;
 	private String title = "";
 	private long time_post;
@@ -84,4 +85,13 @@ public class PostBean
 		this.uid = uid;
 	}
 
+	public int getReplycount()
+	{
+		return replycount;
+	}
+
+	public void setReplycount(int replycount)
+	{
+		this.replycount = replycount;
+	}
 }

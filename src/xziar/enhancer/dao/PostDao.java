@@ -60,7 +60,7 @@ public class PostDao
 	public ArrayList<PostBean> queryPosts(int from, int size, String order) throws SQLException
 	{
 		final String sql_queryRangePosts = "select top " + size
-				+ " pid,type,uid,title,time_post,poster from PostData where pid not in (select top "
+				+ " pid,type,uid,title,time_post,poster,replycount from PostData where pid not in (select top "
 				+ from + " pid from PostData order by time_post desc) order by time_post";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangePosts))
 		{
@@ -82,7 +82,6 @@ public class PostDao
 		final String sql_queryRangeReplys = "select top " + size
 				+ " * from ReplyData where pid=? AND rid not in (select top " + from
 				+ " pid from ReplyData order by time_reply desc) order by time_reply";
-		System.out.println(sql_queryRangeReplys);
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeReplys))
 		{
 			ps.setInt(1, post.getPid());

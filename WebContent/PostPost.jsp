@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="/struts-tags" prefix="s"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -140,8 +139,7 @@ $(document).ready(function()
 					</div>
 				</div>
 				<div class="g_12" style="text-align: center;">
-					<input class="submitIt simple_buttons" id="send" value="发布话题"
-						type="submit" />
+					<input class="submitIt simple_buttons" id="send" value="发布话题" type="submit" />
 				</div>
 
 			</form>

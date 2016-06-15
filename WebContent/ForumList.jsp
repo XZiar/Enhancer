@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="xziar.enhancer.pojo.UserBean" %>
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,22 +61,22 @@ $(document).ready(function()
 								<th>话题</th>
 								<th width="15%">发布者</th>
 								<th width="15%">发布日期</th>
-								<th width="10%">回帖</th>
+								<th width="10%">回帖数量</th>
 							</tr>
 						</thead>
 						<tbody id="forumlist">
-							<s:iterator value="posts" id='p'> 
+							<c:forEach var="p" items="${posts }">
 							    <tr>
-									<td class="ptitle" data-id='<s:property value="#p.pid"/>'>
-										<s:property value='#p.title'/>
+									<td class="ptitle" data-id='<c:out value="${p.pid }"/>'>
+										<c:out value='${p.title }'/>
 									</td>
-									<td data-id='<s:property value="#p.uid"/>'>
-										<s:property value='#p.poster'/>
+									<td data-id='<c:out value="${p.uid }"/>'>
+										<c:out value='${p.poster }'/>
 									</td>
-									<td class="ptime"><s:property value='#p.time_post'/></td>
-									<td><s:property value='#p.pid'/></td>
+									<td class="ptime"><c:out value='${p.time_post }'/></td>
+									<td><c:out value='${p.replycount }'/></td>
 								</tr>
-							</s:iterator>
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>
