@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="xziar.enhancer.pojo.TaskBean,xziar.enhancer.pojo.UserBean" %>
+<%@ page import="xziar.enhancer.pojo.UserBean" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
 <html>
@@ -13,7 +13,7 @@
 	<!-- jQuery -->
 	<script src="Javascript/jQuery/jquery-1.12.0.min.js"></script>
 	<style>
-		.ttitle {cursor: pointer;}
+		.ptitle {cursor: pointer;}
 	</style>
 </head>
 <body>
@@ -23,43 +23,58 @@ $(document).ready(function()
 {
 	$("#forumlist tr").each(function()
 	{
-		var obj = $(this).children(".ttime");
+		var obj = $(this).children(".ptime");
 		obj.text(new Date(parseInt(obj.text())).toLocaleDateString());
 	});
-	$(".ttitle").on("click",function()
+	$(".ptitle").on("click",function()
 	{
-		window.location.href = "taskview?id=" + $(this).data("id");
+		window.location.href = "postview?pid=" + $(this).data("id");
+	});
+	$("#addpost").click(function()
+	{
+		window.location.href = "PostPost.jsp";
 	});
 });
 </script>
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
-
+<%
+{
+	UserBean user = (UserBean)session.getAttribute("user");
+	if(user != null)
+	{
+%>		
+			<div class="g_12" style="text-align: center;">
+				<div class="simple_buttons" id="addpost">
+					<div>发布新话题</div>
+				</div>
+			</div>
+<%
+	}
+}
+%>
 			<div class="g_12">
 				<div class="widget_contents noPadding">
 					<table class="tables">
 						<thead>
 							<tr>
-								<th>任务名</th>
-								<th width="5%">状态</th>
-								<th width="10%">发布者</th>
-								<th width="10%">发布日期</th>
-								<th width="5%">申请人数</th>
+								<th>话题</th>
+								<th width="15%">发布者</th>
+								<th width="15%">发布日期</th>
+								<th width="10%">回帖</th>
 							</tr>
 						</thead>
 						<tbody id="forumlist">
-							<s:set name="tstatus" value="{'待审核','报名中','报名截止','进行中','已完结'}"/>
-							<s:iterator value="tasks" id='t'> 
+							<s:iterator value="posts" id='p'> 
 							    <tr>
-									<td class="ttitle" data-id='<s:property value="#t.tid"/>'>
-										<s:property value='#t.title'/>
+									<td class="ptitle" data-id='<s:property value="#p.pid"/>'>
+										<s:property value='#p.title'/>
 									</td>
-									<td><s:property value='#tstatus[#t.status]'/></td>
-									<td data-id='<s:property value="#t.uid"/>'>
-										<s:property value='#t.launcher'/>
+									<td data-id='<s:property value="#p.uid"/>'>
+										<s:property value='#p.poster'/>
 									</td>
-									<td class="ttime"><s:property value='#t.time_start'/></td>
-									<td><s:property value='#t.applycount'/></td>
+									<td class="ptime"><s:property value='#p.time_post'/></td>
+									<td><s:property value='#p.pid'/></td>
 								</tr>
 							</s:iterator>
 						</tbody>

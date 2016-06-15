@@ -61,12 +61,12 @@ $(document).ready(function()
 		}
 	});
 	
-	$('#taskform').submit(function() 
+	$('#postform').submit(function() 
 	{
 		var fd = new FormData(this);
 		$.ajax({
 			type : "POST",
-			url : "addtask",
+			url : "addpost",
 			data : $(this).serialize(),
 			success : function(data)
 			{
@@ -76,7 +76,7 @@ $(document).ready(function()
 				{
 					title = "发布成功";
 					$('#ret #msg').html("<br>2秒后自动跳转");
-					setTimeout(function(){window.location.href = "taskview?tid=" + ret.msg},2000);
+					setTimeout(function(){window.location.href = "postview?pid=" + ret.msg},2000);
 				}
 				else
 				{
@@ -101,75 +101,54 @@ $(document).ready(function()
 
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
-			
+
 			<div id="ret" class="dialog" title="">
 				<span class="label lwParagraph" id="msg"></span>
 			</div>
-			
-			
+
+
 			<div style="text-align: center;">
-				<h1>发布任务</h1>
+				<h1>发布话题</h1>
 			</div>
-			
+
 			<div class="g_12 separator">
 				<span></span>
 			</div>
-			
-			<form id="taskform">
+
+			<form id="postform">
 				<div class="g_12">
-					<div class="g_3"><span class="label">任务标题<span class="must">*</span></span></div>
+					<div class="g_3">
+						<span class="label">话题标题<span class="must">*</span></span>
+					</div>
 					<div class="g_9">
-						<input type="text" name="task.title" class="simple_field" required>
+						<input type="text" name="post.title" class="simple_field" required>
 						<div class="field_alert"></div>
 					</div>
 				</div>
-				
+
 				<div class="g_12">
 					<div class="widget_header">
-						<h4 class="widget_header_title wwIcon i_16_wysiwyg">任务介绍</h4>
+						<h4 class="widget_header_title wwIcon i_16_wysiwyg">详细内容</h4>
 					</div>
 					<div class="widget_contents noPadding">
 						<div class="line_grid">
 							<div class="g_12">
-								<textarea name="task.describe" class="simple_field wysiwyg"></textarea>
+								<textarea name="post.describe" class="simple_field wysiwyg"></textarea>
 								<div class="field_notice"></div>
 							</div>
 						</div>
 					</div>
 				</div>
-				
-				<div class="g_12">
-					<div class="widget_header">
-						<h4 class="widget_header_title">硬性要求</h4>
-					</div>
-					<div class="widget_contents">
-						<div class="line_grid">
-							<div class="g_6">
-								<div class="g_3"><span class="label">人数</span></div>
-								<div class="g_9">
-									<input type="number" name="task.limit_people" class="simple_field" max="10" min="1" value="1" required/>
-									<div class="field_notice">最少1人</div>
-								</div>
-							</div>
-							<div class="g_6">
-								<div class="g_3"><span class="label">薪酬</span></div>
-								<div class="g_9">
-									<input type="number" name="task.payment" class="simple_field" min="10" value="10" required/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-	
 				<div class="g_12" style="text-align: center;">
-					<input class="submitIt simple_buttons" id="send" value="发布任务" type="submit"/>
+					<input class="submitIt simple_buttons" id="send" value="发布话题"
+						type="submit" />
 				</div>
-			
+
 			</form>
-			
+
 		</div>
 	</div>
-	
-	
+
+
 </body>
 </html>

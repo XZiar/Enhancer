@@ -67,7 +67,16 @@
 		</action>
 		<action name="apply" class="xziar.enhancer.action.TaskAction" method="Apply">
 		</action>
-
+		
+		<action name="postview" class="xziar.enhancer.action.ForumAction" method="View">
+			<result name="success">/ShowPost.jsp</result>
+		</action>
+		<action name="forum" class="xziar.enhancer.action.ForumAction" method="List">
+			<result name="success">/ForumList.jsp</result>
+		</action>
+		<action name="addpost" class="xziar.enhancer.action.ForumAction" method="PostPost">
+		</action>
+		
 	</package>
 
 </struts>

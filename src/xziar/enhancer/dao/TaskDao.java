@@ -79,7 +79,7 @@ public class TaskDao
 	{
 		final String sql_queryRangeTasks = "select top " + size
 				+ " * from TaskSimpleData where tid not in (select top " + from
-				+ " TID from TaskSimpleData order by time_start desc) order by time_start";
+				+ " tid from TaskSimpleData order by time_start desc) order by time_start";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeTasks))
 		{
 			ResultSet rs = ps.executeQuery();
