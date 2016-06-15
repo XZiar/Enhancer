@@ -5,27 +5,32 @@
 
 <struts>
 
-    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
-    <constant name="struts.devMode" value="true" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.devMode" value="true" />
 
-    <package name="strutsBean" namespace="/" extends="struts-default">
-    
-    	<default-action-ref name="login.jsp" />
+	<package name="app" namespace="/app" extends="struts-default">
+		<action name="login" class="xziar.enhancer.action.UserAction" method="JLogin">
+		</action>
+	</package>
 
-        <global-results>
-        	<result name="error">403.jsp</result>
-            <result name="404">404.jsp</result>
-            <result name="null">todo.jsp</result>
-        </global-results>
-        
-        <action name="img" class="xziar.enhancer.action.ImgAction" method="Basic">
+	<package name="strutsBean" namespace="/" extends="struts-default">
+
+		<default-action-ref name="login.jsp" />
+
+		<global-results>
+			<result name="error">403.jsp</result>
+			<result name="404">404.jsp</result>
+			<result name="null">todo.jsp</result>
+		</global-results>
+
+		<action name="img" class="xziar.enhancer.action.ImgAction" method="Basic">
 			<result name="success" type="stream">
-    			<param name="contentType">image/*</param>  
-				<param name="inputName">istream</param>  
+				<param name="contentType">image/*</param>
+				<param name="inputName">istream</param>
 				<param name="bufferSize">65536</param>
-    		</result>
-    	</action>
-    	<action name="tester" class="xziar.enhancer.action.TestAction" method="dir">
+			</result>
+		</action>
+		<action name="tester" class="xziar.enhancer.action.TestAction" method="dir">
 		</action>
 		<action name="login" class="xziar.enhancer.action.UserAction" method="Login">
 		</action>
@@ -41,7 +46,7 @@
 			<result name="success">/MyInfo.jsp</result>
 		</action>
 		<action name="mytasks" class="xziar.enhancer.action.UserInfoAction" method="TaskOngoing">
-		    <result name="unlogin" type="redirect">/login.jsp</result>
+			<result name="unlogin" type="redirect">/login.jsp</result>
 			<result name="company">/cpn_MyTasks_ongoing.jsp</result>
 			<result name="student">/stu_MyTasks_ongoing.jsp</result>
 		</action>
@@ -54,7 +59,7 @@
 		</action>
 		<action name="taskview" class="xziar.enhancer.action.TaskAction" method="View">
 			<result name="success">/ShowTask.jsp</result>
-		</action> 
+		</action>
 		<action name="task" class="xziar.enhancer.action.TaskAction" method="List">
 			<result name="success">/TaskList.jsp</result>
 		</action>
@@ -62,7 +67,7 @@
 		</action>
 		<action name="apply" class="xziar.enhancer.action.TaskAction" method="Apply">
 		</action>
-		
-    </package>
-    
+
+	</package>
+
 </struts>

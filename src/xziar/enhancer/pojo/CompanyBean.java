@@ -1,7 +1,5 @@
 package xziar.enhancer.pojo;
 
-import xziar.enhancer.dao.ImageDao;
-
 public class CompanyBean extends UserBean
 {
 	private String name_legal;
