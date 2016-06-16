@@ -212,14 +212,68 @@ $(document).ready(function()
 <%
 {
 	UserBean user = (UserBean)session.getAttribute("user");
-	if(user != null && user.getClass() == StudentBean.class)
+	if(user != null)
 	{
-%>		
+%>
+		<c:if test="${user.role == 1 && task.status == 1 }">
 			<div class="g_12" style="text-align: center;">
 				<div class="simple_buttons" id="apply">
 					<div>提交申请</div>
 				</div>
 			</div>
+		</c:if>
+		<c:if test="${user.role == 0 && task.status != 0}">
+<script>
+function dodel()
+{
+	$.ajax({
+		type : "POST",
+		data : "tid=" + tid,
+		url : "deltask",
+		success : function(data)
+		{
+			var ret = JSON.parse(data);
+			if(!ret.success)
+			{
+				if(ret.msg == "unlogin")
+				{
+					window.location.href = "login.jsp";
+					return;
+				}
+				window.location.href = "403.jsp";
+				return;
+			}
+			window.location.href = "task";
+		}
+	});
+}
+function deltask()
+{
+	$('#ret #msg').html("确定要关闭这项任务吗？");
+	$('#ret').dialog(
+	{
+		buttons: 
+		{
+	        "是": function() 
+	        {
+	        	dodel();
+	          	$(this).dialog("close");
+	        },
+	        "否": function() 
+	        {
+	          	$(this).dialog("close");
+	        }
+		}
+	}).dialog("open");
+}
+</script>
+			<div class="g_12" style="text-align: center;">
+				<div class="simple_buttons" onclick='deltask()'>
+					<div>关闭任务</div>
+				</div>
+			</div>
+
+		</c:if>
 <%
 	}
 }

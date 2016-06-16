@@ -90,10 +90,6 @@ $(document).ready(function()
 				<span class="tab_label">任务审核</span>
 				<span class="tab_info"></span>
 			</a></li>
-			<li class="i_32_forms" data-obj="part4"><a>
-				<span class="tab_label">任务管理</span>
-				<span class="tab_info"></span>
-			</a></li>
 		</ul>
 	</aside>
 	
@@ -101,7 +97,7 @@ $(document).ready(function()
 		<div class="grid_wrapper">
 
 			<div id="ret" class="dialog" title="">
-				<span class="label lwParagraph" id="msg">L</span>
+				<span class="label lwParagraph" id="msg"></span>
 			</div>
 			<div class="g_12" id="msgtip">
 			</div>
@@ -122,13 +118,6 @@ $(document).ready(function()
 			
 			<div id="part3" class="onepart">
 				<%@ include file="Info_Task_Check.jsp"%>
-				<div class="g_12 separator">
-					<span></span>
-				</div>
-			</div>
-			
-			<div id="part4" class="onepart">
-				<%@ include file="Info_Task_Finish_stu.jsp"%>
 				<div class="g_12 separator">
 					<span></span>
 				</div>

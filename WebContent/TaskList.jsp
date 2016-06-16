@@ -68,7 +68,7 @@ $(document).ready(function()
 							</tr>
 						</thead>
 						<tbody id="tasklist">
-							<c:set var="tstatus" value="${fn:split('待审核,报名中,报名截止,进行中,已完结', ',')}" />
+							<c:set var="tstatus" value="${fn:split('待审核,报名中,报名截止,进行中,已完结,已关闭', ',')}" />
 							<c:forEach var="t" items="${tasks}">
 								<tr>
 									<td class="ttitle" data-tid="<c:out value='${t.tid} '/>">

@@ -81,29 +81,12 @@ $(document).ready(function()
 	});
 });
 </script>
+	<c:set var="isAdmin" value="${(! empty sessionScope.user) && user.role == 0 }" />
 	<div class="theme-popover" style="display:none;">
 		<div id="ret" class="dialog" title="">
 			<span class="label lwParagraph" id="msg"></span>
 		</div>
-		<div class="widget_header wwOptions">
-			<h4 class="widget_header_title wwIcon i_16_tooltip">选择申请人</h4>
-			<div class="w_Options i_16_close"><span class="aclose"></span></div>
-		</div>
-		<div class="widget_contents noPadding">
-			<div class="g_6" id="aps">
-				<div class="widget_contents noPadding" style="max-height:400px; overflow:auto;">
-				
-				</div>
-			</div>
-			<div class="g_6">
-				<textarea class="simple_field" name="des"></textarea>
-			</div>
-			<div class="g_12" style="text-align:center;">
-				<div class="submitIt simple_buttons" id="sendapply" data-uid="-1">提交申请</div>
-			</div>
-		</div>
 	</div>
-	<div class="theme-popover-mask"></div>
 
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
@@ -119,6 +102,80 @@ $(document).ready(function()
 					<div class="bwIcon i_16_help">关于话题发帖人</div>
 				</div>
 			</div>
+			
+			<c:if test="${isAdmin }">
+<script>
+function dodel(type,id)
+{
+	$.ajax({
+		type : "POST",
+		data : (type?"pid=":"rid=") + id,
+		url : type?"delpost":"delreply",
+		success : function(data)
+		{
+			var ret = JSON.parse(data);
+			if(!ret.success)
+			{
+				if(ret.msg == "unlogin")
+				{
+					window.location.href = "login.jsp";
+					return;
+				}
+				window.location.href = "403.jsp";
+				return;
+			}
+			if(ret.msg == "reply")
+				location.reload(true);
+			else
+				window.location.href = "forum";
+		}
+	});
+}
+function delpost(pid)
+{
+	$('#ret #msg').html("确定删除这个话题？");
+	$('#ret').dialog(
+	{
+		buttons: 
+		{
+	        "是": function() 
+	        {
+	        	dodel(true,pid);
+	          	$(this).dialog("close");
+	        },
+	        "否": function() 
+	        {
+	          	$(this).dialog("close");
+	        }
+		}
+	}).dialog("open");
+}
+function delreply(rid)
+{
+	$('#ret #msg').html("确定删除这条回复？");
+	$('#ret').dialog(
+	{
+		buttons: 
+		{
+	        "是": function() 
+	        {
+	        	dodel(false,rid);
+	          	$(this).dialog("close");
+	        },
+	        "否": function() 
+	        {
+	          	$(this).dialog("close");
+	        }
+		}
+	}).dialog("open");
+}
+</script>
+				<div class="g_12" style="text-align: center;">
+					<div class="simple_buttons" onclick="delpost(${post.pid })" >
+						<div>删除此话题</div>
+					</div>
+				</div>
+			</c:if>
 
 			<div class="g_12 separator">
 				<span></span>
@@ -142,15 +199,22 @@ $(document).ready(function()
 				<c:forEach var="r" items="${replys}">
 					<div class="line_grid">
 						<div class="g_3">
-							<span data-id='<c:out value="${r.uid} "/>'>
+							<span data-id='${r.uid}'>
 								<c:out value='${r.replyer} '/>
 							</span><br>
 							<div class="field_notice">
 								发表于
-								<span class="rtime" data-id='<c:out value="${r.uid} "/>'>
+								<span class="rtime">
 									<c:out value='${r.time_reply} '/>
 								</span>
 							</div>
+							<c:if test="${isAdmin }">
+								<div class="g_12" style="text-align: center;">
+									<div class="simple_buttons" onclick="delreply(${r.rid})">
+										<div>删除此回复</div>
+									</div>
+								</div>
+							</c:if>
 						</div>
 						<div class="g_9">
 							<div class="message"><c:out value='${r.describe} ' escapeXml="false"/></div>
@@ -160,14 +224,9 @@ $(document).ready(function()
 				</div>
 			</div>
 			</c:if>
-<%
-{
-	UserBean user = (UserBean)session.getAttribute("user");
-	if(user != null)
-	{
-%>
+			<c:if test="${! empty sessionScope.user }">
 			<form id="replyform">
-				<input type="hidden" name="reply.pid" value='<c:out value="${post.pid }"/>' />
+				<input type="hidden" name="reply.pid" value='${post.pid }' />
 				<div class="g_12">
 					<div class="widget_header">
 						<h4 class="widget_header_title wwIcon i_16_wysiwyg">发表回复</h4>
@@ -185,10 +244,7 @@ $(document).ready(function()
 					</div>
 				</div>
 			</form>
-<%
-	}
-}
-%>
+			</c:if>
 		</div>
 	</div>
 	

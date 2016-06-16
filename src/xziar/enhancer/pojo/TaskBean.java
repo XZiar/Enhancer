@@ -4,7 +4,7 @@ public class TaskBean
 {
 	public enum Status
 	{
-		oncheck, onapply, onliscene, ongoing, onfinish;
+		oncheck, onapply, onliscene, ongoing, onfinish, closed;
 	}
 
 	private int tid = -1;

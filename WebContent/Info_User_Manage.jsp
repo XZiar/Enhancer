@@ -65,7 +65,7 @@ $(document).ready(function()
 	$("#umdetail").on("click","#umdel",function()
 	{
 		var uid = $(this).data("uid");
-		$('#ret #msg').append("确定要删除用户" + $(this).data("name") + "<br>吗？");
+		$('#ret #msg').html("确定要删除用户<br>" + $(this).data("name") + "<br>吗？");
 		$('#ret').dialog(
 		{
 			buttons: 

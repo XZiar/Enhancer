@@ -141,17 +141,27 @@ public class PostDao
 		return reply;
 	}
 	
-	public int deleteUser(AccountBean account) throws SQLException
+	public int deletePost(int pid) throws SQLException
 	{
-		final String sql_delReply = "delete from PostReply where uid=?";
-		final String sql_delPost = "delete from PostInfo where uid=?";
+		final String sql_delReply = "delete from PostReply where pid=?";
+		final String sql_delPost = "delete from PostInfo where pid=?";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql_delReply);
 				PreparedStatement ps2 = conn.prepareStatement(sql_delPost);)
 		{
-			ps1.setInt(1, account.getUid());
-			ps2.setInt(1, account.getUid());
+			ps1.setInt(1, pid);
+			ps2.setInt(1, pid);
 			int i = ps1.executeUpdate(), j = ps2.executeUpdate();
 			return i + j;
+		}
+	}
+	
+	public int deleteReply(int rid) throws SQLException
+	{
+		final String sql_delReply = "delete from PostReply where rid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_delReply))
+		{
+			ps.setInt(1, rid);
+			return ps.executeUpdate();
 		}
 	}
 }

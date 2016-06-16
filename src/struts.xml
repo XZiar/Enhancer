@@ -95,6 +95,14 @@
 		</action>
 		<action name="dotcheck" class="xziar.enhancer.action.AdminAction" method="DoTaskCheck">
 		</action>
+		<action name="gettmans" class="xziar.enhancer.action.AdminAction" method="GetTaskMans">
+		</action>
+		<action name="dotman" class="xziar.enhancer.action.AdminAction" method="DoTaskMan">
+		</action>
+		<action name="delpost" class="xziar.enhancer.action.AdminAction" method="DeletePost">
+		</action>
+		<action name="delreply" class="xziar.enhancer.action.AdminAction" method="DeleteReply">
+		</action>
 	</package>
 
 </struts>
