@@ -54,6 +54,35 @@ public class ForumAction extends ActionUtil
 		return "success";
 	}
 
+	public void JView()
+	{
+		if (OnMethod("GET", "../postview"))
+			return;
+		ServRes<PostBean> res = forumServ.GetPost(pid);
+		switch (res.toEnum())
+		{
+		case success:
+			post = res.getData();
+			break;
+		default:
+			Response(false, "error");
+			return;
+		}
+		ServRes<ArrayList<ReplyBean>> res2 = forumServ.GetReplys(post, from);
+		switch (res.toEnum())
+		{
+		case success:
+			replys = res2.getData();
+			break;
+		default:
+			Response(false, "error");
+			return;
+		}
+		datmap.put("post", post);
+		Response(true, "");
+		return;
+	}
+
 	public String List()
 	{
 		if (OnMethod("POST", null))
@@ -67,6 +96,23 @@ public class ForumAction extends ActionUtil
 		case error:
 		default:
 			return "error";
+		}
+	}
+
+	public void JList()
+	{
+		if (OnMethod("GET", "../forum"))
+			return;
+		ServRes<ArrayList<PostBean>> res = forumServ.GetTasks(from);
+		switch (res.toEnum())
+		{
+		case success:
+			posts = res.getData();
+			datmap.put("posts", posts);
+			Response(true, "");
+		case error:
+		default:
+			Response(false, "error");
 		}
 	}
 
@@ -127,7 +173,7 @@ public class ForumAction extends ActionUtil
 			return;
 		}
 	}
-	
+
 	public PostBean getPost()
 	{
 		return post;

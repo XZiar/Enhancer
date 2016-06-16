@@ -9,8 +9,11 @@
 	<constant name="struts.devMode" value="true" />
 
 	<package name="app" namespace="/app" extends="struts-default">
-		<action name="login" class="xziar.enhancer.action.UserAction" method="JLogin">
-		</action>
+		<action name="login" class="xziar.enhancer.action.UserAction" method="JLogin" />
+		<action name="task" class="xziar.enhancer.action.TaskAction" method="JList" />
+		<action name="taskview" class="xziar.enhancer.action.TaskAction" method="JView" />
+		<action name="forum" class="xziar.enhancer.action.ForumAction" method="JList" />
+		<action name="postview" class="xziar.enhancer.action.ForumAction" method="JView" />
 	</package>
 
 	<package name="strutsBean" namespace="/" extends="struts-default">

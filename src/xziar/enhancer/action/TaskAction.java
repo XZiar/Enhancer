@@ -39,6 +39,25 @@ public class TaskAction extends ActionUtil
 		}
 	}
 	
+	public void JView()
+	{
+		if(OnMethod("GET","../taskview"))
+			return;
+		ServRes<TaskBean> res = taskServ.GetTask(tid);
+		switch(res.toEnum())
+		{
+		case success:
+			task = res.getData();
+			datmap.put("task", task);
+			Response(true,"");
+			return ;
+		case error:
+		default:
+			Response(false,"ÏµÍ³´íÎó");
+			return;
+		}
+	}
+	
 	public String List()
 	{
 		if(OnMethod("POST",null))
@@ -52,6 +71,25 @@ public class TaskAction extends ActionUtil
 		case error:
 		default:
 			return "error";
+		}
+	}
+	
+	public void JList()
+	{
+		if(OnMethod("GET","../task"))
+			return;
+		ServRes<ArrayList<TaskBean>> res = taskServ.GetTasks(from);
+		switch(res.toEnum())
+		{
+		case success:
+			tasks = res.getData();
+			datmap.put("tasks", tasks);
+			Response(true,"");
+			return;
+		case error:
+		default:
+			Response(false,"ÍøÂç´íÎó");
+			return;
 		}
 	}
 	
