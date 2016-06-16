@@ -2,6 +2,7 @@ package xziar.enhancer.action;
 
 import java.util.ArrayList;
 
+import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.TaskBean;
@@ -26,7 +27,8 @@ public class UserInfoAction extends ActionUtil
 		user = (UserBean)session.getAttribute("user");
 		if(user == null)
 			return "unlogin";
-		
+		if(user.getAccountRole() == AccountBean.Role.admin)
+			return "admin";
 		return "success";
 	}
 	

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.PostBean;
 import xziar.enhancer.pojo.ReplyBean;
 import xziar.enhancer.pojo.UserBean;
@@ -139,5 +140,18 @@ public class PostDao
 		}
 		return reply;
 	}
-
+	
+	public int deleteUser(AccountBean account) throws SQLException
+	{
+		final String sql_delReply = "delete from PostReply where uid=?";
+		final String sql_delPost = "delete from PostInfo where uid=?";
+		try (PreparedStatement ps1 = conn.prepareStatement(sql_delReply);
+				PreparedStatement ps2 = conn.prepareStatement(sql_delPost);)
+		{
+			ps1.setInt(1, account.getUid());
+			ps2.setInt(1, account.getUid());
+			int i = ps1.executeUpdate(), j = ps2.executeUpdate();
+			return i + j;
+		}
+	}
 }

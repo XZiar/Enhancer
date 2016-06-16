@@ -50,24 +50,23 @@ $(document).ready(function()
 
 
 <div class="wrapper contents" style="position: relative;">
-<c:set var="urole" value="${fn:split('管理员,学生,企业', ',')}" />
 	<aside class="sidebar" style="width:20%;">
 		<ul class="tab_nav">
 			<li class="active_tab i_32_dashboard" data-obj="part1"><a>
-				<span class="tab_label">个人信息</span>
+				<span class="tab_label">用户审核</span>
 				<span class="tab_info"></span>
 			</a></li>
 			<li class="i_32_inbox" data-obj="part2"><a>
-				<span class="tab_label">修改信息</span>
+				<span class="tab_label">用户管理</span>
 				<span class="tab_info"></span>
 			</a></li>
 			<li class="i_32_tables" data-obj="part3"><a>
-				<span class="tab_label">任务</span>
-				<span class="tab_info">进行中</span>
+				<span class="tab_label">任务审核</span>
+				<span class="tab_info"></span>
 			</a></li>
 			<li class="i_32_forms" data-obj="part4"><a>
-				<span class="tab_label">任务</span>
-				<span class="tab_info">已完成</span>
+				<span class="tab_label">任务管理</span>
+				<span class="tab_info"></span>
 			</a></li>
 		</ul>
 	</aside>
@@ -79,86 +78,37 @@ $(document).ready(function()
 				<span class="label lwParagraph" id="msg"></span>
 			</div>
 			
-			<div class="g_6 contents_header">
-				<h3 class="i_16_dashboard tab_label">个人信息</h3>
-			</div>
-			<div class="g_6 contents_options">
-				<div class="simple_buttons">
-					<div class="bwIcon i_16_help">${urole[user.role]}</div>
-				</div>
-			</div>
-			
-			
-			<div id="part2" class="onepart">
+			<div id="part1" class="onepart">
 				<c:set var="obj" value="${user}"/>
-				<%@ include file="Info_Account.jsp"%>
+				<%@ include file="Info_User_Check.jsp"%>
 				
 				<div class="g_12 separator">
 					<span></span>
 				</div>
 			</div>
-			
-			
-<%
-	if(user.getAccountRole() == AccountBean.Role.student)
-	{
-%>
-		<div id="part1" class="onepart">
-			<c:set var="obj" value="${user}"/>
-			<%@ include file="Info_Job.jsp"%>
-			<div class="g_12 separator">
-				<span></span>
-			</div>
-		</div>
-		
-		<div id="part3" class="onepart">
-			<%@ include file="Info_Task_Ongoing_stu.jsp"%>
-			<div class="g_12 separator">
-				<span></span>
-			</div>
-		</div>
-		
-		<div id="part4" class="onepart">
-			<%@ include file="Info_Task_Finish_stu.jsp"%>
-			<div class="g_12 separator">
-				<span></span>
-			</div>
-		</div>
-<%
-	}
-	else if(user.getAccountRole() == AccountBean.Role.company)//company
-	{
-%>
-		<div id="part1" class="onepart">
-			<c:set var="obj" value="${user}"/>
-			<%@ include file="Info_Company.jsp"%>
-			<div class="g_12 separator">
-			<span></span>
-			</div>
-		</div>
-		
-		<div id="part3" class="onepart">
-			<%@ include file="Info_Task_Ongoing_cpn.jsp"%>
-			<div class="g_12 separator">
-				<span></span>
-			</div>
-		</div>
-		
-		<div id="part4" class="onepart">
-			<%@ include file="Info_Task_Finish_cpn.jsp"%>
-			<div class="g_12 separator">
-				<span></span>
-			</div>
-		</div>
-<%
-	}
-	else//admin
-	{
-%>
 
-		
+			<div id="part2" class="onepart">
+				<c:set var="obj" value="${user}"/>
+				<%@ include file="Info_Job.jsp"%>
+				<div class="g_12 separator">
+					<span></span>
+				</div>
+			</div>
+			
+			<div id="part3" class="onepart">
+				<%@ include file="Info_Task_Ongoing_stu.jsp"%>
+				<div class="g_12 separator">
+					<span></span>
+				</div>
+			</div>
+			
+			<div id="part4" class="onepart">
+				<%@ include file="Info_Task_Finish_stu.jsp"%>
+				<div class="g_12 separator">
+					<span></span>
+				</div>
+			</div>
 <%
-	}
 }
 %>
 			

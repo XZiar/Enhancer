@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.AccountBean.Status;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.GroupBean;
 import xziar.enhancer.pojo.StudentBean;
@@ -120,6 +121,25 @@ public class UserDao
 		return groups;
 	}
 
+	public ArrayList<UserBean> queryUsers(Status status) throws SQLException
+	{
+		final String sql_queryAccount = "select * from AccountInfo where status=?";
+		try (PreparedStatement ps1 = conn.prepareStatement(sql_queryAccount))
+		{
+			ps1.setInt(1, status.ordinal());
+			ResultSet rs1 = ps1.executeQuery();
+			ArrayList<UserBean> users = new ArrayList<>();
+			while (rs1.next())
+			{
+				AccountBean account = new AccountBean();
+				DataInject.RSToObj(rs1, account);
+				UserBean user = queryUser(account);
+				users.add(user);
+			}
+			return users;
+		}
+	}
+	
 	public ArrayList<UserBean> queryApplicants(int tid) throws SQLException
 	{
 		final String sql_queryApplicants = "select uid from TaskApply where tid=?";
@@ -149,6 +169,33 @@ public class UserDao
 			ps.setInt(3, account.getRole());
 			ps.setInt(4, account.getStatus());
 			return ps.executeUpdate();
+		}
+	}
+
+	public int deleteUser(AccountBean account) throws SQLException
+	{
+		final String sql_delAccount = "delete from AccountInfo where uid=?";
+		final String sql_delCompany = "delete from CompanyInfo where uid=?";
+		final String sql_delStudent = "delete from StudentInfo where uid=?";
+		final String sql_delUser = "delete from UserBasicInfo where uid=?";
+		try (PreparedStatement ps1 = conn.prepareStatement(sql_delAccount);
+				PreparedStatement ps2 = conn.prepareStatement(sql_delUser);
+				PreparedStatement ps3 = conn.prepareStatement(sql_delCompany);
+				PreparedStatement ps4 = conn.prepareStatement(sql_delStudent);)
+		{
+			ps1.setInt(1, account.getUid());
+			ps2.setInt(1, account.getUid());
+			ps3.setInt(1, account.getUid());
+			ps4.setInt(1, account.getUid());
+
+			int i = ps3.executeUpdate() + ps4.executeUpdate();
+			int j = ps2.executeUpdate() + ps1.executeUpdate();
+			if (i < 1 || j != 2)
+			{
+				System.out.println("delete res:" + i + "," + j);
+				return -1;
+			}
+			return i + j;
 		}
 	}
 

@@ -141,6 +141,20 @@ public class TaskDao
 		return task;
 	}
 
+	public int updateTask(TaskBean task) throws SQLException
+	{
+		final String sql_updAccount = "update TaskInfo set title=? , time_modify=? , status=? where tid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_updAccount))
+		{
+			task.setTime_modify((int) (System.currentTimeMillis() - task.getTime_start()));
+			ps.setInt(4, task.getTid());
+			ps.setString(1, task.getTitle());
+			ps.setInt(2, task.getTime_modify());
+			ps.setInt(3, task.getStatus());
+			return ps.executeUpdate();
+		}
+	}
+	
 	public int addApplicant(int tid, int uid, String des) throws SQLException
 	{
 		final String sql = "insert into TaskApply (uid,tid,describe) values(?,?,?)";

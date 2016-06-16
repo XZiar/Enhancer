@@ -47,6 +47,7 @@
 		<action name="my" class="xziar.enhancer.action.UserInfoAction" method="Overall">
 			<result name="unlogin" type="redirect">/login.jsp</result>
 			<result name="success">/MyInfo.jsp</result>
+			<result name="admin">/Admin.jsp</result>
 		</action>
 		<action name="mytasks" class="xziar.enhancer.action.UserInfoAction" method="TaskOngoing">
 			<result name="unlogin" type="redirect">/login.jsp</result>
@@ -80,6 +81,11 @@
 		<action name="addpost" class="xziar.enhancer.action.ForumAction" method="PostPost">
 		</action>
 		<action name="addreply" class="xziar.enhancer.action.ForumAction" method="PostReply">
+		</action>
+		
+		<action name="getuchecks" class="xziar.enhancer.action.AdminAction" method="GetUserChecks">
+		</action>
+		<action name="doucheck" class="xziar.enhancer.action.AdminAction" method="DoUserCheck">
 		</action>
 	</package>
 
