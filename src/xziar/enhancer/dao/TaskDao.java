@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.TaskBean;
+import xziar.enhancer.pojo.TaskBean.Status;
 import xziar.enhancer.util.DataInject;
 
 public class TaskDao
@@ -74,6 +76,24 @@ public class TaskDao
 		}
 	}
 
+	public ArrayList<TaskBean> queryTasks(Status status) throws SQLException
+	{
+		final String sql_queryTasks = "select * from TaskSimpleData where status=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
+		{
+			ps.setInt(1, status.ordinal());
+			ResultSet rs = ps.executeQuery();
+			ArrayList<TaskBean> tasks = new ArrayList<>();
+			while (rs.next())
+			{
+				TaskBean task = new TaskBean();
+				DataInject.RSToObj(rs, task);
+				tasks.add(task);
+			}
+			return tasks;
+		}
+	}
+	
 	public ArrayList<TaskBean> queryTasks(int from, int size, String order)
 			throws SQLException
 	{
@@ -141,6 +161,26 @@ public class TaskDao
 		return task;
 	}
 
+	public int deleteTask(int tid) throws SQLException
+	{
+		final String sql_delInfo = "delete from TaskInfo where tid=?";
+		final String sql_delDetail = "delete from TaskDetail where tid=?";
+		try (PreparedStatement ps1 = conn.prepareStatement(sql_delDetail);
+				PreparedStatement ps2 = conn.prepareStatement(sql_delInfo))
+		{
+			ps1.setInt(1, tid);
+			ps2.setInt(1, tid);
+
+			int i = ps1.executeUpdate(), j = ps2.executeUpdate();
+			if (i + j != 2)
+			{
+				System.out.println("delete res:" + i + "," + j);
+				return -1;
+			}
+			return i + j;
+		}
+	}
+	
 	public int updateTask(TaskBean task) throws SQLException
 	{
 		final String sql_updAccount = "update TaskInfo set title=? , time_modify=? , status=? where tid=?";
@@ -214,4 +254,5 @@ public class TaskDao
 			return;
 		}
 	}
+
 }

@@ -91,6 +91,10 @@
 		</action>
 		<action name="deluser" class="xziar.enhancer.action.AdminAction" method="DeleteUser">
 		</action>
+		<action name="gettchecks" class="xziar.enhancer.action.AdminAction" method="GetTaskChecks">
+		</action>
+		<action name="dotcheck" class="xziar.enhancer.action.AdminAction" method="DoTaskCheck">
+		</action>
 	</package>
 
 </struts>

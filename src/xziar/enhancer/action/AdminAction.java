@@ -7,6 +7,7 @@ import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.AccountBean.Status;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
+import xziar.enhancer.pojo.TaskBean;
 import xziar.enhancer.pojo.UserBean;
 import xziar.enhancer.service.AdminService;
 import xziar.enhancer.util.ServRes;
@@ -20,6 +21,7 @@ public class AdminAction extends ActionUtil
 	private Boolean pass;
 	private UserBean user;
 	private ArrayList<UserBean> users;
+	private ArrayList<TaskBean> tasks;
 	private StudentBean stu;
 	private CompanyBean cpn;
 
@@ -53,6 +55,25 @@ public class AdminAction extends ActionUtil
 		case error:
 		default:
 			Response(false, "error");
+		}
+	}
+	
+	public void GetTaskChecks()
+	{
+		if (!check())
+			return;
+		ServRes<ArrayList<TaskBean>> res = adminServ.GetTaskChecks();
+		switch (res.toEnum())
+		{
+		case success:
+			tasks = res.getData();
+			datmap.put("tchecks", tasks);
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+			return;
 		}
 	}
 
@@ -103,7 +124,37 @@ public class AdminAction extends ActionUtil
 			Response(false, "error");
 		}
 	}
-
+	
+	public void DoTaskCheck()
+	{
+		if (!check())
+			return;
+		if (pass == null)
+		{
+			Response(false, "error");
+			return;
+		}
+		ServRes<?> res;
+		if (pass)
+		{
+			res = adminServ.ChangeStatus(tid, TaskBean.Status.onapply);
+		}
+		else
+		{
+			res = adminServ.DeleteTask(tid);
+		}
+		switch (res.toEnum())
+		{
+		case success:
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+		}
+	}
+	
+/*
 	public void ChgUserState()
 	{
 		if (!check())
@@ -126,7 +177,7 @@ public class AdminAction extends ActionUtil
 			Response(false, "ÏµÍ³´íÎó");
 			return;
 		}
-	}
+	}*/
 
 	public void DeleteUser()
 	{
@@ -233,5 +284,15 @@ public class AdminAction extends ActionUtil
 	public void setType(String type)
 	{
 		this.type = type;
+	}
+
+	public ArrayList<TaskBean> getTasks()
+	{
+		return tasks;
+	}
+
+	public void setTasks(ArrayList<TaskBean> tasks)
+	{
+		this.tasks = tasks;
 	}
 }

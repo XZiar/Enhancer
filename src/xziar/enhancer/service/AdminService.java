@@ -79,6 +79,26 @@ public class AdminService
 		}
 	}
 
+	public ServRes<Boolean> DeleteTask(int tid)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		taskdao = new TaskDao(conn);
+		try
+		{
+			int ret = taskdao.deleteTask(tid);
+			return new ServRes<>((ret != -1));
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+	
 	public ServRes<ArrayList<UserBean>> GetUserChecks()
 	{
 		Connection conn = DaoBase.getConnection(true);
@@ -87,6 +107,26 @@ public class AdminService
 		{
 			ArrayList<UserBean> users = userdao.queryUsers(AccountBean.Status.unchecked);
 			return new ServRes<>(users);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+	
+	public ServRes<ArrayList<TaskBean>> GetTaskChecks()
+	{
+		Connection conn = DaoBase.getConnection(true);
+		taskdao = new TaskDao(conn);
+		try
+		{
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(TaskBean.Status.oncheck);
+			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
 		{
@@ -129,7 +169,7 @@ public class AdminService
 			if (task == null)
 				return new ServRes<>(Result.nonexist);
 			task.setTaskStatus(newStatus);
-			if (taskdao.updateTask(task) != -1)
+			if (taskdao.updateTask(task) == -1)
 				return new ServRes<>(Result.error);
 			conn.commit();
 			return new ServRes<>(task);

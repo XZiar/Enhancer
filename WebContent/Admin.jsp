@@ -16,6 +16,7 @@
 	<script src="Javascript/jQuery/jquery-ui-1.11.4.min.js"></script>
 	<style>
 		.sidebar > ul > li{cursor: pointer;}
+		.ttitle {cursor: pointer;}
 	</style>
 </head>
 <body>
@@ -120,7 +121,7 @@ $(document).ready(function()
 			</div>
 			
 			<div id="part3" class="onepart">
-				<%@ include file="Info_Task_Ongoing_stu.jsp"%>
+				<%@ include file="Info_Task_Check.jsp"%>
 				<div class="g_12 separator">
 					<span></span>
 				</div>

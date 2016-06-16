@@ -126,9 +126,8 @@ $(document).ready(function()
 			<div class="bwIcon i_16_help">刷新企业</div>
 		</div>
 	</div>
-	<div class="g_12">
-	<div class="widget_contents noPadding">
-		<div class="g_4"><div class="widget_contents noPadding">
+	<div class="g_4">
+		<div class="widget_contents noPadding">
 			<table class="tables">
 				<thead><tr>
 					<th width="50%">姓名/公司名</th>
@@ -137,17 +136,15 @@ $(document).ready(function()
 				<tbody id="umlist">
 				</tbody>
 			</table>
-		</div></div>
-
-		<div class="g_8">
-			<div class="widget_contents noPadding">
-				<table class="tables">
-					<tbody id="umdetail">
-					</tbody>
-				</table>
-			</div>
 		</div>
 	</div>
+	<div class="g_8">
+		<div class="widget_contents noPadding">
+			<table class="tables">
+				<tbody id="umdetail">
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 	

@@ -98,8 +98,8 @@ $(document).ready(function()
 			ctxt += "<tr><td>公司营业执照</td><td><img style='max-width: 100%;' src='img?obj=" + user.pic_coltd + "'></td></tr>";
 			ctxt += "<tr><td>负责人身份证照</td><td><img style='max-width: 100%;' src='img?obj=" + user.pic_id + "'></td></tr>";
 		}
-		ctxt += "<tr><td><div class='simple_buttons' id='ucpass' data-uid='"+ user.uid +"'><div>通过</div><div></td>"
-			+ "<td><div class='simple_buttons' id='ucfail' data-uid='"+ user.uid +"'><div>拒绝</div><div></td></tr>";
+		ctxt += "<tr><td><div class='simple_buttons' id='ucpass' data-uid='"+ user.uid +"'><div>通过</div></div></td>"
+			+ "<td><div class='simple_buttons' id='ucfail' data-uid='"+ user.uid +"'><div>拒绝</div></div></td></tr>";
 		obj.append(ctxt);
 		
 	});
@@ -113,9 +113,8 @@ $(document).ready(function()
 			<div class="bwIcon i_16_help">刷新</div>
 		</div>
 	</div>
-	<div class="g_12">
-	<div class="widget_contents noPadding">
-		<div class="g_4"><div class="widget_contents noPadding">
+	<div class="g_4">
+		<div class="widget_contents noPadding">
 			<table class="tables">
 				<thead>
 					<tr><th>姓名/公司名</th></tr>
@@ -123,17 +122,16 @@ $(document).ready(function()
 				<tbody id="uclist">
 				</tbody>
 			</table>
-		</div></div>
-
-		<div class="g_8">
-			<div class="widget_contents noPadding">
-				<table class="tables">
-					<tbody id="ucdetail">
-					</tbody>
-				</table>
-			</div>
 		</div>
 	</div>
+	<div class="g_8">
+		<div class="widget_contents noPadding">
+			<table class="tables">
+				<tbody id="ucdetail">
+				</tbody>
+			</table>
+		</div>
 	</div>
+
 
 	
