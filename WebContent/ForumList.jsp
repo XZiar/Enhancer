@@ -38,21 +38,15 @@ $(document).ready(function()
 </script>
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
-<%
-{
-	UserBean user = (UserBean)session.getAttribute("user");
-	if(user != null)
-	{
-%>		
+		
+<c:if test="${! empty user }">	
 			<div class="g_12" style="text-align: center;">
 				<div class="simple_buttons" id="addpost">
 					<div>发布新话题</div>
 				</div>
 			</div>
-<%
-	}
-}
-%>
+</c:if>
+
 			<div class="g_12">
 				<div class="widget_contents noPadding">
 					<table class="tables">

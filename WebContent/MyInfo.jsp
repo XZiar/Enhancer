@@ -90,9 +90,7 @@ $(document).ready(function()
 			
 			
 			<div id="part2" class="onepart">
-				<c:set var="obj" value="${user}"/>
 				<%@ include file="Info_Account.jsp"%>
-				
 				<div class="g_12 separator">
 					<span></span>
 				</div>
@@ -104,7 +102,6 @@ $(document).ready(function()
 	{
 %>
 		<div id="part1" class="onepart">
-			<c:set var="obj" value="${user}"/>
 			<%@ include file="Info_Job.jsp"%>
 			<div class="g_12 separator">
 				<span></span>
@@ -130,7 +127,6 @@ $(document).ready(function()
 	{
 %>
 		<div id="part1" class="onepart">
-			<c:set var="obj" value="${user}"/>
 			<%@ include file="Info_Company.jsp"%>
 			<div class="g_12 separator">
 			<span></span>
@@ -150,13 +146,6 @@ $(document).ready(function()
 				<span></span>
 			</div>
 		</div>
-<%
-	}
-	else//admin
-	{
-%>
-
-		
 <%
 	}
 }

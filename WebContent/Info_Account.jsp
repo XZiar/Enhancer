@@ -57,7 +57,7 @@ $(document).ready(function()
 		<div class="line_grid half">
 			<div class="g_3"><span class="label">简介</span></div>
 			<div class="g_9">
-				<input type="text" name="des" class="simple_field" value="<c:out value='${obj.describe}'/>" pattern="{2,50}" required>
+				<input type="text" name="des" class="simple_field" value="${user.describe}" pattern="{2,50}" required>
 				<div class="field_alert"></div>
 			</div>
 		</div>

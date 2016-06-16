@@ -17,19 +17,19 @@ $(document).ready(function()
 	<!-- Quick Statistics -->
 	<div class="g_4 quick_stats">
 		<div class="big_stats visitor_stats">
-			<c:out value="${obj.score}"/>
+			<c:out value="${user.score}"/>
 		</div>
 		<h5 class="stats_info">得分</h5>
 	</div>
 	<div class="g_4 quick_stats" data-url="mytasks">
 		<div class="big_stats tickets_stats">
-			<c:out value="${obj.task_finish}"/>
+			<c:out value="${user.task_finish}"/>
 		</div>
 		<h5 class="stats_info">完成任务数</h5>
 	</div>
 	<div class="g_4 quick_stats" data-url="mytasks">
 		<div class="big_stats users_stats">
-			<c:out value="${obj.task_ongoing}"/>
+			<c:out value="${user.task_ongoing}"/>
 		</div>
 		<h5 class="stats_info">待完成任务数</h5>
 	</div>

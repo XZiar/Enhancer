@@ -39,22 +39,15 @@ $(document).ready(function()
 </script>
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
-
-<%
-{
-	UserBean user = (UserBean)session.getAttribute("user");
-	if(user != null && user.getClass() == CompanyBean.class)
-	{
-%>		
+		
+<c:if test="${(! empty user) && user.role == 2 }">
 			<div class="g_12" style="text-align: center;">
 				<div class="simple_buttons" id="addtask">
 					<div>发布任务</div>
 				</div>
 			</div>
-<%
-	}
-}
-%>
+</c:if>
+
 			<div class="g_12">
 				<div class="widget_contents noPadding">
 					<table class="tables">

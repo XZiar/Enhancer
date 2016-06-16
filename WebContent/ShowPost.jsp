@@ -81,7 +81,7 @@ $(document).ready(function()
 	});
 });
 </script>
-	<c:set var="isAdmin" value="${(! empty sessionScope.user) && user.role == 0 }" />
+	<c:set var="isAdmin" value="${(! empty user) && user.role == 0 }" />
 	<div class="theme-popover" style="display:none;">
 		<div id="ret" class="dialog" title="">
 			<span class="label lwParagraph" id="msg"></span>
@@ -224,7 +224,7 @@ function delreply(rid)
 				</div>
 			</div>
 			</c:if>
-			<c:if test="${! empty sessionScope.user }">
+			<c:if test="${! empty user }">
 			<form id="replyform">
 				<input type="hidden" name="reply.pid" value='${post.pid }' />
 				<div class="g_12">

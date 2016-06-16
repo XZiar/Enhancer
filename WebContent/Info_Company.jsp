@@ -14,22 +14,22 @@ $(document).ready(function()
 	});
 });
 </script>
-	<!-- Quick Statistics -->
+	
 	<div class="g_4 quick_stats">
 		<div class="big_stats visitor_stats">
-			<c:out value="${obj.score}"/>
+			<c:out value="${user.score}"/>
 		</div>
 		<h5 class="stats_info">得分</h5>
 	</div>
 	<div class="g_4 quick_stats" data-url="mytasks">
 		<div class="big_stats tickets_stats">
-			<c:out value="${obj.task_finish}"/>
+			<c:out value="${user.task_finish}"/>
 		</div>
 		<h5 class="stats_info">发布任务数</h5>
 	</div>
 	<div class="g_4 quick_stats" data-url="mytasks">
 		<div class="big_stats users_stats">
-			<c:out value="${obj.task_ongoing}"/>
+			<c:out value="${user.task_ongoing}"/>
 		</div>
 		<h5 class="stats_info">进行中任务数</h5>
 	</div>
@@ -40,10 +40,10 @@ $(document).ready(function()
 	
 	<div class="g_6">
 		<div class="widget_header">
-			<h4 class="widget_header_title wwIcon i_16_tables">法人照片</h4>
+			<h4 class="widget_header_title wwIcon i_16_tables">负责人身份证照</h4>
 		</div>
 		<div class="widget_contents noPadding">
-			<img src="img?obj=<c:out value="${obj.pic_id}"/>" alt="id" style="max-width: 100%;">
+			<img src="img?obj=${user.pic_id}" alt="id" style="max-width: 100%;">
 		</div>
 	</div>
 	<div class="g_6">
@@ -51,7 +51,7 @@ $(document).ready(function()
 			<h4 class="widget_header_title wwIcon i_16_tables">企业执照</h4>
 		</div>
 		<div class="widget_contents noPadding">
-			<img src="img?obj=<c:out value="${obj.pic_coltd}"/>" alt="coltd" style="max-width: 100%;">
+			<img src="img?obj=${user.pic_coltd}" alt="coltd" style="max-width: 100%;">
 		</div>
 	</div>	
 

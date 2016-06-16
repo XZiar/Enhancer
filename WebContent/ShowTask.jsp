@@ -209,13 +209,7 @@ $(document).ready(function()
 				</div>
 			</div>
 			
-<%
-{
-	UserBean user = (UserBean)session.getAttribute("user");
-	if(user != null)
-	{
-%>
-		<c:if test="${user.role == 1 && task.status == 1 }">
+		<c:if test="${(! empty user) && user.role == 1 && task.status == 1 }">
 			<div class="g_12" style="text-align: center;">
 				<div class="simple_buttons" id="apply">
 					<div>提交申请</div>
@@ -274,10 +268,6 @@ function deltask()
 			</div>
 
 		</c:if>
-<%
-	}
-}
-%>
 			
 		</div>
 	</div>

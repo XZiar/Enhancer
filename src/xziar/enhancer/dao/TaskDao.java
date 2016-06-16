@@ -113,6 +113,20 @@ public class TaskDao
 		}
 	}
 
+	public Integer queryApplicant(int tid) throws SQLException
+	{
+		final String sql1 = "select uid from TaskApply where tid=? and state=1";
+		try (PreparedStatement ps = conn.prepareStatement(sql1))
+		{
+			ps.setInt(1, tid);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+		}
+	}
+	
 	public ArrayList<Integer> GetApplicants(int tid) throws SQLException
 	{
 		final String sql1 = "select uid from TaskApply where tid=?";
@@ -236,7 +250,7 @@ public class TaskDao
 		final String sql3 = "insert into TaskResult(tid,suid,cuid) values(?,?,?)";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql1);
 				PreparedStatement ps2 = conn.prepareStatement(sql2);
-				PreparedStatement ps3 = conn.prepareStatement(sql3);)
+				PreparedStatement ps3 = conn.prepareStatement(sql3))
 		{
 			ps1.setInt(1, suid);
 			ps1.setInt(2, tid);

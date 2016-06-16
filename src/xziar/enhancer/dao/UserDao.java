@@ -63,8 +63,8 @@ public class UserDao
 		{
 		case admin:
 			user = new UserBean(account);
-			user.setName(user.getUn());
-			return user;
+			sql_query = "select * from UserBasicInfo where uid=?";
+			break;
 		case student:
 			sql_query = "select * from StudentData where uid=?";
 			user = new StudentBean(account);

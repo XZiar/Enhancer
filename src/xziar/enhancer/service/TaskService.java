@@ -172,7 +172,7 @@ public class TaskService
 
 	public ServRes<Boolean> Apply(int uid, int tid, String des)
 	{
-		Boolean rolled = false;
+		boolean rolled = false;
 		Connection conn = DaoBase.getConnection(true);
 		UserDao userdao = new UserDao(conn);
 		TaskDao taskdao = new TaskDao(conn);
@@ -187,21 +187,27 @@ public class TaskService
 				return new ServRes<>(Result.error);
 			TaskBean task = res1.getData();
 
+			if (task.getTaskStatus() != TaskBean.Status.onapply)
+				return new ServRes<>(Result.wrongstatus);
+
 			if (task.getLimit_people() > user.getPeople())
 				return new ServRes<>(Result.unsatisfy);
-
+			
 			// add applicant
 			conn.setAutoCommit(false);
 			rolled = true;
 			if (taskdao.addApplicant(tid, uid, des) != 1)
-				return new ServRes<>(Result.error);
+			{
+				rolled = false;
+				conn.rollback();
+			}
 			conn.commit();
 			return new ServRes<>(true);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			if (true == rolled)
+			if (rolled)
 			{
 				try
 				{
@@ -223,7 +229,7 @@ public class TaskService
 	public ServRes<Boolean> AcceptApply(int uid, int tid, UserBean user)
 	{
 		boolean rolled = false;
-		if (CompanyBean.class != user.getClass())
+		if (user.getAccountRole() != Role.company)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
@@ -234,8 +240,7 @@ public class TaskService
 				return new ServRes<>(Result.nonexist);
 			if (task.getUid() != user.getUid())// not own this task
 				return new ServRes<>(Result.unsatisfy);
-			if (task.getTaskStatus() != TaskBean.Status.oncheck
-					&& task.getTaskStatus() != TaskBean.Status.onapply)
+			if (task.getTaskStatus() != TaskBean.Status.onapply)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
 			conn.setAutoCommit(false);
@@ -269,7 +274,7 @@ public class TaskService
 	public ServRes<Boolean> ComfirmApply(int tid, UserBean user)
 	{
 		boolean rolled = false;
-		if (StudentBean.class != user.getClass())
+		if (user.getAccountRole() != Role.student)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
@@ -278,7 +283,8 @@ public class TaskService
 			TaskBean task = taskdao.queryTask(tid);
 			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			if (task.getUid() != user.getUid())// not own this task
+			Integer uid = taskdao.queryApplicant(tid);
+			if (user.getUid() != uid)// not own this task
 				return new ServRes<>(Result.unsatisfy);
 			if (task.getTaskStatus() != TaskBean.Status.onliscene)
 				return new ServRes<>(Result.wrongstatus);

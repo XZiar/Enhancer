@@ -1,40 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="xziar.enhancer.pojo.UserBean" %>
-<%{%>
-<%
-UserBean user = (UserBean)session.getAttribute("user");
-boolean isLogged = !(user == null);
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<c:set var="isLogged" value="${! empty user }" />
 <!-- Top Panel -->
 <div class="top_panel">
 	<div class="wrapper">
-		<div class="user" onclick="<%=isLogged?"my":"login.jsp"%>">
-		<%if(isLogged){%>
-			<img src="Images/user_avatar.png" class="user_avatar" />
-			<span class="label"><%=user.getName()%></span>
-			
-		<%}else{%>
-			<span class="label">未登录</span>
-		<%}%>
+		<div class="user" onclick='${isLogged?"my":"login.jsp"}'>
+		<c:choose>
+			<c:when test="${isLogged }">
+				<img src="Images/user_avatar.png" class="user_avatar" />
+				<span class="label"><c:out value="${user.name }"/></span>
+			</c:when>
+			<c:otherwise>
+				<span class="label">未登录</span>
+			</c:otherwise>
+		</c:choose>
 		</div>
-		<div class="top_links">
-			<ul>
-			<%if(isLogged){%>
+		<div class="top_links"><ul>
+		<c:choose>
+			<c:when test="${isLogged }">
 				<li class="i_22_logout">
 					<a href="logout" title="安全退出">
 						<span class="label">安全退出</span>
 					</a>
 				</li>
-			<%}else{%>
+			</c:when>
+			<c:otherwise>
 				<li class="i_22_login">
 					<a href="login.jsp" title="登录">
 						<span class="label">登录</span>
 					</a>
 				</li>
-			<%}%>
-			</ul>
-		</div>
+			</c:otherwise>
+		</c:choose>
+		</ul></div>
 	</div>
 </div>
 
@@ -98,4 +98,3 @@ boolean isLogged = !(user == null);
 		</nav>
 	</div>
 </header>
-<%}%>

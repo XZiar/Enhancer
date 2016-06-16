@@ -69,12 +69,6 @@ $(document).ready(function()
 </script>
 	<%@ include file="PageHead.jsp"%>
 
-<%
-{
-	UserBean user = (UserBean)request.getAttribute("user");
-%>
-
-
 <div class="wrapper contents" style="position: relative;">
 	<aside class="sidebar" style="width:20%;">
 		<ul class="tab_nav">
@@ -122,10 +116,7 @@ $(document).ready(function()
 					<span></span>
 				</div>
 			</div>
-<%
-}
-%>
-			
+					
 		</div>
 	</div>
 	
