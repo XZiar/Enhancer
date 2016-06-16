@@ -27,6 +27,9 @@ public class UserAction extends ActionUtil
 		case wrongun:
 			Response(false, "用户名错误");
 			return;
+		case wrongstatus:
+			Response(false, "审核尚未通过");
+			return;
 		case wrongpwd:
 			Response(false, "密码错误");
 			return;
@@ -51,6 +54,9 @@ public class UserAction extends ActionUtil
 		{
 		case wrongun:
 			Response(false, "用户名错误");
+			return;
+		case wrongstatus:
+			Response(false, "审核尚未通过");
 			return;
 		case wrongpwd:
 			Response(false, "密码错误");
@@ -111,7 +117,7 @@ public class UserAction extends ActionUtil
 
 	public void setUn(String un)
 	{
-		this.un = un;
+		this.un = un.replace(" ", "");
 	}
 
 	public String getPwd()

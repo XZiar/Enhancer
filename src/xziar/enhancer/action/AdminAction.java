@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.pojo.AccountBean.Status;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.UserBean;
@@ -15,6 +16,7 @@ public class AdminAction extends ActionUtil
 	private int uid = -1;
 	private int tid = -1;
 	private int status = -1;
+	private String type = "";
 	private Boolean pass;
 	private UserBean user;
 	private ArrayList<UserBean> users;
@@ -54,6 +56,25 @@ public class AdminAction extends ActionUtil
 		}
 	}
 
+	public void GetAllUsers()
+	{
+		if (!check())
+			return;
+		Role role = Role.valueOf(type);
+		ServRes<ArrayList<UserBean>> res = adminServ.GetUsers(role);
+		switch (res.toEnum())
+		{
+		case success:
+			users = res.getData();
+			datmap.put("users", users);
+			Response(true, role == Role.company ? "ÆóÒµ" : "Ñ§Éú");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+		}
+	}
+
 	public void DoUserCheck()
 	{
 		if (!check())
@@ -64,9 +85,9 @@ public class AdminAction extends ActionUtil
 			return;
 		}
 		ServRes<?> res;
-		if(pass)
+		if (pass)
 		{
-			res = adminServ.ChangeStatus(uid,AccountBean.Status.pass);
+			res = adminServ.ChangeStatus(uid, Status.pass);
 		}
 		else
 		{
@@ -98,9 +119,7 @@ public class AdminAction extends ActionUtil
 			Response(false, "ÃÜÂë´íÎó");
 			return;
 		case success:
-			// user = res.getData();
-			session.setAttribute("user", user);
-			Response(true, "»¶Ó­Äú£¬" + user.getName());
+			Response(true, "");
 			return;
 		case error:
 		default:
@@ -109,6 +128,23 @@ public class AdminAction extends ActionUtil
 		}
 	}
 
+	public void DeleteUser()
+	{
+		if (!check())
+			return;
+		ServRes<Boolean> res = adminServ.BlockUser(uid);
+		switch (res.toEnum())
+		{
+		case success:
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+			return;
+		}
+	}
+	
 	public int getUid()
 	{
 		return uid;
@@ -187,5 +223,15 @@ public class AdminAction extends ActionUtil
 	public void setPass(Boolean pass)
 	{
 		this.pass = pass;
+	}
+
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
 	}
 }

@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.AccountBean.Status;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.GroupBean;
@@ -124,22 +125,42 @@ public class UserDao
 	public ArrayList<UserBean> queryUsers(Status status) throws SQLException
 	{
 		final String sql_queryAccount = "select * from AccountInfo where status=?";
-		try (PreparedStatement ps1 = conn.prepareStatement(sql_queryAccount))
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryAccount))
 		{
-			ps1.setInt(1, status.ordinal());
-			ResultSet rs1 = ps1.executeQuery();
+			ps.setInt(1, status.ordinal());
+			ResultSet rs = ps.executeQuery();
 			ArrayList<UserBean> users = new ArrayList<>();
-			while (rs1.next())
+			while (rs.next())
 			{
 				AccountBean account = new AccountBean();
-				DataInject.RSToObj(rs1, account);
+				DataInject.RSToObj(rs, account);
 				UserBean user = queryUser(account);
 				users.add(user);
 			}
 			return users;
 		}
 	}
-	
+
+	public ArrayList<UserBean> queryUsers(Role role) throws SQLException
+	{
+		final String sql_queryAccount = "select * from AccountInfo where role=? and status="
+				+ Status.pass.ordinal();
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryAccount))
+		{
+			ps.setInt(1, role.ordinal());
+			ResultSet rs = ps.executeQuery();
+			ArrayList<UserBean> users = new ArrayList<>();
+			while (rs.next())
+			{
+				AccountBean account = new AccountBean();
+				DataInject.RSToObj(rs, account);
+				UserBean user = queryUser(account);
+				users.add(user);
+			}
+			return users;
+		}
+	}
+
 	public ArrayList<UserBean> queryApplicants(int tid) throws SQLException
 	{
 		final String sql_queryApplicants = "select uid from TaskApply where tid=?";

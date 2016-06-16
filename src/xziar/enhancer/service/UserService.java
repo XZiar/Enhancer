@@ -53,6 +53,8 @@ public class UserService
 			else if (pwd.equals(account.getPwd()))
 			{
 				UserBean user = userdao.queryUser(account);
+				if(user.getAccountStatus() == AccountBean.Status.unchecked)
+					return new ServRes<>(Result.wrongstatus);
 				return new ServRes<>(user);
 			}
 			else

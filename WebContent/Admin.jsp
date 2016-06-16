@@ -20,9 +20,34 @@
 </head>
 <body>
 <script>
+function MsgTip(txt)
+{
+	var cont = '<div class="g_12"><div class="success iDialog">' + txt + '</div></div>';
+	$("#msgtip").html(cont);
+}
+function MsgTip(txt)
+{
+	var cont = '<div class="g_12"><div class="success iDialog">' + txt + '</div></div>';
+	$("#msgtip").html(cont);
+}
 $(document).ready(function()
 {
 	$.fx.speeds._default = 300;
+	$('#ret').dialog(
+	{
+		resizable: false,
+		autoOpen: false,
+		show: "fadeIn",
+		modal: true,
+		closeText: "",
+	});
+	$("#msgtip").on("click", ".iDialog", function()
+	{
+		$(this).fadeOut("slow").promise().done(function()
+		{
+			$(this).parent().remove();
+		});
+	});
 	$('#ret').dialog(
 	{
 		autoOpen: false,
@@ -75,21 +100,20 @@ $(document).ready(function()
 		<div class="grid_wrapper">
 
 			<div id="ret" class="dialog" title="">
-				<span class="label lwParagraph" id="msg"></span>
+				<span class="label lwParagraph" id="msg">L</span>
+			</div>
+			<div class="g_12" id="msgtip">
 			</div>
 			
 			<div id="part1" class="onepart">
-				<c:set var="obj" value="${user}"/>
 				<%@ include file="Info_User_Check.jsp"%>
-				
 				<div class="g_12 separator">
 					<span></span>
 				</div>
 			</div>
 
 			<div id="part2" class="onepart">
-				<c:set var="obj" value="${user}"/>
-				<%@ include file="Info_Job.jsp"%>
+				<%@ include file="Info_User_Manage.jsp"%>
 				<div class="g_12 separator">
 					<span></span>
 				</div>

@@ -3,13 +3,14 @@
 <!DOCTYPE html>
 
 <script>
-var g_uchecks;
-function rfs_uc()
+var g_umusers;
+function rfs_um(type)
 {
 	$.ajax({
 		type : "POST",
-		url : "getuchecks",
-		success : function(data)
+		data : "type="+type,
+		url : "getusers",
+		success : function(data,type)
 		{
 			var ret = JSON.parse(data);
 			if(!ret.success)
@@ -22,25 +23,26 @@ function rfs_uc()
 				window.location.href = "403.jsp";
 				return;
 			}
-			var obj = $("#uclist");
+			var obj = $("#umlist");
 			obj.html("");
-			g_uchecks = ret.uchecks;
-			$.each(g_uchecks, function(i, user)
+			g_umusers = ret.users;
+			$.each(g_umusers, function(i, user)
 			{
-				var ctxt = "<tr data-idx='" + i + "'><td>" + user.name + "</td></tr>";
+				var ctxt = "<tr data-idx='" + i + "'><td>" + user.name + "</td><td>" 
+					+ user.task_ongoing + "/" + user.task_finish + "</td></tr>";
 				obj.append(ctxt);
 			});
-			$('#ucdetail').html("");
-			MsgTip("目前有"+g_uchecks.length+"个用户未被审核");
+			$('#umdetail').html("");
+			MsgTip("目前有"+g_umusers.length+"个"+ret.msg);
 		}
 	});
 }
-function chk_uc(uid, pass)
+function deluser(uid)
 {
 	$.ajax({
 		type : "POST",
-		data : "uid="+uid+"&pass="+pass,
-		url : "doucheck",
+		data : "uid="+uid,
+		url : "deluser",
 		success : function(data)
 		{
 			var ret = JSON.parse(data);
@@ -54,29 +56,38 @@ function chk_uc(uid, pass)
 				window.location.href = "403.jsp";
 				return;
 			}
-			rfs_uc();
+			rfs_um("student");
 		}
 	});
 }
 $(document).ready(function()
 {
-	$("#rfs_uc").click(function()
+	$("#umdetail").on("click","#umdel",function()
 	{
-		rfs_uc();
+		var uid = $(this).data("uid");
+		$('#ret #msg').append("确定要删除用户" + $(this).data("name") + "<br>吗？");
+		$('#ret').dialog(
+		{
+			buttons: 
+			{
+		        "是": function() 
+		        {
+		        	deluser(uid);
+		          	$(this).dialog("close");
+		        },
+		        "否": function() 
+		        {
+		          	$(this).dialog("close");
+		        }
+			}
+		}).dialog("open");
+		
 	});
-	$("#ucdetail").on("click","#ucpass",function()
+	$("#umlist").on("click","tr",function()
 	{
-		chk_uc($(this).data("uid"),true);
-	});
-	$("#ucdetail").on("click","#ucfail",function()
-	{
-		chk_uc($(this).data("uid"),false);
-	});
-	$("#uclist").on("click","tr",function()
-	{
-		var obj = $("#ucdetail");
+		var obj = $("#umdetail");
 		obj.html("");
-		var user = g_uchecks[$(this).data("idx")];
+		var user = g_umusers[$(this).data("idx")];
 		var ctxt = "<tr><td>用户名</td><td>" + user.un + "</td></tr>";
 		if(user.accountRole == "student")
 		{
@@ -98,29 +109,32 @@ $(document).ready(function()
 			ctxt += "<tr><td>公司营业执照</td><td><img style='max-width: 100%;' src='img?obj=" + user.pic_coltd + "'></td></tr>";
 			ctxt += "<tr><td>负责人身份证照</td><td><img style='max-width: 100%;' src='img?obj=" + user.pic_id + "'></td></tr>";
 		}
-		ctxt += "<tr><td><div class='simple_buttons' id='ucpass' data-uid='"+ user.uid +"'><div>通过</div><div></td>"
-			+ "<td><div class='simple_buttons' id='ucfail' data-uid='"+ user.uid +"'><div>拒绝</div><div></td></tr>";
+		ctxt += "<tr><td colspan='2'><div class='simple_buttons' id='umdel' data-uid='"+ user.uid 
+		+ "' data-name='" + user.name + "'><div>删除</div><div></td></tr>";
 		obj.append(ctxt);
-		
 	});
 });
 </script>
 	<div class="g_6 contents_header">
 		<h3 class="i_16_dashboard tab_label">管理面板</h3>
 	</div>
-	<div class="g_6 contents_options" id="rfs_uc">
-		<div class="simple_buttons">
-			<div class="bwIcon i_16_help">刷新</div>
+	<div class="g_6 contents_options">
+		<div class="simple_buttons" onclick='rfs_um("student")'>
+			<div class="bwIcon i_16_help">刷新学生</div>
+		</div>
+		<div class="simple_buttons" onclick='rfs_um("company")'>
+			<div class="bwIcon i_16_help">刷新企业</div>
 		</div>
 	</div>
 	<div class="g_12">
 	<div class="widget_contents noPadding">
 		<div class="g_4"><div class="widget_contents noPadding">
 			<table class="tables">
-				<thead>
-					<tr><th>姓名/公司名</th></tr>
-				</thead>
-				<tbody id="uclist">
+				<thead><tr>
+					<th width="50%">姓名/公司名</th>
+					<th>任务数(进行中/已完成)</th>
+				</tr></thead>
+				<tbody id="umlist">
 				</tbody>
 			</table>
 		</div></div>
@@ -128,7 +142,7 @@ $(document).ready(function()
 		<div class="g_8">
 			<div class="widget_contents noPadding">
 				<table class="tables">
-					<tbody id="ucdetail">
+					<tbody id="umdetail">
 					</tbody>
 				</table>
 			</div>

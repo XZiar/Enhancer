@@ -87,6 +87,10 @@
 		</action>
 		<action name="doucheck" class="xziar.enhancer.action.AdminAction" method="DoUserCheck">
 		</action>
+		<action name="getusers" class="xziar.enhancer.action.AdminAction" method="GetAllUsers">
+		</action>
+		<action name="deluser" class="xziar.enhancer.action.AdminAction" method="DeleteUser">
+		</action>
 	</package>
 
 </struts>

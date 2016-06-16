@@ -11,6 +11,7 @@ import xziar.enhancer.dao.UserDao;
 import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.TaskBean;
 import xziar.enhancer.pojo.UserBean;
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.util.ServRes;
 import xziar.enhancer.util.ServRes.Result;
 
@@ -19,6 +20,44 @@ public class AdminService
 	UserDao userdao = null;
 	TaskDao taskdao = null;
 	PostDao postdao = null;
+
+	public ServRes<Boolean> BlockUser(int uid)
+	{
+		Connection conn = DaoBase.getConnection(false);
+		userdao = new UserDao(conn);
+		try
+		{
+			UserBean user = userdao.queryUser(userdao.queryAccount(uid));
+			user.setAccountStatus(AccountBean.Status.banned);
+			user.setUn(" "+System.currentTimeMillis());
+			user.setName("(ÒÑÉ¾³ý)" + user.getName());
+			int i = userdao.updateAccount(user), j = userdao.updateUser(user);
+			System.out.println("block:" + i + "," + j);
+			if (i + j == 2)
+			{
+				conn.commit();
+				return new ServRes<>(true);
+			}
+			return new ServRes<>(Result.error);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			try
+			{
+				conn.rollback();
+			}
+			catch (SQLException e1)
+			{
+				e1.printStackTrace();
+			}
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
 
 	public ServRes<Boolean> DeleteUser(int uid)
 	{
@@ -39,7 +78,7 @@ public class AdminService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
 	public ServRes<ArrayList<UserBean>> GetUserChecks()
 	{
 		Connection conn = DaoBase.getConnection(true);
@@ -59,7 +98,27 @@ public class AdminService
 			DaoBase.close(conn, null, null);
 		}
 	}
-	
+
+	public ServRes<ArrayList<UserBean>> GetUsers(Role role)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		userdao = new UserDao(conn);
+		try
+		{
+			ArrayList<UserBean> users = userdao.queryUsers(role);
+			return new ServRes<>(users);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
 	public ServRes<TaskBean> ChangeStatus(int tid, TaskBean.Status newStatus)
 	{
 		Connection conn = DaoBase.getConnection(false);
