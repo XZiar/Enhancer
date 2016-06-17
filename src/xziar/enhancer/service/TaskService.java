@@ -147,10 +147,8 @@ public class TaskService
 		}
 	}
 
-	public ServRes<ArrayList<UserBean>> GetApplyersByTID(UserBean user, int tid)
+	public ServRes<ArrayList<UserBean>> GetApplicants(CompanyBean cpn, int tid)
 	{
-		if (CompanyBean.class != user.getClass())
-			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
 		UserDao userdao = new UserDao(conn);
@@ -159,7 +157,7 @@ public class TaskService
 			TaskBean task = taskdao.queryTask(tid);
 			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			if (task.getUid() != user.getUid())
+			if (task.getUid() != cpn.getUid())
 				return new ServRes<>(Result.unsatisfy);
 			if (task.getTaskStatus() != TaskBean.Status.oncheck
 					&& task.getTaskStatus() != TaskBean.Status.onapply)
@@ -218,8 +216,7 @@ public class TaskService
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<Integer> aps = taskdao.GetApplicants(tid);
-			if (aps.indexOf(uid) != -1)
+			if (taskdao.testHasApply(tid, uid))
 				return new ServRes<>(Result.exist);
 			ServRes<TaskBean> res1 = GetTask(tid);
 			UserBean user = userdao.queryUser(new AccountBean(uid, Role.student));
@@ -323,8 +320,7 @@ public class TaskService
 			TaskBean task = taskdao.queryTask(tid);
 			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			Integer uid = taskdao.queryApplicant(tid);
-			if (user.getUid() != uid)// not own this task
+			if (!taskdao.testHasAccept(tid, user.getUid()))// not own this task
 				return new ServRes<>(Result.unsatisfy);
 			if (task.getTaskStatus() != TaskBean.Status.onliscene)
 				return new ServRes<>(Result.wrongstatus);

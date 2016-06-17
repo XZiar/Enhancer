@@ -151,34 +151,28 @@ public class TaskDao
 			return tasks;
 		}
 	}
-
-	public Integer queryApplicant(int tid) throws SQLException
+	
+	public boolean testHasAccept(int tid, int uid) throws SQLException
 	{
-		final String sql1 = "select uid from TaskApply where tid=? and state=1";
-		try (PreparedStatement ps = conn.prepareStatement(sql1))
+		final String sql_querHasApply = "select uid from TaskApply where tid=? and uid=? and status=1";
+		try (PreparedStatement ps = conn.prepareStatement(sql_querHasApply))
 		{
 			ps.setInt(1, tid);
+			ps.setInt(2, uid);
 			ResultSet rs = ps.executeQuery();
-			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+			return rs.next();
 		}
 	}
-	
-	public ArrayList<Integer> GetApplicants(int tid) throws SQLException
+
+	public boolean testHasApply(int tid, int uid) throws SQLException
 	{
-		final String sql1 = "select uid from TaskApply where tid=?";
-		try (PreparedStatement ps1 = conn.prepareStatement(sql1))
+		final String sql_querHasApply = "select uid from TaskApply where tid=? and uid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_querHasApply))
 		{
-			ArrayList<Integer> aps = new ArrayList<>();
-			ps1.setInt(1, tid);
-			ResultSet rs1 = ps1.executeQuery();
-			while (rs1.next())
-			{
-				aps.add(rs1.getInt(1));
-			}
-			return aps;
+			ps.setInt(1, tid);
+			ps.setInt(2, uid);
+			ResultSet rs = ps.executeQuery();
+			return rs.next();
 		}
 	}
 

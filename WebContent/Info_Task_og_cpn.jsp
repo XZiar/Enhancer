@@ -99,15 +99,13 @@ $(document).ready(function()
 			success : function(data)
 			{
 				var ret = JSON.parse(data);
-				var words = "申请成功";
-				var title = "申请成功";
+				var words = "请求成功";
+				var title = "请求成功";
 				if(ret.success)
-				{
-					setTimeout(function(){location.reload(true);},3000);
-				}
+					rfs_og();
 				else
 				{
-					title = "申请失败";
+					title = "请求失败";
 					switch(ret.msg)
 					{
 					case "unlogin":

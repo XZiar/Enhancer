@@ -42,48 +42,50 @@
 		<action name="logout" class="xziar.enhancer.action.UserAction" method="Logout">
 			<result name="success" type="redirect">/login.jsp</result>
 		</action>
-		<action name="chgmyinfo" class="xziar.enhancer.action.UserInfoAction" method="ChangeBasic">
-		</action>
-		<action name="my" class="xziar.enhancer.action.UserInfoAction" method="Overall">
-			<result name="unlogin" type="redirect">/login.jsp</result>
-			<result name="success">/MyInfo.jsp</result>
-			<result name="admin">/Admin.jsp</result>
-		</action>
+		
 		<action name="mytasks" class="xziar.enhancer.action.UserInfoAction" method="TaskOngoing">
 			<result name="unlogin" type="redirect">/login.jsp</result>
 			<result name="company">/cpn_MyTasks_ongoing.jsp</result>
 			<result name="student">/stu_MyTasks_ongoing.jsp</result>
 		</action>
-		<action name="getapplyers" class="xziar.enhancer.action.TaskAction" method="GetApplyers">
-		</action>
-		<action name="acceptapplyer" class="xziar.enhancer.action.TaskAction" method="AcceptApply">
-		</action>
+		
 		<action name="people" class="xziar.enhancer.action.UserInfoAction" method="ViewOther">
 			<result name="success">/AnyoneInfo.jsp</result>
 		</action>
-		<action name="taskview" class="xziar.enhancer.action.TaskAction" method="View">
-			<result name="success">/ShowTask.jsp</result>
-		</action>
+		
 		<action name="task" class="xziar.enhancer.action.TaskAction" method="List">
 			<result name="success">/TaskList.jsp</result>
+		</action>
+		<action name="taskview" class="xziar.enhancer.action.TaskAction" method="View">
+			<result name="success">/ShowTask.jsp</result>
 		</action>
 		<action name="addtask" class="xziar.enhancer.action.TaskAction" method="PostTask">
 		</action>
 		<action name="apply" class="xziar.enhancer.action.TaskAction" method="Apply">
 		</action>
 		
-		<action name="postview" class="xziar.enhancer.action.ForumAction" method="View">
-			<result name="success">/ShowPost.jsp</result>
-		</action>
 		<action name="forum" class="xziar.enhancer.action.ForumAction" method="List">
 			<result name="success">/ForumList.jsp</result>
+		</action>
+		<action name="postview" class="xziar.enhancer.action.ForumAction" method="View">
+			<result name="success">/ShowPost.jsp</result>
 		</action>
 		<action name="addpost" class="xziar.enhancer.action.ForumAction" method="PostPost">
 		</action>
 		<action name="addreply" class="xziar.enhancer.action.ForumAction" method="PostReply">
 		</action>
 		
+		<action name="my" class="xziar.enhancer.action.UserInfoAction" method="Overall">
+			<result name="unlogin" type="redirect">/login.jsp</result>
+			<result name="success">/MyInfo.jsp</result>
+			<result name="admin">/Admin.jsp</result>
+		</action>
+		<action name="chgmyinfo" class="xziar.enhancer.action.UserInfoAction" method="ChangeBasic"/>
 		<action name="ogtasks" class="xziar.enhancer.action.UserInfoAction" method="OngoingTasks"/>
+		<action name="fntasks" class="xziar.enhancer.action.UserInfoAction" method="FinishTasks"/>
+		<action name="getapplyers" class="xziar.enhancer.action.TaskAction" method="GetApplyers"/>
+		<action name="acceptapplyer" class="xziar.enhancer.action.TaskAction" method="AcceptApply"/>
+		<action name="confirmapplyer" class="xziar.enhancer.action.TaskAction" method="ConfirmApply"/>
 		
 		<action name="getuchecks" class="xziar.enhancer.action.AdminAction" method="GetUserChecks"/>
 		<action name="doucheck" class="xziar.enhancer.action.AdminAction" method="DoUserCheck"/>

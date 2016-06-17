@@ -3,6 +3,8 @@ package xziar.enhancer.action;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.TaskBean;
 import xziar.enhancer.pojo.UserBean;
 import xziar.enhancer.service.TaskService;
@@ -157,8 +159,6 @@ public class TaskAction extends ActionUtil
 		}
 		else
 		{
-			//try apply
-			//System.out.print(des);
 			ServRes<Boolean> res = taskServ.Apply(uid, tid, des);
 			switch(res.toEnum())
 			{
@@ -185,7 +185,12 @@ public class TaskAction extends ActionUtil
 			Response(false,"unlogin");
 			return;
 		}
-		ServRes<ArrayList<UserBean>> res = taskServ.GetApplyersByTID(user, tid);
+		if (user.getAccountRole() != Role.company)
+		{
+			Response(false, "wrong");
+			return;
+		}
+		ServRes<ArrayList<UserBean>> res = taskServ.GetApplicants((CompanyBean) user, tid);
 		switch(res.toEnum())
 		{
 		case success:
@@ -230,7 +235,7 @@ public class TaskAction extends ActionUtil
 		}
 	}
 	
-	public void ComfirmApply()
+	public void ConfirmApply()
 	{
 		if(OnMethod("GET","403.jsp"))
 			return;

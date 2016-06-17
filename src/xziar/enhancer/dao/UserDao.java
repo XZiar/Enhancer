@@ -163,7 +163,7 @@ public class UserDao
 
 	public ArrayList<UserBean> queryApplicants(int tid) throws SQLException
 	{
-		final String sql_queryApplicants = "select uid from TaskApply where tid=?";
+		final String sql_queryApplicants = "select uid, describe from TaskApply where tid=?";
 		ArrayList<UserBean> aps = new ArrayList<>();
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryApplicants))
 		{
@@ -173,6 +173,7 @@ public class UserDao
 			{
 				AccountBean account = queryAccount(rs.getInt(1));
 				UserBean user = (UserBean) queryUser(account);
+				user.setDescribe(rs.getString(2));
 				aps.add(user);
 			}
 		}
