@@ -1,16 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="xziar.enhancer.pojo.TaskBean, xziar.enhancer.pojo.UserBean, xziar.enhancer.pojo.StudentBean" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 
 <script>
-function preApplicants(data)
+function rfs_fn()
 {
-	var obj = $('#aps .widget_contents');
+	$.ajax({
+		type : "POST",
+		url : "fntasks",
+		success : function(data)
+		{
+			var ret = JSON.parse(data);
+			if(!validRet(ret))
+				return;
+			
+			var obj = $("#fnlist");
+			obj.html("");
+			$.each(ret.fntasks, function(i, t)
+			{
+				var ctxt = "<tr data-tid='" + t.tid + "'><td>" + t.title + "</td><td>"
+					+ tsstatus[t.status]+"</td><td>"
+					+ t.applycount + "</td></tr>";
+				obj.append(ctxt);
+			});
+			MsgTip("目前有"+ret.fntasks.length+"个待结束的任务");
+		}
+	});
+}
+function preDoers(data)
+{
+	var obj = $('#tp_fn #aps .widget_contents');
 	obj.html("");
-	$('#des').val("");
+	var dobj = $('#tp_fn #des');
+	dobj.val("");
 	$.each(data,function(i,ap)
 	{
 		var cont = "<div class='line_grid' data-uid='" + ap.uid + "'>"
@@ -20,18 +42,16 @@ function preApplicants(data)
 			+ "<div class='g_4'>" + ap.people + "</div>"
 			+ "</div>";
 		obj.append(cont);
-		$('#des').data(ap.uid.toString(),ap.des);
+		dobj.data(ap.uid.toString(),ap.des);
 	});
 }
 $(document).ready(function()
 {
-	$('.i_16_close').click(function()
+	$("#rfspart3").click(function()
 	{
-		$('.theme-popover-mask').fadeOut(100);
-		$('.theme-popover').slideUp(200);
+		rfs_og();
 	});
-
-	$('#tasklist').on("click",".ttitle",function()
+	$("#fnlist").on("click","tr",function()
 	{
 		var tid = $(this).data("tid");
 		$.ajax({
@@ -41,40 +61,25 @@ $(document).ready(function()
 			success : function(data)
 			{
 				var ret = JSON.parse(data);
-				if(!ret.success)
-				{
-					if(ret.msg == "unlogin")
-					{
-						window.location.href = "login.jsp";
-						return;
-					}
-					if(ret.msg == "error")
-					{
-						window.location.href = "403.jsp";
-						return;
-					}
-				}
-				else
-				{
-					preApplicants(ret.applicants);
-					$('#sendapply').data("tid", tid);
-					$('#tpm_og').fadeIn(100);
-					$('#tp_og').slideDown(200);
-				}
+				if(!validRet(ret))
+					return;
+
+				preDoers(ret.applicants);
+				$('#tp_fn .submitIt').data("tid", tid);
+				$('#tpm_fn').fadeIn(100);
+				$('#tp_fn').slideDown(200);
 			}
 		});
 	});
-
-	$('#aps').on("click",".line_grid",function()
+	$('#tp_fn #aps').on("click",".line_grid",function()
 	{
 		var uid = $(this).data("uid");
-		$('#sendapply').data("uid", uid);
+		$('#tp_fn .submitIt').data("uid", uid);
 		$(this).siblings().removeClass("chosen");
 		$(this).addClass("chosen");
-		$('#des').val($('#des').data(uid.toString()));
+		$('#tp_fn #des').val($('#tp_fn #des').data(uid.toString()));
 	});
-	
-	$('#sendapply').click(function()
+	$('#tp_fn .submitIt').click(function()
 	{
 		var uid = $(this).data("uid");
 		if(uid < 0)
@@ -122,9 +127,7 @@ $(document).ready(function()
 });
 </script>
 
-
-
-	<div class="theme-popover" id="tp_og" style="display:none;">
+	<div class="theme-popover" id="tp_fn" style="display:none;">
 		<div class="widget_header wwOptions">
 			<h4 class="widget_header_title wwIcon i_16_tooltip">选择申请人</h4>
 			<div class="w_Options i_16_close"><span class="aclose"></span></div>
@@ -152,42 +155,35 @@ $(document).ready(function()
 				</div>
 			</div>
 			<div class="g_12" style="text-align:center;">
-				<div class="submitIt simple_buttons" id="sendapply" data-uid="-1">接受申请</div>
+				<div class="submitIt simple_buttons" data-uid="-1">接受申请</div>
 			</div>
 		</div>
 	</div>
-	<div class="theme-popover-mask" id="tpm_og"></div>
-	
-	<%-- <input type="hidden" name="tid" value='<s:property value="task.tid"/>'/> --%>
-	
+	<div class="theme-popover-mask" id="tpm_fn"></div>
+
+	<div class="g_6 contents_header">
+		<h3 class="i_16_dashboard tab_label">待结束的任务</h3>
+	</div>
+	<div class="g_6 contents_options" id="rfspart4">
+		<div class="simple_buttons">
+			<div class="bwIcon i_16_help">刷新</div>
+		</div>
+	</div>
 	<div class="g_12">
 		<div class="widget_contents noPadding">
 			<table class="tables">
 				<thead>
 					<tr>
 						<th>任务名</th>
-						<th width="12%">状态</th>
-						<th width="8%">申请人数</th>
+						<th width="15%">状态</th>
+						<th width="10%">申请人数</th>
 					</tr>
 				</thead>
-				<tbody id="tasklist">
-					<c:set var="tstatus" value="${fn:split('待审核,报名中,报名截止,进行中,已完结', ',')}" />
-					<c:forEach var="t" items="${tasks}">
-						<tr>
-							<td class="ttitle" data-tid="<c:out value='${t.tid} '/>">
-								<c:out value='${t.title} '/>
-							</td>
-							<td><c:out value='${tstatus[t.status]}'/></td>
-							<td data-uid='c:out value="${t.uid} "/>'>
-								<c:out value='${t.launcher} '/>
-							</td>
-							<td class="ttime"><c:out value='${t.time_start} '/></td>
-							<td><c:out value='${t.applycount} '/></td>
-						</tr>
-					</c:forEach>
+				<tbody id="fnlist">
 				</tbody>
 			</table>
 		</div>
 	</div>
+
 
 	

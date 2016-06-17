@@ -37,6 +37,16 @@ $(document).ready(function()
 	});
 });
 </script>
+	
+	<div class="g_6 contents_header">
+		<h3 class="i_16_dashboard tab_label">个人信息</h3>
+	</div>
+	<div class="g_6 contents_options">
+		<div class="simple_buttons">
+			<div class="bwIcon i_16_help">${urole[user.role]}</div>
+		</div>
+	</div>
+
 	<form id="stuform">
 		<div class="line_grid half">
 			<div class="g_3"><span class="label">旧密码</span></div>

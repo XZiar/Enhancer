@@ -8,11 +8,11 @@ import xziar.enhancer.dao.DaoBase;
 import xziar.enhancer.dao.TaskDao;
 import xziar.enhancer.dao.UserDao;
 import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.TaskBean;
 import xziar.enhancer.pojo.UserBean;
-import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.util.ServRes;
 import xziar.enhancer.util.ServRes.Result;
 
@@ -54,6 +54,46 @@ public class TaskService
 		try
 		{
 			ArrayList<TaskBean> tasks = taskdao.queryTasks(from, 10, "");
+			return new ServRes<>(tasks);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
+	public ServRes<ArrayList<TaskBean>> GetTasks(CompanyBean cpn, TaskBean.Status status)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		TaskDao taskdao = new TaskDao(conn);
+		try
+		{
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(cpn, status);
+			return new ServRes<>(tasks);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
+	public ServRes<ArrayList<TaskBean>> GetTasks(StudentBean stu, TaskBean.Status status)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		TaskDao taskdao = new TaskDao(conn);
+		try
+		{
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu, status);
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)

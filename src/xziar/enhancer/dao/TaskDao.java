@@ -58,9 +58,28 @@ public class TaskDao
 		}
 	}
 
+	public ArrayList<TaskBean> queryTasks(CompanyBean cpn, Status status) throws SQLException
+	{
+		final String sql_queryTasks = "select * from TaskSimpleData where uid=? and status=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
+		{
+			ps.setInt(1, cpn.getUid());
+			ps.setInt(2, status.ordinal());
+			ResultSet rs = ps.executeQuery();
+			ArrayList<TaskBean> tasks = new ArrayList<>();
+			while (rs.next())
+			{
+				TaskBean task = new TaskBean();
+				DataInject.RSToObj(rs, task);
+				tasks.add(task);
+			}
+			return tasks;
+		}
+	}
+
 	public ArrayList<TaskBean> queryTasks(StudentBean stu) throws SQLException
 	{
-		final String sql_queryTasks = "select tid from TaskApply where uid=?";
+		final String sql_queryTasks = "select * from ApplyData where aid=? and applystatus=1";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
 		{
 			ps.setInt(1, stu.getUid());
@@ -68,7 +87,27 @@ public class TaskDao
 			ArrayList<TaskBean> tasks = new ArrayList<>();
 			while (rs.next())
 			{
-				TaskBean task = queryTask(rs.getInt(1));
+				TaskBean task = new TaskBean();
+				DataInject.RSToObj(rs, task);
+				tasks.add(task);
+			}
+			return tasks;
+		}
+	}
+
+	public ArrayList<TaskBean> queryTasks(StudentBean stu, Status status) throws SQLException
+	{
+		final String sql_queryTasks = "select * from ApplyData where aid=? and applystatus=1 and status=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
+		{
+			ps.setInt(1, stu.getUid());
+			ps.setInt(2, status.ordinal());
+			ResultSet rs = ps.executeQuery();
+			ArrayList<TaskBean> tasks = new ArrayList<>();
+			while (rs.next())
+			{
+				TaskBean task = new TaskBean();
+				DataInject.RSToObj(rs, task);
 				tasks.add(task);
 			}
 			return tasks;
@@ -225,7 +264,7 @@ public class TaskDao
 		final String sql1 = "update TaskApply set status=1 where uid=? and tid=?";
 		final String sql2 = "update TaskInfo set status="
 				+ TaskBean.Status.onliscene.ordinal() + " where tid=?";
-		final String sql3 = "update UserBasicInfo set task_progress=task_progress+1 where uid=?";
+		final String sql3 = "update UserBasicInfo set task_ongoing=task_ongoing+1 where uid=?";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql1);
 				PreparedStatement ps2 = conn.prepareStatement(sql2);
 				PreparedStatement ps3 = conn.prepareStatement(sql3);)
@@ -267,5 +306,6 @@ public class TaskDao
 			return;
 		}
 	}
+
 
 }

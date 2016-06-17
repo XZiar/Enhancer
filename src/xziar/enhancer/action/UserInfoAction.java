@@ -3,9 +3,11 @@ package xziar.enhancer.action;
 import java.util.ArrayList;
 
 import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.TaskBean;
+import xziar.enhancer.pojo.TaskBean.Status;
 import xziar.enhancer.pojo.UserBean;
 import xziar.enhancer.service.TaskService;
 import xziar.enhancer.service.UserService;
@@ -66,6 +68,76 @@ public class UserInfoAction extends ActionUtil
 		}
 	}
 	
+	public void OngoingTasks()
+	{
+		if (OnMethod("GET", "login.jsp"))
+			return;
+		user = (UserBean) session.getAttribute("user");
+		if (user == null)
+		{
+			Response(false, "unlogin");
+			return;
+		}
+		ServRes<ArrayList<TaskBean>> res = null;
+		if (user.getAccountRole() == Role.company)
+		{
+			res = taskServ.GetTasks((CompanyBean) user, Status.onapply);
+		}
+		else if (user.getAccountRole() == Role.student)
+		{
+			res = taskServ.GetTasks((StudentBean) user, Status.onliscene);
+		}
+		else
+			return;
+		switch (res.toEnum())
+		{
+		case success:
+			tasks = res.getData();
+			datmap.put("ogtasks", tasks);
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+			return;
+		}
+	}
+
+	public void FinshTasks()
+	{
+		if (OnMethod("GET", "login.jsp"))
+			return;
+		user = (UserBean) session.getAttribute("user");
+		if (user == null)
+		{
+			Response(false, "unlogin");
+			return;
+		}
+		ServRes<ArrayList<TaskBean>> res = null;
+		if (user.getAccountRole() == Role.company)
+		{
+			res = taskServ.GetTasks((CompanyBean) user, Status.ongoing);
+		}
+		else if (user.getAccountRole() == Role.student)
+		{
+			res = taskServ.GetTasksByStudent((StudentBean) user);
+		}
+		else
+			return;
+		switch (res.toEnum())
+		{
+		case success:
+			tasks = res.getData();
+			datmap.put("fntasks", tasks);
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+			return;
+		}
+	}
+
 	public String TaskOngoing()
 	{
 		user = (UserBean)session.getAttribute("user");

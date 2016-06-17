@@ -26,11 +26,6 @@ function MsgTip(txt)
 	var cont = '<div class="g_12"><div class="success iDialog">' + txt + '</div></div>';
 	$("#msgtip").html(cont);
 }
-function MsgTip(txt)
-{
-	var cont = '<div class="g_12"><div class="success iDialog">' + txt + '</div></div>';
-	$("#msgtip").html(cont);
-}
 $(document).ready(function()
 {
 	$.fx.speeds._default = 300;

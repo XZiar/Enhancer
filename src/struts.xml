@@ -83,26 +83,20 @@
 		<action name="addreply" class="xziar.enhancer.action.ForumAction" method="PostReply">
 		</action>
 		
-		<action name="getuchecks" class="xziar.enhancer.action.AdminAction" method="GetUserChecks">
-		</action>
-		<action name="doucheck" class="xziar.enhancer.action.AdminAction" method="DoUserCheck">
-		</action>
-		<action name="getusers" class="xziar.enhancer.action.AdminAction" method="GetAllUsers">
-		</action>
-		<action name="deluser" class="xziar.enhancer.action.AdminAction" method="DeleteUser">
-		</action>
-		<action name="gettchecks" class="xziar.enhancer.action.AdminAction" method="GetTaskChecks">
-		</action>
-		<action name="dotcheck" class="xziar.enhancer.action.AdminAction" method="DoTaskCheck">
-		</action>
-		<action name="gettmans" class="xziar.enhancer.action.AdminAction" method="GetTaskMans">
-		</action>
-		<action name="dotman" class="xziar.enhancer.action.AdminAction" method="DoTaskMan">
-		</action>
-		<action name="delpost" class="xziar.enhancer.action.AdminAction" method="DeletePost">
-		</action>
-		<action name="delreply" class="xziar.enhancer.action.AdminAction" method="DeleteReply">
-		</action>
+		<action name="ogtasks" class="xziar.enhancer.action.UserInfoAction" method="OngoingTasks"/>
+		
+		<action name="getuchecks" class="xziar.enhancer.action.AdminAction" method="GetUserChecks"/>
+		<action name="doucheck" class="xziar.enhancer.action.AdminAction" method="DoUserCheck"/>
+		<action name="getusers" class="xziar.enhancer.action.AdminAction" method="GetAllUsers"/>
+		<action name="deluser" class="xziar.enhancer.action.AdminAction" method="DeleteUser"/>
+		
+		<action name="gettchecks" class="xziar.enhancer.action.AdminAction" method="GetTaskChecks"/>
+		<action name="dotcheck" class="xziar.enhancer.action.AdminAction" method="DoTaskCheck"/>
+		<action name="gettmans" class="xziar.enhancer.action.AdminAction" method="GetTaskMans"/>
+		<action name="dotman" class="xziar.enhancer.action.AdminAction" method="DoTaskMan"/>
+		
+		<action name="delpost" class="xziar.enhancer.action.AdminAction" method="DeletePost"/>
+		<action name="delreply" class="xziar.enhancer.action.AdminAction" method="DeleteReply"/>
 	</package>
 
 </struts>
