@@ -369,7 +369,7 @@ public class TaskService
 		}
 	}
 
-	public ServRes<TaskBean> TaskComment(int tid, String comment, UserBean user)
+	public ServRes<TaskBean> TaskComment(int tid, String comment, int score, UserBean user)
 	{
 		Connection conn = DaoBase.getConnection(true);
 		TaskDao taskdao = new TaskDao(conn);
@@ -377,7 +377,7 @@ public class TaskService
 		boolean isS2C = (user.getAccountRole() == Role.student);
 		try
 		{
-			int res = taskdao.addComment(tid, user.getUid(), comment, isS2C);
+			int res = taskdao.addComment(tid, user.getUid(), comment, score, isS2C);
 			if (res != 1)
 				return new ServRes<>(Result.error);
 			else

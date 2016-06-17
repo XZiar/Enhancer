@@ -15,22 +15,15 @@ function rfs_fn()
 				return;
 			
 			var obj = $("#fnlist");
-			var ofnum = 0;
 			obj.html("");
 			$.each(ret.fntasks, function(i, t)
 			{
-				var ctxt = "<tr data-tid='" + t.tid + "'><td class='ttitle'>" + t.title + "</td><td>";
-				if(t.status == 3)
-				{
-					ctxt += "<div class='simple_buttons tfin' ><div>项目完结</div></div>";
-					ofnum++;
-				}
-				else
-					ctxt += "<div class='simple_buttons tcmt' ><div>提交评价</div></div>";
-				ctxt += "</td><td>" + tsstatus[t.status]+"</td><td>" + t.doer + "</td></tr>";
+				var ctxt = "<tr data-tid='" + t.tid + "'><td class='ttitle'>" + t.title + "</td><td>"
+					+ "<div class='simple_buttons tcmt' ><div>提交评价</div></div>"
+					+ "</td><td>" + tsstatus[t.status]+"</td><td>" + t.launcher + "</td></tr>";
 				obj.append(ctxt);
 			});
-			MsgTip("目前有"+ofnum+"个待结束的任务");
+			MsgTip("目前有"+ret.fntasks.length+"个可评价的任务");
 		}
 	});
 }
@@ -43,22 +36,6 @@ $(document).ready(function()
 	$("#fnlist").on("click",".ttitle",function()
 	{
 		window.location.href = "taskview?tid=" + $(this).parents("tr").data("tid");
-	});
-	$("#fnlist").on("click",".tfin",function()
-	{
-		var tid = $(this).parents("tr").data("tid");
-		$.ajax({
-			type : "POST",
-			url : "fintask",
-			data : "tid=" + tid,
-			success : function(data)
-			{
-				var ret = JSON.parse(data);
-				if(!validRet(ret))
-					return;
-				rfs_fn();
-			}
-		});
 	});
 	$("#fnlist").on("click",".tcmt",function()
 	{
@@ -89,7 +66,7 @@ $(document).ready(function()
 
 	<div class="theme-popover" id="tp_fn" style="display:none;">
 		<div class="widget_header wwOptions">
-			<h4 class="widget_header_title wwIcon i_16_tooltip">选择申请人</h4>
+			<h4 class="widget_header_title wwIcon i_16_tooltip">任务评价</h4>
 			<div class="w_Options i_16_close"><span class="aclose"></span></div>
 		</div>
 		
@@ -101,7 +78,7 @@ $(document).ready(function()
 			</div>
 			<div class="g_12">
 				<div class="g_6">
-					本次任务对学生的评分
+					<span class="label">本次任务对公司的评分</span>
 				</div>
 				<div class="g_6">
 					<input type="number" class="simple_form" name="score" min="1" max="5" value="3" required />
@@ -115,7 +92,7 @@ $(document).ready(function()
 	<div class="theme-popover-mask" id="tpm_fn"></div>
 
 	<div class="g_6 contents_header">
-		<h3 class="i_16_dashboard tab_label">待结束的任务</h3>
+		<h3 class="i_16_dashboard tab_label">可评价的任务</h3>
 	</div>
 	<div class="g_6 contents_options" id="rfspart4">
 		<div class="simple_buttons">
@@ -130,7 +107,7 @@ $(document).ready(function()
 						<th>任务名</th>
 						<th width="15%">操作</th>
 						<th width="15%">状态</th>
-						<th width="10%">承包方</th>
+						<th width="10%">发起方</th>
 					</tr>
 				</thead>
 				<tbody id="fnlist">

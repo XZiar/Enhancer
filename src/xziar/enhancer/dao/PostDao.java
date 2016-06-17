@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.PostBean;
 import xziar.enhancer.pojo.ReplyBean;
 import xziar.enhancer.pojo.UserBean;

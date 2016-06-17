@@ -64,7 +64,7 @@ $(document).ready(function()
 		$('#'+obj).show();
 		$(this).siblings().removeClass('active_tab');
 		$(this).addClass('active_tab');
-		$('.rfs'+obj).trigger("click");
+		$('#rfs'+obj).trigger("click");
 	});
 	$('.i_32_dashboard').click();
 	$('.i_16_close').on('click',function()
@@ -97,6 +97,12 @@ $(document).ready(function()
 				<span class="tab_label">任务</span>
 				<span class="tab_info">已完成</span>
 			</a></li>
+<c:if test="${user.role == 1 }">
+			<li class="i_32_forms" data-obj="part5"><a>
+				<span class="tab_label">团队</span>
+				<span class="tab_info"></span>
+			</a></li>
+</c:if>
 		</ul>
 	</aside>
 	
@@ -132,7 +138,7 @@ $(document).ready(function()
 		</div>
 		
 		<div id="part4" class="onepart">
-			<%@ include file="Info_Task_Finish_stu.jsp"%>
+			<%@ include file="Info_Task_fn_stu.jsp"%>
 			<div class="g_12 separator">
 				<span></span>
 			</div>

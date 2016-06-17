@@ -14,6 +14,7 @@ import xziar.enhancer.util.ServRes;
 public class TaskAction extends ActionUtil
 {
 	int tid = -1;
+	int score = 3;
 	Integer uid = null;
 	int from = 0;
 	String des = "ÔÝÎÞ";
@@ -302,7 +303,7 @@ public class TaskAction extends ActionUtil
 			return;
 		}
 
-		ServRes<TaskBean> res = taskServ.TaskComment(tid, cmt, user);
+		ServRes<TaskBean> res = taskServ.TaskComment(tid, cmt, score, user);
 		switch (res.toEnum())
 		{
 		case success:
@@ -353,5 +354,10 @@ public class TaskAction extends ActionUtil
 	public void setCmt(String cmt)
 	{
 		this.cmt = cmt;
+	}
+
+	public void setScore(int score)
+	{
+		this.score = score;
 	}
 }

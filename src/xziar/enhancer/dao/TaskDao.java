@@ -300,16 +300,18 @@ public class TaskDao
 		}
 	}
 
-	public int addComment(int tid, int uid, String comment, boolean isS2C)
+	public int addComment(int tid, int uid, String comment, int score, boolean isS2C)
 			throws SQLException
 	{
-		final String sql = isS2C ? "update TaskResult set stoc=? where tid=? and suid=?"
-				: "update TaskResult set ctos=? where tid=? and cuid=?";
+		final String sql = isS2C
+				? "update TaskResult set stoc=?,cscore=(case when cscore is null then ? else cscore end) where tid=? and suid=?"
+				: "update TaskResult set ctos=?,sscore=(case when sscore is null then ? else sscore end) where tid=? and cuid=?";
 		try (PreparedStatement ps = conn.prepareStatement(sql))
 		{
 			ps.setString(1, comment);
-			ps.setInt(2, tid);
-			ps.setInt(3, uid);
+			ps.setInt(2, score);
+			ps.setInt(3, tid);
+			ps.setInt(4, uid);
 			return ps.executeUpdate();
 		}
 	}
