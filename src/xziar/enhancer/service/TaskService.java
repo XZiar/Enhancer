@@ -87,6 +87,26 @@ public class TaskService
 		}
 	}
 
+	public ServRes<ArrayList<TaskBean>> GetFinTasks(CompanyBean cpn)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		TaskDao taskdao = new TaskDao(conn);
+		try
+		{
+			ArrayList<TaskBean> tasks = taskdao.queryFinTasks(cpn);
+			return new ServRes<>(tasks);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
 	public ServRes<ArrayList<TaskBean>> GetTasks(StudentBean stu, TaskBean.Status status)
 	{
 		Connection conn = DaoBase.getConnection(true);
@@ -94,46 +114,6 @@ public class TaskService
 		try
 		{
 			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu, status);
-			return new ServRes<>(tasks);
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			return new ServRes<>(Result.error);
-		}
-		finally
-		{
-			DaoBase.close(conn, null, null);
-		}
-	}
-
-	public ServRes<ArrayList<TaskBean>> GetTasksByCompany(CompanyBean cpn)
-	{
-		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
-		try
-		{
-			ArrayList<TaskBean> tasks = taskdao.queryTasks(cpn);
-			return new ServRes<>(tasks);
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			return new ServRes<>(Result.error);
-		}
-		finally
-		{
-			DaoBase.close(conn, null, null);
-		}
-	}
-
-	public ServRes<ArrayList<TaskBean>> GetTasksByStudent(StudentBean stu)
-	{
-		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
-		try
-		{
-			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu);
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -185,7 +165,7 @@ public class TaskService
 		TaskDao taskdao = new TaskDao(conn);
 		try
 		{
-			int tid = taskdao.addTask(task, (CompanyBean)user).getTid();
+			int tid = taskdao.addTask(task, (CompanyBean) user).getTid();
 			conn.commit();
 			return new ServRes<>(tid);
 		}
@@ -229,7 +209,7 @@ public class TaskService
 
 			if (task.getLimit_people() > user.getPeople())
 				return new ServRes<>(Result.unsatisfy);
-			
+
 			// add applicant
 			conn.setAutoCommit(false);
 			rolled = true;
@@ -345,6 +325,67 @@ public class TaskService
 					e1.printStackTrace();
 				}
 			}
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
+	public ServRes<TaskBean> FinishTask(int tid)
+	{
+		Connection conn = DaoBase.getConnection(false);
+		TaskDao taskdao = new TaskDao(conn);
+		try
+		{
+			TaskBean task = taskdao.queryTask(tid);
+			if (task == null)
+				return new ServRes<>(Result.nonexist);
+			if (task.getTaskStatus() != TaskBean.Status.ongoing)
+				return new ServRes<>(Result.wrongstatus);
+			task.setTaskStatus(TaskBean.Status.onfinish);
+			if (taskdao.updateTask(task) == -1)
+				return new ServRes<>(Result.error);
+			conn.commit();
+			return new ServRes<>(task);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			try
+			{
+				conn.rollback();
+			}
+			catch (SQLException e1)
+			{
+				e1.printStackTrace();
+			}
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
+	public ServRes<TaskBean> TaskComment(int tid, String comment, UserBean user)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		TaskDao taskdao = new TaskDao(conn);
+
+		boolean isS2C = (user.getAccountRole() == Role.student);
+		try
+		{
+			int res = taskdao.addComment(tid, user.getUid(), comment, isS2C);
+			if (res != 1)
+				return new ServRes<>(Result.error);
+			else
+				return new ServRes<>(Result.success);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 			return new ServRes<>(Result.error);
 		}
 		finally

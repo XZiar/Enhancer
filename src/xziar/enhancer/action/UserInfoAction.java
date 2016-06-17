@@ -103,7 +103,7 @@ public class UserInfoAction extends ActionUtil
 		}
 	}
 
-	public void FinshTasks()
+	public void FinishTasks()
 	{
 		if (OnMethod("GET", "login.jsp"))
 			return;
@@ -116,11 +116,11 @@ public class UserInfoAction extends ActionUtil
 		ServRes<ArrayList<TaskBean>> res = null;
 		if (user.getAccountRole() == Role.company)
 		{
-			res = taskServ.GetTasks((CompanyBean) user, Status.ongoing);
+			res = taskServ.GetFinTasks((CompanyBean) user);
 		}
 		else if (user.getAccountRole() == Role.student)
 		{
-			res = taskServ.GetTasksByStudent((StudentBean) user);
+			res = taskServ.GetTasks((StudentBean) user, Status.onfinish);
 		}
 		else
 			return;
@@ -146,7 +146,7 @@ public class UserInfoAction extends ActionUtil
 		ServRes<ArrayList<TaskBean>> res = null;
 		if(CompanyBean.class == user.getClass())
 		{
-			res = taskServ.GetTasksByCompany((CompanyBean) user);
+			res = taskServ.GetTasks((CompanyBean) user, Status.onapply);
 			if(res.toEnum() == Result.success)
 			{
 				tasks = res.getData();
@@ -155,7 +155,7 @@ public class UserInfoAction extends ActionUtil
 		}
 		else if(StudentBean.class == user.getClass())
 		{
-			res = taskServ.GetTasksByStudent((StudentBean) user);
+			res = taskServ.GetTasks((StudentBean) user, Status.ongoing);
 			if(res.toEnum() == Result.success)
 			{
 				tasks = res.getData();

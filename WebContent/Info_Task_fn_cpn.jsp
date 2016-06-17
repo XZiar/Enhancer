@@ -18,111 +18,66 @@ function rfs_fn()
 			obj.html("");
 			$.each(ret.fntasks, function(i, t)
 			{
-				var ctxt = "<tr data-tid='" + t.tid + "'><td>" + t.title + "</td><td>"
-					+ tsstatus[t.status]+"</td><td>"
-					+ t.applycount + "</td></tr>";
+				var ctxt = "<tr data-tid='" + t.tid + "'><td class='ttitle'>" + t.title + "</td><td>";
+				if(t.status == 3)
+					ctxt += "<div class='simple_buttons tfin' ><div>项目完结</div></div>";
+				else
+					ctxt += "<div class='simple_buttons tcmt' ><div>提交评价</div></div>";
+				ctxt += "</td><td>" + tsstatus[t.status]+"</td><td>" + t.doer + "</td></tr>";
 				obj.append(ctxt);
 			});
 			MsgTip("目前有"+ret.fntasks.length+"个待结束的任务");
 		}
 	});
 }
-function preDoers(data)
-{
-	var obj = $('#tp_fn #aps .widget_contents');
-	obj.html("");
-	var dobj = $('#tp_fn #des');
-	dobj.val("");
-	$.each(data,function(i,ap)
-	{
-		var cont = "<div class='line_grid' data-uid='" + ap.uid + "'>"
-			+ "<div class='g_2'><span class='label'>名称</span></div>"
-			+ "<div class='g_4'>" + ap.name + "</div>"
-			+ "<div class='g_2'><span class='label'>人数</span></div>"
-			+ "<div class='g_4'>" + ap.people + "</div>"
-			+ "</div>";
-		obj.append(cont);
-		dobj.data(ap.uid.toString(),ap.des);
-	});
-}
 $(document).ready(function()
 {
-	$("#rfspart3").click(function()
+	$("#rfspart4").click(function()
 	{
-		rfs_og();
+		rfs_fn();
 	});
-	$("#fnlist").on("click","tr",function()
+	$("#fnlist").on("click",".ttitle",function()
 	{
-		var tid = $(this).data("tid");
+		window.location.href = "taskview?tid=" + $(this).parents("tr").data("tid");
+	});
+	$("#fnlist").on("click",".tfin",function()
+	{
+		var tid = $(this).parents("tr").data("tid");
 		$.ajax({
 			type : "POST",
-			url : "getapplyers",
+			url : "fintask",
 			data : "tid=" + tid,
 			success : function(data)
 			{
 				var ret = JSON.parse(data);
 				if(!validRet(ret))
 					return;
-
-				preDoers(ret.applicants);
-				$('#tp_fn .submitIt').data("tid", tid);
-				$('#tpm_fn').fadeIn(100);
-				$('#tp_fn').slideDown(200);
+				rfs_fn();
 			}
 		});
 	});
-	$('#tp_fn #aps').on("click",".line_grid",function()
+	$("#fnlist").on("click",".tcmt",function()
 	{
-		var uid = $(this).data("uid");
-		$('#tp_fn .submitIt').data("uid", uid);
-		$(this).siblings().removeClass("chosen");
-		$(this).addClass("chosen");
-		$('#tp_fn #des').val($('#tp_fn #des').data(uid.toString()));
+		var tid = $(this).parents("tr").data("tid");
+		$('#sendcmt').data("tid", tid);
+		$('#tpm_fn').fadeIn(100);
+		$('#tp_fn').slideDown(200);
 	});
-	$('#tp_fn .submitIt').click(function()
+	$("#sendcmt").click(function()
 	{
-		var uid = $(this).data("uid");
-		if(uid < 0)
-		{
-			alert("请选择申请人！");
-			return false;
-		}
-		if(!$("input[name='agree']").is(':checked'))
-		{
-			alert("请阅读并同意协议！");
-			return false;
-		}
 		$.ajax({
 			type : "POST",
-			url : "acceptapplyer",
-			data : "uid=" + uid + "&tid=" + $(this).data("tid"),
+			url : "comment",
+			data : $('[name="cmt"]').serialize() + "&tid=" + $(this).data("tid"),
 			success : function(data)
 			{
 				var ret = JSON.parse(data);
-				var words = "申请成功";
-				var title = "申请成功";
-				if(ret.success)
-				{
-					setTimeout(function(){location.reload(true);},3000);
-				}
-				else
-				{
-					title = "申请失败";
-					switch(ret.msg)
-					{
-					case "unlogin":
-						window.location.href = "login.jsp";
-						break;
-					case "error":
-						words = "系统错误！";
-						break;
-					}
-				}
-				$('#ret #msg').html(words);
-				$('#ret').dialog("option","title",title).dialog("open");
+				if(!validRet(ret))
+					return;
+				rfs_fn();
 			}
 		});
-		return false;
+		
 	});
 });
 </script>
@@ -134,28 +89,23 @@ $(document).ready(function()
 		</div>
 		
 		<div class="widget_contents noPadding">
-			<div class="g_6" id="aps">
+			<div class="g_12">
 				<div class="widget_contents noPadding" style="max-height:400px; overflow:auto;">
-				
+					<textarea class="simple_field" name="cmt"></textarea>
 				</div>
-			</div>
-			<div class="g_6">
-				<span class="label">申请人自述</span>
-				<textarea class="simple_field" id="des" readonly></textarea>
 			</div>
 			<div class="g_12">
-				<div class="g_9">
+				<div class="g_6">
 					<span class="label">
-						同意签署<a href="liscen.html">业务外包协议</a>
-						<span class="must">*</span>
+						本次任务评分
 					</span>
 				</div>
-				<div class="g_3">
-					<input type="checkbox" class="simple_form" name="agree" required />
+				<div class="g_6">
+					<input type="number" class="simple_form" name="score" min="1" max="5" required />
 				</div>
 			</div>
 			<div class="g_12" style="text-align:center;">
-				<div class="submitIt simple_buttons" data-uid="-1">接受申请</div>
+				<div class="submitIt simple_buttons" id="sendcmt">提交评价</div>
 			</div>
 		</div>
 	</div>
@@ -175,8 +125,9 @@ $(document).ready(function()
 				<thead>
 					<tr>
 						<th>任务名</th>
+						<th width="15%">操作</th>
 						<th width="15%">状态</th>
-						<th width="10%">申请人数</th>
+						<th width="10%">承包方</th>
 					</tr>
 				</thead>
 				<tbody id="fnlist">

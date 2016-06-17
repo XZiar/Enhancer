@@ -40,9 +40,10 @@ public class TaskDao
 		}
 	}
 
-	public ArrayList<TaskBean> queryTasks(CompanyBean cpn) throws SQLException
+	public ArrayList<TaskBean> queryFinTasks(CompanyBean cpn) throws SQLException
 	{
-		final String sql_queryTasks = "select * from TaskSimpleData where uid=?";
+		final String sql_queryTasks = "select * from ApplyData where uid=? and applystatus=1 and (status="
+				+ Status.ongoing.ordinal() + " or status=" + Status.onfinish.ordinal() + ")";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
 		{
 			ps.setInt(1, cpn.getUid());
@@ -131,9 +132,8 @@ public class TaskDao
 			return tasks;
 		}
 	}
-	
-	public ArrayList<TaskBean> queryTasks(int from, int size, String order)
-			throws SQLException
+
+	public ArrayList<TaskBean> queryTasks(int from, int size, String order) throws SQLException
 	{
 		final String sql_queryRangeTasks = "select top " + size
 				+ " * from TaskSimpleData where tid not in (select top " + from
@@ -151,7 +151,7 @@ public class TaskDao
 			return tasks;
 		}
 	}
-	
+
 	public boolean testHasAccept(int tid, int uid) throws SQLException
 	{
 		final String sql_querHasApply = "select uid from TaskApply where tid=? and uid=? and status=1";
@@ -226,7 +226,7 @@ public class TaskDao
 			return i + j;
 		}
 	}
-	
+
 	public int updateTask(TaskBean task) throws SQLException
 	{
 		final String sql_updAccount = "update TaskInfo set title=? , time_modify=? , status=? where tid=?";
@@ -240,7 +240,7 @@ public class TaskDao
 			return ps.executeUpdate();
 		}
 	}
-	
+
 	public int addApplicant(int tid, int uid, String des) throws SQLException
 	{
 		final String sql = "insert into TaskApply (uid,tid,describe) values(?,?,?)";
@@ -256,8 +256,8 @@ public class TaskDao
 	public void acceptApply(int tid, int uid) throws SQLException
 	{
 		final String sql1 = "update TaskApply set status=1 where uid=? and tid=?";
-		final String sql2 = "update TaskInfo set status="
-				+ TaskBean.Status.onliscene.ordinal() + " where tid=?";
+		final String sql2 = "update TaskInfo set status=" + TaskBean.Status.onliscene.ordinal()
+				+ " where tid=?";
 		final String sql3 = "update UserBasicInfo set task_ongoing=task_ongoing+1 where uid=?";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql1);
 				PreparedStatement ps2 = conn.prepareStatement(sql2);
@@ -267,8 +267,7 @@ public class TaskDao
 			ps1.setInt(2, tid);
 			ps2.setInt(1, tid);
 			ps3.setInt(1, uid);
-			int a1 = ps1.executeUpdate(), a2 = ps2.executeUpdate(),
-					a3 = ps3.executeUpdate();
+			int a1 = ps1.executeUpdate(), a2 = ps2.executeUpdate(), a3 = ps3.executeUpdate();
 			if (a1 != a2 || a2 != a3 || a3 != 1)
 				throw new SQLException("ans not equal to 1");
 			return;
@@ -278,8 +277,8 @@ public class TaskDao
 	public void comfirmApply(int tid, int suid, int cuid) throws SQLException
 	{
 		final String sql1 = "select uid from TaskApply where uid=? and tid=? and status=1";
-		final String sql2 = "update TaskInfo set status="
-				+ TaskBean.Status.ongoing.ordinal() + " where tid=?";
+		final String sql2 = "update TaskInfo set status=" + TaskBean.Status.ongoing.ordinal()
+				+ " where tid=?";
 		final String sql3 = "insert into TaskResult(tid,suid,cuid) values(?,?,?)";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql1);
 				PreparedStatement ps2 = conn.prepareStatement(sql2);
@@ -301,5 +300,17 @@ public class TaskDao
 		}
 	}
 
-
+	public int addComment(int tid, int uid, String comment, boolean isS2C)
+			throws SQLException
+	{
+		final String sql = isS2C ? "update TaskResult set stoc=? where tid=? and suid=?"
+				: "update TaskResult set ctos=? where tid=? and cuid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql))
+		{
+			ps.setString(1, comment);
+			ps.setInt(2, tid);
+			ps.setInt(3, uid);
+			return ps.executeUpdate();
+		}
+	}
 }

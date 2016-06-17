@@ -9,7 +9,9 @@ public class TaskBean
 
 	private int tid = -1;
 	private int uid = -1;
+	private int aid = -1;
 	private String launcher;
+	private String doer;
 	private long time_start;
 	private int time_last, time_modify;
 	private int applycount;
@@ -166,5 +168,25 @@ public class TaskBean
 	public void setLauncher(String launcher)
 	{
 		this.launcher = launcher;
+	}
+
+	public int getAid()
+	{
+		return aid;
+	}
+
+	public void setAid(int aid)
+	{
+		this.aid = aid;
+	}
+
+	public String getDoer()
+	{
+		return doer;
+	}
+
+	public void setDoer(String doer)
+	{
+		this.doer = doer;
 	}
 }

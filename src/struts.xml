@@ -83,9 +83,12 @@
 		<action name="chgmyinfo" class="xziar.enhancer.action.UserInfoAction" method="ChangeBasic"/>
 		<action name="ogtasks" class="xziar.enhancer.action.UserInfoAction" method="OngoingTasks"/>
 		<action name="fntasks" class="xziar.enhancer.action.UserInfoAction" method="FinishTasks"/>
+		
 		<action name="getapplyers" class="xziar.enhancer.action.TaskAction" method="GetApplyers"/>
 		<action name="acceptapplyer" class="xziar.enhancer.action.TaskAction" method="AcceptApply"/>
 		<action name="confirmapplyer" class="xziar.enhancer.action.TaskAction" method="ConfirmApply"/>
+		<action name="fintask" class="xziar.enhancer.action.TaskAction" method="FinTask"/>
+		<action name="comment" class="xziar.enhancer.action.TaskAction" method="TaskComment"/>
 		
 		<action name="getuchecks" class="xziar.enhancer.action.AdminAction" method="GetUserChecks"/>
 		<action name="doucheck" class="xziar.enhancer.action.AdminAction" method="DoUserCheck"/>
