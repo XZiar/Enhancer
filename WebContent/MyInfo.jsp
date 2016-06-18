@@ -77,7 +77,7 @@ $(document).ready(function()
 </script>
 	<%@ include file="PageHead.jsp"%>
 
-<div class="wrapper contents" style="position: relative;">
+<div class="wrapper contents_wrapper" style="position: relative;">
 <c:set var="urole" value="${fn:split('管理员,学生,企业', ',')}" />
 	<aside class="sidebar" style="width:20%;">
 		<ul class="tab_nav">
@@ -98,10 +98,10 @@ $(document).ready(function()
 				<span class="tab_info">已完成</span>
 			</a></li>
 <c:if test="${user.role == 1 }">
-			<li class="i_32_forms" data-obj="part5"><a>
+			<!-- <li class="i_32_forms" data-obj="part5"><a>
 				<span class="tab_label">团队</span>
 				<span class="tab_info"></span>
-			</a></li>
+			</a></li> -->
 </c:if>
 		</ul>
 	</aside>

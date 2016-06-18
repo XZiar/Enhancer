@@ -9,6 +9,7 @@ import xziar.enhancer.dao.TaskDao;
 import xziar.enhancer.dao.UserDao;
 import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.pojo.CommentBean;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.TaskBean;
@@ -18,12 +19,15 @@ import xziar.enhancer.util.ServRes.Result;
 
 public class TaskService
 {
+	UserDao userdao = null;
+	TaskDao taskdao = null;
+
 	public ServRes<TaskBean> GetTask(int tid)
 	{
 		if (tid < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			TaskBean task = taskdao.queryTask(tid);
@@ -50,7 +54,7 @@ public class TaskService
 		if (from < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			ArrayList<TaskBean> tasks = taskdao.queryTasks(from, 10, "");
@@ -70,7 +74,7 @@ public class TaskService
 	public ServRes<ArrayList<TaskBean>> GetTasks(CompanyBean cpn, TaskBean.Status status)
 	{
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			ArrayList<TaskBean> tasks = taskdao.queryTasks(cpn, status);
@@ -90,7 +94,7 @@ public class TaskService
 	public ServRes<ArrayList<TaskBean>> GetFinTasks(CompanyBean cpn)
 	{
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			ArrayList<TaskBean> tasks = taskdao.queryFinTasks(cpn);
@@ -110,7 +114,7 @@ public class TaskService
 	public ServRes<ArrayList<TaskBean>> GetTasks(StudentBean stu, TaskBean.Status status)
 	{
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu, status);
@@ -130,8 +134,8 @@ public class TaskService
 	public ServRes<ArrayList<UserBean>> GetApplicants(CompanyBean cpn, int tid)
 	{
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
-		UserDao userdao = new UserDao(conn);
+		taskdao = new TaskDao(conn);
+		userdao = new UserDao(conn);
 		try
 		{
 			TaskBean task = taskdao.queryTask(tid);
@@ -162,7 +166,7 @@ public class TaskService
 		if (user.getAccountRole() != AccountBean.Role.company)// not company
 			return new ServRes<>(Result.unsatisfy);
 		Connection conn = DaoBase.getConnection(false);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			int tid = taskdao.addTask(task, (CompanyBean) user).getTid();
@@ -192,8 +196,8 @@ public class TaskService
 	{
 		boolean rolled = false;
 		Connection conn = DaoBase.getConnection(true);
-		UserDao userdao = new UserDao(conn);
-		TaskDao taskdao = new TaskDao(conn);
+		userdao = new UserDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			if (taskdao.testHasApply(tid, uid))
@@ -249,7 +253,7 @@ public class TaskService
 		if (user.getAccountRole() != Role.company)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			TaskBean task = taskdao.queryTask(tid);
@@ -294,7 +298,7 @@ public class TaskService
 		if (user.getAccountRole() != Role.student)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			TaskBean task = taskdao.queryTask(tid);
@@ -336,7 +340,7 @@ public class TaskService
 	public ServRes<TaskBean> FinishTask(int tid)
 	{
 		Connection conn = DaoBase.getConnection(false);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 		try
 		{
 			TaskBean task = taskdao.queryTask(tid);
@@ -372,7 +376,7 @@ public class TaskService
 	public ServRes<TaskBean> TaskComment(int tid, String comment, int score, UserBean user)
 	{
 		Connection conn = DaoBase.getConnection(true);
-		TaskDao taskdao = new TaskDao(conn);
+		taskdao = new TaskDao(conn);
 
 		boolean isS2C = (user.getAccountRole() == Role.student);
 		try
@@ -382,6 +386,28 @@ public class TaskService
 				return new ServRes<>(Result.error);
 			else
 				return new ServRes<>(Result.success);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
+	public ServRes<CommentBean> GetComment(int tid, UserBean user)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		taskdao = new TaskDao(conn);
+		try
+		{
+			CommentBean res = taskdao.queryComment(tid);
+			if (res == null)
+				return new ServRes<>(Result.error);
+			return new ServRes<>(res);
 		}
 		catch (Exception e)
 		{

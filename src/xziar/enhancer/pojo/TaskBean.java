@@ -19,6 +19,8 @@ public class TaskBean
 	private int payment;
 	private String title;
 	private String describe;
+	private int sscored = -1;
+	private int cscored = -1;
 	private int limit_people, limit_score;
 
 	public TaskBean()
@@ -189,4 +191,25 @@ public class TaskBean
 	{
 		this.doer = doer;
 	}
+
+	public int getSscored()
+	{
+		return sscored;
+	}
+
+	public void setSscored(int sscored)
+	{
+		this.sscored = sscored;
+	}
+
+	public int getCscored()
+	{
+		return cscored;
+	}
+
+	public void setCscored(int cscored)
+	{
+		this.cscored = cscored;
+	}
+
 }

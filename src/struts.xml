@@ -88,6 +88,7 @@
 		<action name="acceptapplyer" class="xziar.enhancer.action.TaskAction" method="AcceptApply"/>
 		<action name="confirmapplyer" class="xziar.enhancer.action.TaskAction" method="ConfirmApply"/>
 		<action name="fintask" class="xziar.enhancer.action.TaskAction" method="FinTask"/>
+		<action name="getcomment" class="xziar.enhancer.action.TaskAction" method="GetComment"/>
 		<action name="comment" class="xziar.enhancer.action.TaskAction" method="TaskComment"/>
 		
 		<action name="getuchecks" class="xziar.enhancer.action.AdminAction" method="GetUserChecks"/>

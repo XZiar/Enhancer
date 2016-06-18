@@ -15,15 +15,25 @@ function rfs_fn()
 				return;
 			
 			var obj = $("#fnlist");
+			var ofnum = 0, cmnum = 0;
 			obj.html("");
 			$.each(ret.fntasks, function(i, t)
 			{
 				var ctxt = "<tr data-tid='" + t.tid + "'><td class='ttitle'>" + t.title + "</td><td>"
-					+ "<div class='simple_buttons tcmt' ><div>提交评价</div></div>"
-					+ "</td><td>" + tsstatus[t.status]+"</td><td>" + t.launcher + "</td></tr>";
+					+ "<div class='simple_buttons tcmt' ><div>提交评价</div></div>";
+				if(t.cscored > 0)
+				{
+					ctxt += "已评" + t.cscored + "分";
+				}
+				else
+				{
+					ctxt += "未评分";
+					cmnum++;
+				}
+				ctxt += "</td><td>" + tsstatus[t.status]+"</td><td>" + t.launcher + "</td></tr>";
 				obj.append(ctxt);
 			});
-			MsgTip("目前有"+ret.fntasks.length+"个可评价的任务");
+			MsgTip("目前有"+cmnum+"个可评价的任务");
 		}
 	});
 }
@@ -40,9 +50,25 @@ $(document).ready(function()
 	$("#fnlist").on("click",".tcmt",function()
 	{
 		var tid = $(this).parents("tr").data("tid");
-		$('#sendcmt').data("tid", tid);
-		$('#tpm_fn').fadeIn(100);
-		$('#tp_fn').slideDown(200);
+		$.ajax({
+			type : "POST",
+			url : "getcomment",
+			data : "tid=" + tid,
+			success : function(data)
+			{
+				var ret = JSON.parse(data);
+				if(!validRet(ret))
+					return;
+				if(ret.score == -1)
+					ret.score = 3;
+				$('[name="score"]').val(ret.score);
+				$('[name="cmt"]').val(ret.comment);
+				$('#sendcmt').data("tid", tid);
+				$('#tpm_fn').fadeIn(100);
+				$('#tp_fn').slideDown(200);
+			}
+		});
+		
 	});
 	$("#sendcmt").click(function()
 	{
@@ -105,8 +131,8 @@ $(document).ready(function()
 				<thead>
 					<tr>
 						<th>任务名</th>
-						<th width="15%">操作</th>
-						<th width="15%">状态</th>
+						<th width="20%">操作</th>
+						<th width="10%">状态</th>
 						<th width="10%">发起方</th>
 					</tr>
 				</thead>

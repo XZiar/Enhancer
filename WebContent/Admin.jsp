@@ -64,7 +64,7 @@ $(document).ready(function()
 </script>
 	<%@ include file="PageHead.jsp"%>
 
-<div class="wrapper contents" style="position: relative;">
+<div class="wrapper contents_wrapper" style="position: relative;">
 	<aside class="sidebar" style="width:20%;">
 		<ul class="tab_nav">
 			<li class="active_tab i_32_dashboard" data-obj="part1"><a>

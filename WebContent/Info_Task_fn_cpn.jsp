@@ -15,7 +15,7 @@ function rfs_fn()
 				return;
 			
 			var obj = $("#fnlist");
-			var ofnum = 0;
+			var ofnum = 0, cmnum = 0;
 			obj.html("");
 			$.each(ret.fntasks, function(i, t)
 			{
@@ -26,11 +26,22 @@ function rfs_fn()
 					ofnum++;
 				}
 				else
+				{
 					ctxt += "<div class='simple_buttons tcmt' ><div>提交评价</div></div>";
+					if(t.sscored > 0)
+					{
+						ctxt += "已评" + t.sscored + "分";
+					}
+					else
+					{
+						ctxt += "未评分";
+						cmnum++;
+					}
+				}
 				ctxt += "</td><td>" + tsstatus[t.status]+"</td><td>" + t.doer + "</td></tr>";
 				obj.append(ctxt);
 			});
-			MsgTip("目前有"+ofnum+"个待结束的任务");
+			MsgTip("目前有"+ofnum+"个待结束的任务与"+cmnum+"个待评分任务");
 		}
 	});
 }
@@ -63,9 +74,25 @@ $(document).ready(function()
 	$("#fnlist").on("click",".tcmt",function()
 	{
 		var tid = $(this).parents("tr").data("tid");
-		$('#sendcmt').data("tid", tid);
-		$('#tpm_fn').fadeIn(100);
-		$('#tp_fn').slideDown(200);
+		$.ajax({
+			type : "POST",
+			url : "getcomment",
+			data : "tid=" + tid,
+			success : function(data)
+			{
+				var ret = JSON.parse(data);
+				if(!validRet(ret))
+					return;
+				if(ret.score == -1)
+					ret.score = 3;
+				$('[name="score"]').val(ret.score);
+				$('[name="cmt"]').val(ret.comment);
+				$('#sendcmt').data("tid", tid);
+				$('#tpm_fn').fadeIn(100);
+				$('#tp_fn').slideDown(200);
+			}
+		});
+		
 	});
 	$("#sendcmt").click(function()
 	{
@@ -128,8 +155,8 @@ $(document).ready(function()
 				<thead>
 					<tr>
 						<th>任务名</th>
-						<th width="15%">操作</th>
-						<th width="15%">状态</th>
+						<th width="20%">操作</th>
+						<th width="10%">状态</th>
 						<th width="10%">承包方</th>
 					</tr>
 				</thead>

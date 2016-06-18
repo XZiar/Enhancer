@@ -40,12 +40,7 @@ $(document).ready(function()
 			<div class="g_6 contents_header">
 				<h3 class="i_16_dashboard tab_label">个人信息</h3>
 			</div>	
-<%
-{
-	UserBean user = (UserBean)request.getAttribute("user");
-	if(user.getClass() == StudentBean.class)//student
-	{
-%>
+<c:if test="${user.role == 2 }">
 		<div class="g_6 contents_options">
 			<div class="simple_buttons">
 				<div class="bwIcon i_16_help">学生账户</div>
@@ -55,14 +50,9 @@ $(document).ready(function()
 		<div class="g_12 separator">
 			<span></span>
 		</div>
-		<s:set name="obj" value="user"/>
 		<%@ include file="Info_Job.jsp"%>
-<%
-	}
-	else if(user.getClass() == CompanyBean.class)//company
-	{
-%>
-		
+</c:if>
+<c:if test="${user.role == 1 }">
 		<div class="g_6 contents_options">
 			<div class="simple_buttons">
 				<div class="bwIcon i_16_help">企业账户</div>
@@ -72,28 +62,8 @@ $(document).ready(function()
 		<div class="g_12 separator">
 			<span></span>
 		</div>
-		<s:set name="obj" value="user"/>
 		<%@ include file="Info_Company.jsp"%>
-<%
-	}
-	else//admin
-	{
-%>
-		<div class="g_6 contents_options">
-			<div class="simple_buttons">
-				<div class="bwIcon i_16_help">管理员</div>
-			</div>
-		</div>
-		
-		<div class="g_12 separator">
-			<span></span>
-		</div>
-		
-<%
-	}
-}
-%>
-			
+</c:if>
 		</div>
 	</div>
 	

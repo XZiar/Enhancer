@@ -21,8 +21,7 @@ public class DataInject
 			String mthName = m.getName();
 			if (Pattern.matches("set(\\w+)", mthName))
 			{
-				MethodMap.put(
-						pm.matcher(mthName).replaceAll("$1").toLowerCase(), m);
+				MethodMap.put(pm.matcher(mthName).replaceAll("$1").toLowerCase(), m);
 			}
 		}
 		String objName = cls.getName();
@@ -51,6 +50,10 @@ public class DataInject
 			try
 			{
 				mth.invoke(obj, val);
+			}
+			catch (IllegalArgumentException e)
+			{
+				System.err.println("unmatch argment when insert " + par + " with " + val);
 			}
 			catch (Exception e)
 			{

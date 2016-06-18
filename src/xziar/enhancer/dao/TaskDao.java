@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import xziar.enhancer.pojo.CommentBean;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.TaskBean;
@@ -66,24 +67,6 @@ public class TaskDao
 		{
 			ps.setInt(1, cpn.getUid());
 			ps.setInt(2, status.ordinal());
-			ResultSet rs = ps.executeQuery();
-			ArrayList<TaskBean> tasks = new ArrayList<>();
-			while (rs.next())
-			{
-				TaskBean task = new TaskBean();
-				DataInject.RSToObj(rs, task);
-				tasks.add(task);
-			}
-			return tasks;
-		}
-	}
-
-	public ArrayList<TaskBean> queryTasks(StudentBean stu) throws SQLException
-	{
-		final String sql_queryTasks = "select * from ApplyData where aid=? and applystatus=1";
-		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
-		{
-			ps.setInt(1, stu.getUid());
 			ResultSet rs = ps.executeQuery();
 			ArrayList<TaskBean> tasks = new ArrayList<>();
 			while (rs.next())
@@ -258,17 +241,14 @@ public class TaskDao
 		final String sql1 = "update TaskApply set status=1 where uid=? and tid=?";
 		final String sql2 = "update TaskInfo set status=" + TaskBean.Status.onliscene.ordinal()
 				+ " where tid=?";
-		final String sql3 = "update UserBasicInfo set task_ongoing=task_ongoing+1 where uid=?";
 		try (PreparedStatement ps1 = conn.prepareStatement(sql1);
-				PreparedStatement ps2 = conn.prepareStatement(sql2);
-				PreparedStatement ps3 = conn.prepareStatement(sql3);)
+				PreparedStatement ps2 = conn.prepareStatement(sql2))
 		{
 			ps1.setInt(1, uid);
 			ps1.setInt(2, tid);
 			ps2.setInt(1, tid);
-			ps3.setInt(1, uid);
-			int a1 = ps1.executeUpdate(), a2 = ps2.executeUpdate(), a3 = ps3.executeUpdate();
-			if (a1 != a2 || a2 != a3 || a3 != 1)
+			int a1 = ps1.executeUpdate(), a2 = ps2.executeUpdate();
+			if (a1 != a2 || a1 != 1)
 				throw new SQLException("ans not equal to 1");
 			return;
 		}
@@ -313,6 +293,21 @@ public class TaskDao
 			ps.setInt(3, tid);
 			ps.setInt(4, uid);
 			return ps.executeUpdate();
+		}
+	}
+
+	public CommentBean queryComment(int tid) throws SQLException
+	{
+		final String sql = "select * from TaskResult where tid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql))
+		{
+			ps.setInt(1, tid);
+			CommentBean comment = new CommentBean();
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next())
+				return null;
+			DataInject.RSToObj(rs, comment);
+			return comment;
 		}
 	}
 }

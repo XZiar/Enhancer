@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.pojo.CommentBean;
 import xziar.enhancer.pojo.CompanyBean;
 import xziar.enhancer.pojo.TaskBean;
 import xziar.enhancer.pojo.UserBean;
@@ -307,6 +308,33 @@ public class TaskAction extends ActionUtil
 		switch (res.toEnum())
 		{
 		case success:
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+			return;
+		}
+	}
+
+	public void GetComment()
+	{
+		if (OnMethod("GET", "403.jsp"))
+			return;
+		UserBean user = (UserBean) session.getAttribute("user");
+		if (user == null)
+		{
+			Response(false, "unlogin");
+			return;
+		}
+		boolean isS2C = (user.getAccountRole() == Role.student);
+		ServRes<CommentBean> res = taskServ.GetComment(tid, user);
+		switch (res.toEnum())
+		{
+		case success:
+			CommentBean comment = res.getData();
+			datmap.put("score", isS2C ? comment.getCscore() : comment.getSscore());
+			datmap.put("comment", isS2C ? comment.getStoc() : comment.getCtos());
 			Response(true, "");
 			return;
 		case error:
