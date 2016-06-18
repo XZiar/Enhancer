@@ -156,7 +156,7 @@ public class TaskDao
 	 */
 	public ArrayList<TaskBean> queryTasks(int from, int size, String order) throws SQLException
 	{
-		final String sql_queryRangeTasks = "select top " + (size + from)
+		final String sql_queryRangeTasks = "select top " + size
 				+ " * from TaskSimpleData where tid not in (select top " + from
 				+ " tid from TaskSimpleData order by time_start desc) order by time_start desc";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeTasks))

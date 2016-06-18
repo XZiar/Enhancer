@@ -16,7 +16,7 @@
 		<action name="postview" class="xziar.enhancer.action.ForumAction" method="JView" />
 	</package>
 
-	<package name="strutsBean" namespace="/" extends="struts-default">
+	<package name="strutsBean" namespace="" extends="struts-default">
 
 		<default-action-ref name="login.jsp" />
 

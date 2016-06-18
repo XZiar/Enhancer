@@ -61,7 +61,7 @@ public class PostDao
 	{
 		final String sql_queryRangePosts = "select top " + size
 				+ " pid,type,uid,title,time_post,poster,replycount from PostData where pid not in (select top "
-				+ from + " pid from PostData order by time_post desc) order by time_post";
+				+ from + " pid from PostData order by time_post desc) order by time_post desc";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangePosts))
 		{
 			ResultSet rs = ps.executeQuery();
