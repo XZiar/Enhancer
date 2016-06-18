@@ -5,7 +5,7 @@
     <property name="user">dbuser</property>
     <property name="password">dbpassword</property>
     <property name="driverClass">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-    <property name="jdbcUrl">jdbc:sqlserver://120.27.106.188:1433;DatabaseName=Enhancer</property>
+    <property name="jdbcUrl">jdbc:sqlserver://120.27.106.188:9433;DatabaseName=Enhancer</property>
  
     <property name="initialPoolSize">3</property>
     <property name="acquireIncrement">2</property>

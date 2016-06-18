@@ -58,8 +58,8 @@ $(document).ready(function()
 				if(ret.success)
 				{
 					title = "发布成功";
-					$('#ret #msg').html("<br>2秒后自动跳转");
-					setTimeout(function(){location.reload(true)},2000);
+					$('#ret #msg').html("<br>1秒后自动跳转");
+					setTimeout(function(){location.reload(true)},1000);
 				}
 				else
 				{

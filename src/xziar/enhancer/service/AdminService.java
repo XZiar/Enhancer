@@ -9,9 +9,9 @@ import xziar.enhancer.dao.PostDao;
 import xziar.enhancer.dao.TaskDao;
 import xziar.enhancer.dao.UserDao;
 import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.TaskBean;
 import xziar.enhancer.pojo.UserBean;
-import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.util.ServRes;
 import xziar.enhancer.util.ServRes.Result;
 
@@ -85,8 +85,8 @@ public class AdminService
 		taskdao = new TaskDao(conn);
 		try
 		{
-			int ret = taskdao.deleteTask(tid);
-			return new ServRes<>((ret != -1));
+			boolean ret = taskdao.deleteTask(tid);
+			return new ServRes<>(ret);
 		}
 		catch (SQLException e)
 		{

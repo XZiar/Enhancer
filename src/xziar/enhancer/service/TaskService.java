@@ -114,7 +114,7 @@ public class TaskService
 		taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu, status);
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(stu, true, status);
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)
@@ -252,9 +252,13 @@ public class TaskService
 			if (task.getTaskStatus() != TaskBean.Status.onapply)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
-			taskdao.acceptApply(tid, uid);
-			conn.commit();
-			return new ServRes<>(true);
+			if (taskdao.acceptApply(tid, uid))
+			{
+				conn.commit();
+				return new ServRes<>(true);
+			}
+			conn.rollback();
+			return new ServRes<>(false);
 		}
 		catch (Exception e)
 		{
@@ -286,12 +290,12 @@ public class TaskService
 			TaskBean task = taskdao.queryTask(tid);
 			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			if (!taskdao.testHasAccept(tid, user.getUid()))// not own this task
-				return new ServRes<>(Result.unsatisfy);
 			if (task.getTaskStatus() != TaskBean.Status.onliscene)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
-			taskdao.comfirmApply(tid, user.getUid(), task.getUid());
+			if (taskdao.comfirmApply(tid, user.getUid(), task.getUid()) == false)
+				// not own this task, unable to comfirm
+				return new ServRes<>(Result.unsatisfy);
 			conn.commit();
 			return new ServRes<>(true);
 		}

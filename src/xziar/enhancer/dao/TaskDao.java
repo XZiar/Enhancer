@@ -23,6 +23,11 @@ public class TaskDao
 		conn = c;
 	}
 
+	/**
+	 * @param tid
+	 * @return Task of given tid
+	 * @throws SQLException
+	 */
 	public TaskBean queryTask(int tid) throws SQLException
 	{
 		final String sql_queryTask = "select * from TaskData where tid=?";
@@ -41,6 +46,12 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param cpn
+	 * @return List of tasks with doer of given company(state only ongoing or
+	 *         onfinish)
+	 * @throws SQLException
+	 */
 	public ArrayList<TaskBean> queryFinTasks(CompanyBean cpn) throws SQLException
 	{
 		final String sql_queryTasks = "select * from ApplyData where uid=? and applystatus=1 and (status="
@@ -60,6 +71,12 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param cpn
+	 * @param status
+	 * @return List of tasks of given company and given state
+	 * @throws SQLException
+	 */
 	public ArrayList<TaskBean> queryTasks(CompanyBean cpn, Status status) throws SQLException
 	{
 		final String sql_queryTasks = "select * from TaskSimpleData where uid=? and status=?";
@@ -79,13 +96,22 @@ public class TaskDao
 		}
 	}
 
-	public ArrayList<TaskBean> queryTasks(StudentBean stu, Status status) throws SQLException
+	/**
+	 * @param stu
+	 * @param accepted
+	 * @param status
+	 * @return List of tasks applyed of given student and given state
+	 * @throws SQLException
+	 */
+	public ArrayList<TaskBean> queryTasks(StudentBean stu, boolean accepted, Status status)
+			throws SQLException
 	{
-		final String sql_queryTasks = "select * from ApplyData where aid=? and applystatus=1 and status=?";
+		final String sql_queryTasks = "select * from ApplyData where aid=? and applystatus=? and status=?";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
 		{
 			ps.setInt(1, stu.getUid());
-			ps.setInt(2, status.ordinal());
+			ps.setInt(2, accepted ? 1 : 0);
+			ps.setInt(3, status.ordinal());
 			ResultSet rs = ps.executeQuery();
 			ArrayList<TaskBean> tasks = new ArrayList<>();
 			while (rs.next())
@@ -98,6 +124,11 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param status
+	 * @return List of tasks of given state
+	 * @throws SQLException
+	 */
 	public ArrayList<TaskBean> queryTasks(Status status) throws SQLException
 	{
 		final String sql_queryTasks = "select * from TaskSimpleData where status=?";
@@ -116,11 +147,18 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param from
+	 * @param size
+	 * @param order
+	 * @return List of tasks of given range in given order
+	 * @throws SQLException
+	 */
 	public ArrayList<TaskBean> queryTasks(int from, int size, String order) throws SQLException
 	{
-		final String sql_queryRangeTasks = "select top " + size
+		final String sql_queryRangeTasks = "select top " + (size + from)
 				+ " * from TaskSimpleData where tid not in (select top " + from
-				+ " tid from TaskSimpleData order by time_start desc) order by time_start";
+				+ " tid from TaskSimpleData order by time_start desc) order by time_start desc";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeTasks))
 		{
 			ResultSet rs = ps.executeQuery();
@@ -135,18 +173,12 @@ public class TaskDao
 		}
 	}
 
-	public boolean testHasAccept(int tid, int uid) throws SQLException
-	{
-		final String sql_querHasApply = "select uid from TaskApply where tid=? and uid=? and status=1";
-		try (PreparedStatement ps = conn.prepareStatement(sql_querHasApply))
-		{
-			ps.setInt(1, tid);
-			ps.setInt(2, uid);
-			ResultSet rs = ps.executeQuery();
-			return rs.next();
-		}
-	}
-
+	/**
+	 * @param tid
+	 * @param uid
+	 * @return whether exist the applyment of given tid and uid
+	 * @throws SQLException
+	 */
 	public boolean testHasApply(int tid, int uid) throws SQLException
 	{
 		final String sql_querHasApply = "select uid from TaskApply where tid=? and uid=?";
@@ -159,6 +191,12 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param task
+	 * @param cpn
+	 * @return task after insert successfully
+	 * @throws SQLException
+	 */
 	public TaskBean addTask(TaskBean task, CompanyBean cpn) throws SQLException
 	{
 		final String sql_info = "insert into TaskInfo (uid,title,time_start,time_modify,status) values(?,?,?,0,"
@@ -190,7 +228,12 @@ public class TaskDao
 		return task;
 	}
 
-	public int deleteTask(int tid) throws SQLException
+	/**
+	 * @param tid
+	 * @return whether successfully deleted
+	 * @throws SQLException
+	 */
+	public boolean deleteTask(int tid) throws SQLException
 	{
 		final String sql_delInfo = "delete from TaskInfo where tid=?";
 		final String sql_delDetail = "delete from TaskDetail where tid=?";
@@ -204,12 +247,17 @@ public class TaskDao
 			if (i + j != 2)
 			{
 				System.out.println("delete res:" + i + "," + j);
-				return -1;
+				return false;
 			}
-			return i + j;
+			return true;
 		}
 	}
 
+	/**
+	 * @param task
+	 * @return number of task be influnced
+	 * @throws SQLException
+	 */
 	public int updateTask(TaskBean task) throws SQLException
 	{
 		final String sql_updAccount = "update TaskInfo set title=? , time_modify=? , status=? where tid=?";
@@ -224,6 +272,13 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param tid
+	 * @param uid
+	 * @param des
+	 * @return number of applicant be influnced
+	 * @throws SQLException
+	 */
 	public int addApplicant(int tid, int uid, String des) throws SQLException
 	{
 		final String sql = "insert into TaskApply (uid,tid,describe) values(?,?,?)";
@@ -236,7 +291,13 @@ public class TaskDao
 		}
 	}
 
-	public void acceptApply(int tid, int uid) throws SQLException
+	/**
+	 * @param tid
+	 * @param uid
+	 * @return whther succeed
+	 * @throws SQLException
+	 */
+	public boolean acceptApply(int tid, int uid) throws SQLException
 	{
 		final String sql1 = "update TaskApply set status=1 where uid=? and tid=?";
 		final String sql2 = "update TaskInfo set status=" + TaskBean.Status.onliscene.ordinal()
@@ -249,18 +310,28 @@ public class TaskDao
 			ps2.setInt(1, tid);
 			int a1 = ps1.executeUpdate(), a2 = ps2.executeUpdate();
 			if (a1 != a2 || a1 != 1)
-				throw new SQLException("ans not equal to 1");
-			return;
+			{
+				System.err.println("ans is " + a1 + "," + a2);
+				return false;
+			}
+			return true;
 		}
 	}
 
-	public void comfirmApply(int tid, int suid, int cuid) throws SQLException
+	/**
+	 * @param tid
+	 * @param suid
+	 * @param cuid
+	 * @return whether is able to comfirm
+	 * @throws SQLException
+	 */
+	public boolean comfirmApply(int tid, int suid, int cuid) throws SQLException
 	{
-		final String sql1 = "select uid from TaskApply where uid=? and tid=? and status=1";
+		final String sql_querHasApply = "select uid from TaskApply where uid=? and tid=? and status=1";
 		final String sql2 = "update TaskInfo set status=" + TaskBean.Status.ongoing.ordinal()
 				+ " where tid=?";
 		final String sql3 = "insert into TaskResult(tid,suid,cuid) values(?,?,?)";
-		try (PreparedStatement ps1 = conn.prepareStatement(sql1);
+		try (PreparedStatement ps1 = conn.prepareStatement(sql_querHasApply);
 				PreparedStatement ps2 = conn.prepareStatement(sql2);
 				PreparedStatement ps3 = conn.prepareStatement(sql3))
 		{
@@ -272,14 +343,24 @@ public class TaskDao
 			ps3.setInt(3, cuid);
 			ResultSet rs = ps1.executeQuery();
 			if (!rs.next())
-				throw new SQLException("wrong status");
+				return false;
 			int a1 = ps2.executeUpdate(), a2 = ps3.executeUpdate();
 			if (a1 != a2 || a1 != 1)
-				throw new SQLException("ans not equal ton 1");
-			return;
+				return false;
+			return true;
 		}
 	}
 
+	/**
+	 * @param tid
+	 * @param uid
+	 * @param comment
+	 * @param score
+	 * @param isS2C
+	 *            whether is student towards company
+	 * @return number of record be influenced
+	 * @throws SQLException
+	 */
 	public int addComment(int tid, int uid, String comment, int score, boolean isS2C)
 			throws SQLException
 	{
@@ -296,6 +377,11 @@ public class TaskDao
 		}
 	}
 
+	/**
+	 * @param tid
+	 * @return comment of given task
+	 * @throws SQLException
+	 */
 	public CommentBean queryComment(int tid) throws SQLException
 	{
 		final String sql = "select * from TaskResult where tid=?";
