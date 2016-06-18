@@ -19,8 +19,8 @@ import xziar.enhancer.util.ServRes.Result;
 
 public class TaskService
 {
-	UserDao userdao = null;
 	TaskDao taskdao = null;
+	UserDao userdao = null;
 
 	public ServRes<TaskBean> GetTask(int tid)
 	{
@@ -33,10 +33,7 @@ public class TaskService
 			TaskBean task = taskdao.queryTask(tid);
 			if (task == null)
 				return new ServRes<>(Result.nonexist);
-			else
-			{
-				return new ServRes<>(task);
-			}
+			return new ServRes<>(task);
 		}
 		catch (SQLException e)
 		{
@@ -194,19 +191,18 @@ public class TaskService
 
 	public ServRes<Boolean> Apply(int uid, int tid, String des)
 	{
-		boolean rolled = false;
-		Connection conn = DaoBase.getConnection(true);
+		Connection conn = DaoBase.getConnection(false);
 		userdao = new UserDao(conn);
 		taskdao = new TaskDao(conn);
 		try
 		{
 			if (taskdao.testHasApply(tid, uid))
 				return new ServRes<>(Result.exist);
-			ServRes<TaskBean> res1 = GetTask(tid);
+
+			TaskBean task = taskdao.queryTask(tid);
 			UserBean user = userdao.queryUser(new AccountBean(uid, Role.student));
-			if (user == null || res1.toEnum() != Result.success)
-				return new ServRes<>(Result.error);
-			TaskBean task = res1.getData();
+			if (task == null || user == null)
+				return new ServRes<>(Result.nonexist);
 
 			if (task.getTaskStatus() != TaskBean.Status.onapply)
 				return new ServRes<>(Result.wrongstatus);
@@ -215,29 +211,22 @@ public class TaskService
 				return new ServRes<>(Result.unsatisfy);
 
 			// add applicant
-			conn.setAutoCommit(false);
-			rolled = true;
 			if (taskdao.addApplicant(tid, uid, des) != 1)
-			{
-				rolled = false;
 				conn.rollback();
-			}
-			conn.commit();
+			else
+				conn.commit();
 			return new ServRes<>(true);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			if (rolled)
+			try
 			{
-				try
-				{
-					conn.rollback();
-				}
-				catch (SQLException e1)
-				{
-					e1.printStackTrace();
-				}
+				conn.rollback();
+			}
+			catch (SQLException e1)
+			{
+				e1.printStackTrace();
 			}
 			return new ServRes<>(Result.error);
 		}
@@ -249,10 +238,9 @@ public class TaskService
 
 	public ServRes<Boolean> AcceptApply(int uid, int tid, UserBean user)
 	{
-		boolean rolled = false;
 		if (user.getAccountRole() != Role.company)
 			return new ServRes<>(Result.error);
-		Connection conn = DaoBase.getConnection(true);
+		Connection conn = DaoBase.getConnection(false);
 		taskdao = new TaskDao(conn);
 		try
 		{
@@ -264,8 +252,6 @@ public class TaskService
 			if (task.getTaskStatus() != TaskBean.Status.onapply)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
-			conn.setAutoCommit(false);
-			rolled = true;
 			taskdao.acceptApply(tid, uid);
 			conn.commit();
 			return new ServRes<>(true);
@@ -273,16 +259,13 @@ public class TaskService
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			if (rolled)
+			try
 			{
-				try
-				{
-					conn.rollback();
-				}
-				catch (SQLException e1)
-				{
-					e1.printStackTrace();
-				}
+				conn.rollback();
+			}
+			catch (SQLException e1)
+			{
+				e1.printStackTrace();
 			}
 			return new ServRes<>(Result.error);
 		}
@@ -294,10 +277,9 @@ public class TaskService
 
 	public ServRes<Boolean> ComfirmApply(int tid, UserBean user)
 	{
-		boolean rolled = false;
 		if (user.getAccountRole() != Role.student)
 			return new ServRes<>(Result.error);
-		Connection conn = DaoBase.getConnection(true);
+		Connection conn = DaoBase.getConnection(false);
 		taskdao = new TaskDao(conn);
 		try
 		{
@@ -309,8 +291,6 @@ public class TaskService
 			if (task.getTaskStatus() != TaskBean.Status.onliscene)
 				return new ServRes<>(Result.wrongstatus);
 			// start attempt
-			conn.setAutoCommit(false);
-			rolled = true;
 			taskdao.comfirmApply(tid, user.getUid(), task.getUid());
 			conn.commit();
 			return new ServRes<>(true);
@@ -318,16 +298,13 @@ public class TaskService
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			if (rolled)
+			try
 			{
-				try
-				{
-					conn.rollback();
-				}
-				catch (SQLException e1)
-				{
-					e1.printStackTrace();
-				}
+				conn.rollback();
+			}
+			catch (SQLException e1)
+			{
+				e1.printStackTrace();
 			}
 			return new ServRes<>(Result.error);
 		}
