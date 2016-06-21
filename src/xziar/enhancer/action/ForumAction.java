@@ -39,7 +39,7 @@ public class ForumAction extends ActionUtil
 		default:
 			return "error";
 		}
-		ServRes<ArrayList<ReplyBean>> res2 = forumServ.GetReplys(post, from);
+		ServRes<ArrayList<ReplyBean>> res2 = forumServ.GetReplys(pid, from);
 		switch (res.toEnum())
 		{
 		case nonexist:
@@ -68,17 +68,26 @@ public class ForumAction extends ActionUtil
 			Response(false, "error");
 			return;
 		}
-		ServRes<ArrayList<ReplyBean>> res2 = forumServ.GetReplys(post, from);
+		datmap.put("post", post);
+		Response(true, "");
+		return;
+	}
+
+	public void JReplyView()
+	{
+		if (OnMethod("GET", "../postview"))
+			return;
+		ServRes<ArrayList<ReplyBean>> res = forumServ.GetReplys(pid, from);
 		switch (res.toEnum())
 		{
 		case success:
-			replys = res2.getData();
+			replys = res.getData();
 			break;
 		default:
 			Response(false, "error");
 			return;
 		}
-		datmap.put("post", post);
+		datmap.put("replys", replys);
 		Response(true, "");
 		return;
 	}

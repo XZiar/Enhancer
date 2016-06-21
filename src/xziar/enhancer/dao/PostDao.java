@@ -76,7 +76,7 @@ public class PostDao
 		}
 	}
 
-	public ArrayList<ReplyBean> queryReplys(int from, int size, PostBean post, String order)
+	public ArrayList<ReplyBean> queryReplys(int from, int size, int pid, String order)
 			throws SQLException
 	{
 		final String sql_queryRangeReplys = "select top " + size
@@ -84,7 +84,7 @@ public class PostDao
 				+ " pid from ReplyData order by time_reply desc) order by time_reply";
 		try (PreparedStatement ps = conn.prepareStatement(sql_queryRangeReplys))
 		{
-			ps.setInt(1, post.getPid());
+			ps.setInt(1, pid);
 			ResultSet rs = ps.executeQuery();
 			ArrayList<ReplyBean> replys = new ArrayList<>();
 			while (rs.next())

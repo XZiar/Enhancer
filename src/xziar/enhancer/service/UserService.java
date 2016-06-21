@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import xziar.enhancer.dao.DaoBase;
 import xziar.enhancer.dao.UserDao;
 import xziar.enhancer.pojo.AccountBean;
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.UserBean;
-import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.util.ServRes;
 import xziar.enhancer.util.ServRes.Result;
 
@@ -53,7 +53,7 @@ public class UserService
 			else if (pwd.equals(account.getPwd()))
 			{
 				UserBean user = userdao.queryUser(account);
-				if(user.getAccountStatus() == AccountBean.Status.unchecked)
+				if (user.getAccountStatus() == AccountBean.Status.unchecked)
 					return new ServRes<>(Result.wrongstatus);
 				return new ServRes<>(user);
 			}
@@ -125,14 +125,14 @@ public class UserService
 		}
 	}
 
-	public ServRes<UserBean> ChangeInfo(UserBean user, String oldpwd,
-			String newpwd, String des)
+	public ServRes<UserBean> ChangeInfo(UserBean user, String oldpwd, String newpwd, String des)
 	{
-		Connection conn = DaoBase.getConnection(false);
+		Connection conn = DaoBase.getConnection(true);
 		userdao = new UserDao(conn);
 		try
 		{
-			if (!"".equals(newpwd))
+			System.out.println(oldpwd + " ==> " + newpwd + " , " + des);
+			if (newpwd != null && !newpwd.equals(""))
 			{
 				// change password
 				AccountBean account = userdao.queryAccount(user.getUid());
@@ -141,28 +141,23 @@ public class UserService
 				if (!account.getPwd().equals(oldpwd))
 					return new ServRes<>(Result.wrongpwd);
 				account.setPwd(newpwd);
-				if (userdao.updateAccount(account) != -1)
+				if (userdao.updateAccount(account) != 1)
 					return new ServRes<>(Result.error);
 				user.setPwd(newpwd);
+				System.out.println("change pwd success");
 			}
-			user.setDescribe(des);
-			if (userdao.updateUser(user) != 1)
-				return new ServRes<>(Result.error);
-
-			conn.commit();
+			if (des != null)
+			{
+				user.setDescribe(des);
+				if (userdao.updateUser(user) != 1)
+					return new ServRes<>(Result.error);
+				System.out.println("change des success");
+			}
 			return new ServRes<>(user);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			try
-			{
-				conn.rollback();
-			}
-			catch (SQLException e1)
-			{
-				e1.printStackTrace();
-			}
 			return new ServRes<>(Result.error);
 		}
 		finally

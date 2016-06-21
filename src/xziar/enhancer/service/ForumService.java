@@ -14,12 +14,13 @@ import xziar.enhancer.util.ServRes.Result;
 
 public class ForumService
 {
+	PostDao postdao;
 	public ServRes<PostBean> GetPost(int pid)
 	{
 		if (pid < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		PostDao postdao = new PostDao(conn);
+		postdao = new PostDao(conn);
 		try
 		{
 			PostBean post = postdao.queryPost(pid);
@@ -46,7 +47,7 @@ public class ForumService
 		if (from < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		PostDao postdao = new PostDao(conn);
+		postdao = new PostDao(conn);
 		try
 		{
 			ArrayList<PostBean> posts = postdao.queryPosts(from, 10, "");
@@ -63,15 +64,15 @@ public class ForumService
 		}
 	}
 	
-	public ServRes<ArrayList<ReplyBean>> GetReplys(PostBean post, int from)
+	public ServRes<ArrayList<ReplyBean>> GetReplys(int pid, int from)
 	{
 		if (from < 0)
 			return new ServRes<>(Result.error);
 		Connection conn = DaoBase.getConnection(true);
-		PostDao postdao = new PostDao(conn);
+		postdao = new PostDao(conn);
 		try
 		{
-			ArrayList<ReplyBean> replys = postdao.queryReplys(from, 10, post, "");
+			ArrayList<ReplyBean> replys = postdao.queryReplys(from, 10, pid, "");
 			return new ServRes<>(replys);
 		}
 		catch (SQLException e)
@@ -88,7 +89,7 @@ public class ForumService
 	public ServRes<ArrayList<PostBean>> GetTasksByUser(UserBean user)
 	{
 		Connection conn = DaoBase.getConnection(true);
-		PostDao postdao = new PostDao(conn);
+		postdao = new PostDao(conn);
 		try
 		{
 			ArrayList<PostBean> posts = postdao.queryPosts(user);
@@ -108,7 +109,7 @@ public class ForumService
 	public ServRes<Integer> PostPost(PostBean post, UserBean user)
 	{
 		Connection conn = DaoBase.getConnection(false);
-		PostDao postdao = new PostDao(conn);
+		postdao = new PostDao(conn);
 		try
 		{
 			int pid = postdao.addPost(post, user).getPid();
@@ -137,7 +138,7 @@ public class ForumService
 	public ServRes<Integer> PostReply(ReplyBean reply, UserBean user)
 	{
 		Connection conn = DaoBase.getConnection(false);
-		PostDao postdao = new PostDao(conn);
+		postdao = new PostDao(conn);
 		try
 		{
 			int rid = postdao.addReply(reply, user).getRid();

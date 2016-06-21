@@ -24,6 +24,19 @@ public class UserInfoAction extends ActionUtil
 	UserService userServ = new UserService();
 	TaskService taskServ = new TaskService();
 	
+	protected boolean check()
+	{
+		if (OnMethod("GET", "login.jsp"))
+			return false;
+		user = (UserBean) session.getAttribute("user");
+		if (user == null)
+		{
+			Response(false, "unlogin");
+			return false;
+		}
+		return true;
+	}
+
 	public String Overall()
 	{
 		user = (UserBean)session.getAttribute("user");
@@ -50,34 +63,30 @@ public class UserInfoAction extends ActionUtil
 
 	public void ChangeBasic()
 	{
-		user = (UserBean)session.getAttribute("user");
-		if(user == null)
-			Response(false,"unlogin");
+		if (!check())
+			return;
 		ServRes<UserBean> res = userServ.ChangeInfo(user, oldpwd, newpwd, des);
 		switch(res.toEnum())
 		{
 		case wrongpwd:
-			Response(false,"√‹¬Î¥ÌŒÛ");return;
+			Response(false, "√‹¬Î¥ÌŒÛ");
+			break;
 		case success:
 			user = res.getData();
 			session.setAttribute("user", user);
 			Response(true,"");
+			break;
 		case error:
 		default:
-			Response(false,"œµÕ≥¥ÌŒÛ");return;
+			Response(false, "œµÕ≥¥ÌŒÛ");
+			break;
 		}
 	}
 	
 	public void OngoingTasks()
 	{
-		if (OnMethod("GET", "login.jsp"))
+		if (!check())
 			return;
-		user = (UserBean) session.getAttribute("user");
-		if (user == null)
-		{
-			Response(false, "unlogin");
-			return;
-		}
 		ServRes<ArrayList<TaskBean>> res = null;
 		if (user.getAccountRole() == Role.company)
 		{
@@ -105,14 +114,8 @@ public class UserInfoAction extends ActionUtil
 
 	public void FinishTasks()
 	{
-		if (OnMethod("GET", "login.jsp"))
+		if (!check())
 			return;
-		user = (UserBean) session.getAttribute("user");
-		if (user == null)
-		{
-			Response(false, "unlogin");
-			return;
-		}
 		ServRes<ArrayList<TaskBean>> res = null;
 		if (user.getAccountRole() == Role.company)
 		{
