@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="xziar.enhancer.pojo.UserBean" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,6 +74,20 @@ $(document).ready(function()
 							</c:forEach>
 						</tbody>
 					</table>
+				</div>
+				<div class="g_12" style="text-align: center;">
+					<c:set var="pageup" value="${from==0?-1:(from-perpage<=0?0:from-perpage) }"/>
+					<c:set var="pagedown" value="${from+perpage }"/>
+					<c:if test="${pageup>=0 }">
+					<div class="simple_buttons" onclick="javascript:window.location.href='forum?perpage=${perpage }&from=${pageup }'">
+						<div>上一页</div>
+					</div>
+					</c:if>
+					<c:if test="${pageup<=fn:length(posts) }">
+					<div class="simple_buttons" onclick="javascript:window.location.href='forum?perpage=${perpage }&from=${pagedown }'">
+						<div>下一页</div>
+					</div>
+					</c:if>
 				</div>
 			</div>
 			

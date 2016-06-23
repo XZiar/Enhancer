@@ -18,6 +18,7 @@ public class TaskAction extends ActionUtil
 	int score = 3;
 	Integer uid = null;
 	int from = 0;
+	int perpage = 10;
 	String des = "ÔÝÎÞ";
 	String cmt = "";
 	TaskBean task;
@@ -67,7 +68,7 @@ public class TaskAction extends ActionUtil
 	{
 		if (OnMethod("POST", null))
 			return "error";
-		ServRes<ArrayList<TaskBean>> res = taskServ.GetTasks(from);
+		ServRes<ArrayList<TaskBean>> res = taskServ.GetTasks(from, perpage);
 		switch (res.toEnum())
 		{
 		case success:
@@ -83,7 +84,7 @@ public class TaskAction extends ActionUtil
 	{
 		if (OnMethod("GET", "../task"))
 			return;
-		ServRes<ArrayList<TaskBean>> res = taskServ.GetTasks(from);
+		ServRes<ArrayList<TaskBean>> res = taskServ.GetTasks(from, perpage);
 		switch (res.toEnum())
 		{
 		case success:
@@ -387,5 +388,21 @@ public class TaskAction extends ActionUtil
 	public void setScore(int score)
 	{
 		this.score = score;
+	}
+
+	public int getPerpage()
+	{
+		return perpage;
+	}
+
+	public void setPerpage(int perpage)
+	{
+		if (perpage >= 5)
+			this.perpage = perpage;
+	}
+
+	public int getFrom()
+	{
+		return from;
 	}
 }

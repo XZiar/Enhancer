@@ -1,25 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="xziar.enhancer.pojo.TaskBean,xziar.enhancer.pojo.UserBean,xziar.enhancer.pojo.CompanyBean" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page
+	import="xziar.enhancer.pojo.TaskBean,xziar.enhancer.pojo.UserBean,xziar.enhancer.pojo.CompanyBean"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta charset="UTF-8">
-	<title>任务列表 ---- Enhancer实战培训中心</title>
-	<!-- The Main CSS File -->
-	<link rel="stylesheet" href="CSS/merge.css" />
-	<!-- jQuery -->
-	<script src="Javascript/jQuery/jquery-1.12.0.min.js"></script>
-	<style>
-		.ttitle {cursor: pointer;}
-	</style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<title>任务列表 ---- Enhancer实战培训中心</title>
+<!-- The Main CSS File -->
+<link rel="stylesheet" href="CSS/merge.css" />
+<!-- jQuery -->
+<script src="Javascript/jQuery/jquery-1.12.0.min.js"></script>
+<style>
+.ttitle {
+	cursor: pointer;
+}
+</style>
 </head>
 <body>
 	<%@ include file="PageHead.jsp"%>
-<script>
+	<script>
 $(document).ready(function()
 {
 	$("#tasklist tr").each(function()
@@ -39,14 +41,14 @@ $(document).ready(function()
 </script>
 	<div class="wrapper contents">
 		<div class="grid_wrapper">
-		
-<c:if test="${(! empty user) && user.role == 2 }">
-			<div class="g_12" style="text-align: center;">
-				<div class="simple_buttons" id="addtask">
-					<div>发布任务</div>
+
+			<c:if test="${(! empty user) && user.role == 2 }">
+				<div class="g_12" style="text-align: center;">
+					<div class="simple_buttons" id="addtask">
+						<div>发布任务</div>
+					</div>
 				</div>
-			</div>
-</c:if>
+			</c:if>
 
 			<div class="g_12">
 				<div class="widget_contents noPadding">
@@ -64,25 +66,32 @@ $(document).ready(function()
 							<c:set var="tstatus" value="${fn:split('待审核,报名中,报名截止,进行中,已完结,已关闭', ',')}" />
 							<c:forEach var="t" items="${tasks}">
 								<tr>
-									<td class="ttitle" data-tid="<c:out value='${t.tid} '/>">
-										<c:out value='${t.title} '/>
+									<td class="ttitle" data-tid="<c:out value='${t.tid} '/>"><c:out value='${t.title} ' />
 									</td>
-									<td><c:out value='${tstatus[t.status]}'/></td>
-									<td data-uid='c:out value="${t.uid} "/>'>
-										<c:out value='${t.launcher} '/>
-									</td>
-									<td class="ttime"><c:out value='${t.time_start} '/></td>
-									<td><c:out value='${t.applycount} '/></td>
+									<td><c:out value='${tstatus[t.status]}' /></td>
+									<td data-uid='c:out value="${t.uid} "/>'><c:out value='${t.launcher} ' /></td>
+									<td class="ttime"><c:out value='${t.time_start} ' /></td>
+									<td><c:out value='${t.applycount} ' /></td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
+				<div class="g_12" style="text-align: center;">
+					<c:set var="pageup" value="${from==0?-1:(from-perpage<=0?0:from-perpage) }"/>
+					<c:set var="pagedown" value="${from+perpage }"/>
+					<c:if test="${pageup>=0 }">
+					<div class="simple_buttons" onclick="javascript:window.location.href='task?perpage=${perpage }&from=${pageup }'">
+						<div>上一页</div>
+					</div>
+					</c:if>
+					<c:if test="${pageup<=fn:length(tasks) }">
+					<div class="simple_buttons" onclick="javascript:window.location.href='task?perpage=${perpage }&from=${pagedown }'">
+						<div>下一页</div>
+					</div>
+					</c:if>
+				</div>
 			</div>
-			
 		</div>
-	</div>
-	
-	
 </body>
 </html>

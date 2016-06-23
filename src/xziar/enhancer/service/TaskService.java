@@ -46,7 +46,7 @@ public class TaskService
 		}
 	}
 
-	public ServRes<ArrayList<TaskBean>> GetTasks(int from)
+	public ServRes<ArrayList<TaskBean>> GetTasks(int from, int perpage)
 	{
 		if (from < 0)
 			return new ServRes<>(Result.error);
@@ -54,7 +54,7 @@ public class TaskService
 		taskdao = new TaskDao(conn);
 		try
 		{
-			ArrayList<TaskBean> tasks = taskdao.queryTasks(from, 10, "");
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(from, perpage, "");
 			return new ServRes<>(tasks);
 		}
 		catch (SQLException e)

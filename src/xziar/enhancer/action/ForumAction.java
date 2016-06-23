@@ -14,6 +14,7 @@ public class ForumAction extends ActionUtil
 	int pid = -1;
 	Integer uid = null;
 	int from = 0;
+	int perpage = 10;
 	String des = "ÔÝÎÞ";
 	PostBean post;
 	ReplyBean reply;
@@ -96,7 +97,7 @@ public class ForumAction extends ActionUtil
 	{
 		if (OnMethod("POST", null))
 			return "error";
-		ServRes<ArrayList<PostBean>> res = forumServ.GetTasks(from);
+		ServRes<ArrayList<PostBean>> res = forumServ.GetPosts(from, perpage);
 		switch (res.toEnum())
 		{
 		case success:
@@ -112,7 +113,7 @@ public class ForumAction extends ActionUtil
 	{
 		if (OnMethod("GET", "../forum"))
 			return;
-		ServRes<ArrayList<PostBean>> res = forumServ.GetTasks(from);
+		ServRes<ArrayList<PostBean>> res = forumServ.GetPosts(from, perpage);
 		switch (res.toEnum())
 		{
 		case success:
@@ -221,6 +222,22 @@ public class ForumAction extends ActionUtil
 	public void setDes(String des)
 	{
 		this.des = des;
+	}
+
+	public int getPerpage()
+	{
+		return perpage;
+	}
+
+	public void setPerpage(int perpage)
+	{
+		if (perpage >= 5)
+			this.perpage = perpage;
+	}
+
+	public int getFrom()
+	{
+		return from;
 	}
 
 	public ArrayList<PostBean> getPosts()

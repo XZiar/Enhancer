@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
-    <Class name="xziar.enhancer.service.AdminService" x="1462" y="496">
+    <Class name="xziar.enhancer.service.AdminService" x="151" y="556">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -19,9 +19,10 @@
         <Communication destinationClassName="xziar.enhancer.pojo.TaskBean"/>
         <Communication destinationClassName="xziar.enhancer.dao.PostDao"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
         <Communication destinationClassName="xziar.enhancer.pojo.UserBean"/>
     </Class>
-    <Class name="xziar.enhancer.dao.TaskDao" x="1018" y="671">
+    <Class name="xziar.enhancer.dao.TaskDao" x="1163" y="796">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -31,7 +32,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Communication destinationClassName="xziar.enhancer.pojo.TaskBean"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.ImgBean" x="1098" y="72">
+    <Class name="xziar.enhancer.pojo.ImgBean" x="1070" y="1351">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -40,7 +41,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.action.ActionUtil" x="1296" y="-5">
+    <Class name="xziar.enhancer.action.ActionUtil" x="691" y="11">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -49,7 +50,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.StudentBean" x="1205" y="143">
+    <Class name="xziar.enhancer.pojo.StudentBean" x="313" y="1120">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -59,7 +60,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Extension destinationClassName="xziar.enhancer.pojo.UserBean"/>
     </Class>
-    <Class name="xziar.enhancer.dao.PostDao" x="1410" y="825">
+    <Class name="xziar.enhancer.dao.PostDao" x="-72" y="855">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -70,7 +71,17 @@
         <Communication destinationClassName="xziar.enhancer.pojo.PostBean"/>
         <Communication destinationClassName="xziar.enhancer.pojo.ReplyBean"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.ReplyBean" x="732" y="300">
+    <Class name="xziar.enhancer.dao.ImageDao" x="388" y="831">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="xziar.enhancer.pojo.ImgBean"/>
+    </Class>
+    <Class name="xziar.enhancer.pojo.ReplyBean" x="15" y="1115">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -79,7 +90,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.action.UserInfoAction" x="1309" y="181">
+    <Class name="xziar.enhancer.action.UserInfoAction" x="904" y="200">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -103,7 +114,7 @@
         <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
     </Class>
-    <Class name="xziar.enhancer.service.UserService" x="-136" y="548">
+    <Class name="xziar.enhancer.service.UserService" x="580" y="572">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -115,9 +126,10 @@
             endpointName="userdao" kind="Simple"/>
         <Communication destinationClassName="xziar.enhancer.dao.UserDao"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
         <Communication destinationClassName="xziar.enhancer.pojo.UserBean"/>
     </Class>
-    <Class name="xziar.enhancer.action.UserAction" x="251" y="73">
+    <Class name="xziar.enhancer.action.UserAction" x="710" y="226">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -141,7 +153,7 @@
         <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.TaskBean.Status" x="458" y="254">
+    <Class name="xziar.enhancer.pojo.TaskBean.Status" x="1458" y="1118">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -150,7 +162,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.AccountBean" x="1131" y="287">
+    <Class name="xziar.enhancer.pojo.AccountBean" x="813" y="1335">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -167,7 +179,7 @@
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean.Role"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean.Status"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.GroupBean.Role" x="975" y="95">
+    <Class name="xziar.enhancer.pojo.GroupBean.Role" x="544" y="1050">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -176,7 +188,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.action.AdminAction" x="1589" y="-47">
+    <Class name="xziar.enhancer.action.AdminAction" x="399" y="24">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -196,16 +208,16 @@
             endpointName="adminServ" kind="Simple"/>
         <Association destinationClassName="xziar.enhancer.pojo.UserBean"
             endpointName="user" kind="Simple"/>
-        <Association destinationClassName="xziar.enhancer.pojo.TaskBean"
-            endpointName="tasks" kind="Simple"/>
         <Association destinationClassName="xziar.enhancer.pojo.UserBean"
             endpointName="users" kind="Simple"/>
+        <Association destinationClassName="xziar.enhancer.pojo.TaskBean"
+            endpointName="tasks" kind="Simple"/>
         <Communication destinationClassName="xziar.enhancer.service.AdminService"/>
         <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean.Role"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.AccountBean.Status" x="859" y="149">
+    <Class name="xziar.enhancer.pojo.AccountBean.Status" x="663" y="1334">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -214,7 +226,19 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.UserBean" x="1057" y="393">
+    <Class name="xziar.enhancer.action.ImgAction" x="981" y="29">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Communication destinationClassName="xziar.enhancer.pojo.ImgBean"/>
+        <Communication destinationClassName="xziar.enhancer.dao.ImageDao"/>
+    </Class>
+    <Class name="xziar.enhancer.pojo.UserBean" x="760" y="1158">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -225,7 +249,7 @@
         <Extension destinationClassName="xziar.enhancer.pojo.AccountBean"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
     </Class>
-    <Class name="xziar.enhancer.dao.UserDao" x="-80" y="728">
+    <Class name="xziar.enhancer.dao.UserDao" x="616" y="820">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -238,7 +262,7 @@
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
         <Communication destinationClassName="xziar.enhancer.pojo.UserBean"/>
     </Class>
-    <Class name="xziar.enhancer.service.ForumService" x="-161" y="331">
+    <Class name="xziar.enhancer.service.ForumService" x="-79" y="381">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -246,11 +270,14 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="xziar.enhancer.dao.PostDao"
+            endpointName="postdao" kind="Simple"/>
         <Communication destinationClassName="xziar.enhancer.dao.PostDao"/>
         <Communication destinationClassName="xziar.enhancer.pojo.PostBean"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
         <Communication destinationClassName="xziar.enhancer.pojo.ReplyBean"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.GroupBean" x="956" y="451">
+    <Class name="xziar.enhancer.pojo.GroupBean" x="647" y="1097">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -263,7 +290,7 @@
             destinationClassName="xziar.enhancer.pojo.GroupBean.Role"
             endpointName="members" kind="Simple"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.CommentBean" x="1094" y="502">
+    <Class name="xziar.enhancer.pojo.CommentBean" x="478" y="1259">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -272,7 +299,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.PostBean" x="859" y="497">
+    <Class name="xziar.enhancer.pojo.PostBean" x="161" y="1087">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -281,7 +308,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="xziar.enhancer.action.ForumAction" x="-69" y="-81">
+    <Class name="xziar.enhancer.action.ForumAction" x="11" y="3">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -309,7 +336,7 @@
         <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
         <Communication destinationClassName="xziar.enhancer.service.ForumService"/>
     </Class>
-    <Class name="xziar.enhancer.service.TaskService" x="440" y="737">
+    <Class name="xziar.enhancer.service.TaskService" x="1086" y="506">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -325,9 +352,10 @@
         <Communication destinationClassName="xziar.enhancer.dao.TaskDao"/>
         <Communication destinationClassName="xziar.enhancer.pojo.TaskBean"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
         <Communication destinationClassName="xziar.enhancer.pojo.UserBean"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.TaskBean" x="1242" y="392">
+    <Class name="xziar.enhancer.pojo.TaskBean" x="1293" y="1102">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -340,7 +368,7 @@
             endpointName="status" kind="Simple"/>
         <Communication destinationClassName="xziar.enhancer.pojo.TaskBean.Status"/>
     </Class>
-    <Class name="xziar.enhancer.action.TaskAction" x="640" y="-42">
+    <Class name="xziar.enhancer.action.TaskAction" x="1386" y="37">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -364,7 +392,7 @@
         <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
         <Communication destinationClassName="xziar.enhancer.pojo.AccountBean"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.CompanyBean" x="437" y="568">
+    <Class name="xziar.enhancer.pojo.CompanyBean" x="1042" y="1112">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -378,7 +406,16 @@
         <Association destinationClassName="xziar.enhancer.pojo.ImgBean"
             endpointName="img_id" kind="Simple"/>
     </Class>
-    <Class name="xziar.enhancer.pojo.AccountBean.Role" x="733" y="518">
+    <Class name="xziar.enhancer.dao.DaoBase" x="507" y="829">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.pojo.AccountBean.Role" x="962" y="1342">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>

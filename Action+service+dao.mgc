@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="xziar.enhancer.service.AdminService" x="151" y="556">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="xziar.enhancer.dao.TaskDao"
+            endpointName="taskdao" kind="Simple"/>
+        <Association destinationClassName="xziar.enhancer.dao.PostDao"
+            endpointName="postdao" kind="Simple"/>
+        <Association destinationClassName="xziar.enhancer.dao.UserDao"
+            endpointName="userdao" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.dao.UserDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.TaskDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.PostDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
+    </Class>
+    <Class name="xziar.enhancer.dao.UserDao" x="616" y="820">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.dao.TaskDao" x="1163" y="796">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.action.ActionUtil" x="691" y="11">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.service.ForumService" x="-79" y="381">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="xziar.enhancer.dao.PostDao"
+            endpointName="postdao" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.dao.PostDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
+    </Class>
+    <Class name="xziar.enhancer.dao.PostDao" x="-72" y="855">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.dao.ImageDao" x="388" y="831">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.action.ForumAction" x="11" y="3">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.ForumService"
+            endpointName="forumServ" kind="Simple"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.UserService"
+            endpointName="userServ" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Communication destinationClassName="xziar.enhancer.service.ForumService"/>
+    </Class>
+    <Class name="xziar.enhancer.service.TaskService" x="1086" y="506">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="xziar.enhancer.dao.TaskDao"
+            endpointName="taskdao" kind="Simple"/>
+        <Association destinationClassName="xziar.enhancer.dao.UserDao"
+            endpointName="userdao" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.dao.UserDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.TaskDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
+    </Class>
+    <Class name="xziar.enhancer.action.UserInfoAction" x="904" y="200">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.TaskService"
+            endpointName="taskServ" kind="Simple"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.UserService"
+            endpointName="userServ" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.service.TaskService"/>
+        <Communication destinationClassName="xziar.enhancer.service.UserService"/>
+        <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
+    </Class>
+    <Class name="xziar.enhancer.service.UserService" x="580" y="572">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="xziar.enhancer.dao.UserDao"
+            endpointName="userdao" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.dao.UserDao"/>
+        <Communication destinationClassName="xziar.enhancer.dao.DaoBase"/>
+    </Class>
+    <Class name="xziar.enhancer.action.TaskAction" x="1386" y="37">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.TaskService"
+            endpointName="taskServ" kind="Simple"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.UserService"
+            endpointName="userServ" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.service.TaskService"/>
+        <Communication destinationClassName="xziar.enhancer.service.UserService"/>
+        <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
+    </Class>
+    <Class name="xziar.enhancer.action.UserAction" x="710" y="226">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.UserService"
+            endpointName="userServ" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.service.UserService"/>
+        <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
+    </Class>
+    <Class name="xziar.enhancer.dao.DaoBase" x="507" y="829">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="xziar.enhancer.action.AdminAction" x="399" y="24">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Association
+            destinationClassName="xziar.enhancer.service.AdminService"
+            endpointName="adminServ" kind="Simple"/>
+        <Communication destinationClassName="xziar.enhancer.service.AdminService"/>
+        <Communication destinationClassName="xziar.enhancer.action.ActionUtil"/>
+    </Class>
+    <Class name="xziar.enhancer.action.ImgAction" x="981" y="29">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="xziar.enhancer.action.ActionUtil"/>
+        <Communication destinationClassName="xziar.enhancer.dao.ImageDao"/>
+    </Class>
+</ClassDiagram>

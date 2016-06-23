@@ -42,7 +42,7 @@ public class ForumService
 		}
 	}
 
-	public ServRes<ArrayList<PostBean>> GetTasks(int from)
+	public ServRes<ArrayList<PostBean>> GetPosts(int from, int perpage)
 	{
 		if (from < 0)
 			return new ServRes<>(Result.error);
@@ -50,7 +50,7 @@ public class ForumService
 		postdao = new PostDao(conn);
 		try
 		{
-			ArrayList<PostBean> posts = postdao.queryPosts(from, 10, "");
+			ArrayList<PostBean> posts = postdao.queryPosts(from, perpage, "");
 			return new ServRes<>(posts);
 		}
 		catch (SQLException e)
