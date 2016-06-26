@@ -64,6 +64,26 @@ public class ForumService
 		}
 	}
 	
+	public ServRes<ArrayList<PostBean>> GetPosts(UserBean user)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		postdao = new PostDao(conn);
+		try
+		{
+			ArrayList<PostBean> posts = postdao.queryPosts(user);
+			return new ServRes<>(posts);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
 	public ServRes<ArrayList<ReplyBean>> GetReplys(int pid, int from)
 	{
 		if (from < 0)

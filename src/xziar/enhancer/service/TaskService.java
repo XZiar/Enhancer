@@ -88,6 +88,26 @@ public class TaskService
 		}
 	}
 
+	public ServRes<ArrayList<TaskBean>> GetTasks(CompanyBean cpn)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		taskdao = new TaskDao(conn);
+		try
+		{
+			ArrayList<TaskBean> tasks = taskdao.queryTasks(cpn);
+			return new ServRes<>(tasks);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
 	public ServRes<ArrayList<TaskBean>> GetFinTasks(CompanyBean cpn)
 	{
 		Connection conn = DaoBase.getConnection(true);

@@ -74,6 +74,30 @@ public class TaskDao
 	/**
 	 * @param cpn
 	 * @param status
+	 * @return List of tasks of given company
+	 * @throws SQLException
+	 */
+	public ArrayList<TaskBean> queryTasks(CompanyBean cpn) throws SQLException
+	{
+		final String sql_queryTasks = "select * from TaskSimpleData where uid=?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryTasks))
+		{
+			ps.setInt(1, cpn.getUid());
+			ResultSet rs = ps.executeQuery();
+			ArrayList<TaskBean> tasks = new ArrayList<>();
+			while (rs.next())
+			{
+				TaskBean task = new TaskBean();
+				DataInject.RSToObj(rs, task);
+				tasks.add(task);
+			}
+			return tasks;
+		}
+	}
+
+	/**
+	 * @param cpn
+	 * @param status
 	 * @return List of tasks of given company and given state
 	 * @throws SQLException
 	 */

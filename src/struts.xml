@@ -11,8 +11,10 @@
 	<package name="app" namespace="/app" extends="struts-default">
 		<action name="login" class="xziar.enhancer.action.UserAction" method="JLogin" />
 		<action name="task" class="xziar.enhancer.action.TaskAction" method="JList" />
+		<action name="mytask" class="xziar.enhancer.action.TaskAction" method="JMyList" />
 		<action name="taskview" class="xziar.enhancer.action.TaskAction" method="JView" />
 		<action name="forum" class="xziar.enhancer.action.ForumAction" method="JList" />
+		<action name="mypost" class="xziar.enhancer.action.ForumAction" method="JMyList" />
 		<action name="postview" class="xziar.enhancer.action.ForumAction" method="JView" />
 		<action name="replyview" class="xziar.enhancer.action.ForumAction" method="JReplyView" />
 	</package>

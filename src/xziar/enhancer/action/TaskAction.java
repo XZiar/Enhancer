@@ -99,6 +99,28 @@ public class TaskAction extends ActionUtil
 		}
 	}
 
+	public void JMyList()
+	{
+		UserBean user = (UserBean) session.getAttribute("user");
+		if (user == null || user.getAccountRole() != Role.company)
+		{
+			Response(false, "unlogin");
+			return;
+		}
+		ServRes<ArrayList<TaskBean>> res = taskServ.GetTasks((CompanyBean) user);
+		switch (res.toEnum())
+		{
+		case success:
+			tasks = res.getData();
+			datmap.put("tasks", tasks);
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "error");
+		}
+	}
+
 	public void PostTask()
 	{
 		if (OnMethod("get", null))

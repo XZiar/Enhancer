@@ -126,6 +126,27 @@ public class ForumAction extends ActionUtil
 		}
 	}
 
+	public void JMyList()
+	{
+		UserBean user = (UserBean) session.getAttribute("user");
+		if (user == null)
+		{
+			Response(false, "unlogin");
+			return;
+		}
+		ServRes<ArrayList<PostBean>> res = forumServ.GetPosts(user);
+		switch (res.toEnum())
+		{
+		case success:
+			posts = res.getData();
+			datmap.put("posts", posts);
+			Response(true, "");
+		case error:
+		default:
+			Response(false, "error");
+		}
+	}
+
 	public void PostPost()
 	{
 		if (OnMethod("get", null))
