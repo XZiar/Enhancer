@@ -75,7 +75,7 @@ public class UserDao
 			break;
 		case group:
 			sql_query = "select * from UserBasicInfo where uid=?";
-			final String sql_queryGroup = "select muid,role from GroupInfo where guid=?";
+			final String sql_queryGroup = "select muid,name,role from UserBasicInfo inner join GroupInfo on uid=muid where guid=?";
 			user = new GroupBean(account);
 			try (PreparedStatement ps = conn.prepareStatement(sql_queryGroup))
 			{
@@ -84,7 +84,7 @@ public class UserDao
 				((GroupBean) (user)).getMembers().clear();
 				while (rs.next())
 				{
-					((GroupBean) (user)).addMember(rs.getInt(0), rs.getInt(1));
+					((GroupBean) (user)).addMember(rs.getInt(1), rs.getString(2), rs.getInt(3));
 				}
 			}
 			break;
@@ -120,6 +120,24 @@ public class UserDao
 			}
 		}
 		return groups;
+	}
+
+	public ArrayList<StudentBean> queryStudents(String name) throws SQLException
+	{
+		final String sql_queryAccount = "select name,uid,school from StudentData where name like ?";
+		try (PreparedStatement ps = conn.prepareStatement(sql_queryAccount))
+		{
+			ps.setString(1, "%" + name + "%");
+			ResultSet rs = ps.executeQuery();
+			ArrayList<StudentBean> stus = new ArrayList<>();
+			while (rs.next())
+			{
+				StudentBean stu = new StudentBean();
+				DataInject.RSToObj(rs, stu);
+				stus.add(stu);
+			}
+			return stus;
+		}
 	}
 
 	public ArrayList<UserBean> queryUsers(Status status) throws SQLException

@@ -10,6 +10,7 @@
 
 	<package name="app" namespace="/app" extends="struts-default">
 		<action name="login" class="xziar.enhancer.action.UserAction" method="JLogin" />
+		<action name="mygroups" class="xziar.enhancer.action.UserAction" method="GetGroups" />
 		<action name="task" class="xziar.enhancer.action.TaskAction" method="JList" />
 		<action name="mytask" class="xziar.enhancer.action.TaskAction" method="JMyList" />
 		<action name="taskview" class="xziar.enhancer.action.TaskAction" method="JView" />
@@ -77,6 +78,8 @@
 		</action>
 		<action name="addreply" class="xziar.enhancer.action.ForumAction" method="PostReply">
 		</action>
+		
+		<action name="search" class="xziar.enhancer.action.UserAction" method="SearchUser"/>
 		
 		<action name="my" class="xziar.enhancer.action.UserInfoAction" method="Overall">
 			<result name="unlogin" type="redirect">/login.jsp</result>

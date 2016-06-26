@@ -1,9 +1,13 @@
 package xziar.enhancer.action;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.pojo.CompanyBean;
+import xziar.enhancer.pojo.GroupBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.UserBean;
-import xziar.enhancer.pojo.AccountBean.Role;
 import xziar.enhancer.service.UserService;
 import xziar.enhancer.util.ServRes;
 
@@ -11,11 +15,23 @@ public class UserAction extends ActionUtil
 {
 	private String un = "";
 	private String pwd = "";
+	private String name = "";
 	private UserBean user;
 	private StudentBean stu;
 	private CompanyBean cpn;
 
 	UserService userServ = new UserService();
+
+	protected boolean check()
+	{
+		user = (UserBean) session.getAttribute("user");
+		if (user == null || user.getAccountRole() != Role.student)
+		{
+			Response(false, "unlogin");
+			return false;
+		}
+		return true;
+	}
 
 	public void Login()
 	{
@@ -110,6 +126,51 @@ public class UserAction extends ActionUtil
 		}
 	}
 
+	public void SearchUser()
+	{
+		if (!check())
+			return;
+		ServRes<ArrayList<StudentBean>> res = userServ.SearchStudents(name);
+		switch (res.toEnum())
+		{
+		case success:
+			ArrayList<HashMap<String, Object>> stus = new ArrayList<>();
+			for (StudentBean u : res.getData())
+			{
+				HashMap<String, Object> stu = new HashMap<>();
+				stu.put("uid", u.getUid());
+				stu.put("name", u.getName());
+				stu.put("school", u.getSchool());
+				stus.add(stu);
+			}
+			datmap.put("students", stus);
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "系统错误");
+			return;
+		}
+	}
+
+	public void GetGroups()
+	{
+		if (!check())
+			return;
+		ServRes<ArrayList<GroupBean>> res = userServ.GetGroups((StudentBean) user);
+		switch (res.toEnum())
+		{
+		case success:
+			datmap.put("groups", res.getData());
+			Response(true, "");
+			return;
+		case error:
+		default:
+			Response(false, "系统错误");
+			return;
+		}
+	}
+
 	public String getUn()
 	{
 		return un;
@@ -158,5 +219,15 @@ public class UserAction extends ActionUtil
 	public void setCpn(CompanyBean cpn)
 	{
 		this.cpn = cpn;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }

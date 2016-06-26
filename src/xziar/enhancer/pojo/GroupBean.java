@@ -8,36 +8,38 @@ public class GroupBean extends UserBean
 	{
 		leader, member;
 	}
-	
-	private HashMap<Integer,Role> members = new HashMap<>();
+
+	private HashMap<Integer, String> members = new HashMap<>();
 	private int leaderID = -1;
-	
+	private String leaderName = "";
+
+	public GroupBean()
+	{
+		this.role = AccountBean.Role.group;
+	}
+
 	public GroupBean(AccountBean account)
 	{
 		super(account);
 	}
 
-	public void addMember(int muid, int role)
+	public void addMember(int muid, String name, int role)
 	{
-		members.put(muid, Role.values()[role]);
-		if(Role.leader.ordinal() == role)
+		if (Role.leader.ordinal() == role)
+		{
 			setLeaderID(muid);
-	}
-	
-	public HashMap<Integer, Role> getMembers()
-	{
-		return members;
-	}
-
-	public void setMembers(HashMap<Integer, Role> members)
-	{
-		this.members = members;
+			setLeaderName(name);
+		}
+		else
+		{
+			members.put(muid, name);
+		}
 	}
 
 	@Override
 	public int getPeople()
 	{
-		return members.size();
+		return members.size() + 1;
 	}
 
 	public int getLeaderID()
@@ -49,4 +51,25 @@ public class GroupBean extends UserBean
 	{
 		this.leaderID = leaderID;
 	}
+
+	public String getLeaderName()
+	{
+		return leaderName;
+	}
+
+	public void setLeaderName(String leaderName)
+	{
+		this.leaderName = leaderName;
+	}
+
+	public HashMap<Integer, String> getMembers()
+	{
+		return members;
+	}
+
+	public void setMembers(HashMap<Integer, String> members)
+	{
+		this.members = members;
+	}
+
 }

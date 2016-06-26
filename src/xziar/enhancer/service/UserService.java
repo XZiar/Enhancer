@@ -8,6 +8,7 @@ import xziar.enhancer.dao.DaoBase;
 import xziar.enhancer.dao.UserDao;
 import xziar.enhancer.pojo.AccountBean;
 import xziar.enhancer.pojo.AccountBean.Role;
+import xziar.enhancer.pojo.GroupBean;
 import xziar.enhancer.pojo.StudentBean;
 import xziar.enhancer.pojo.UserBean;
 import xziar.enhancer.util.ServRes;
@@ -16,6 +17,47 @@ import xziar.enhancer.util.ServRes.Result;
 public class UserService
 {
 	UserDao userdao = null;
+
+	public ServRes<ArrayList<StudentBean>> SearchStudents(String name)
+	{
+		Connection conn = DaoBase.getConnection(true);
+		userdao = new UserDao(conn);
+		try
+		{
+			ArrayList<StudentBean> users = userdao.queryStudents(name);
+			return new ServRes<>(users);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
+
+	public ServRes<ArrayList<GroupBean>> GetGroups(StudentBean stu)
+	{
+
+		Connection conn = DaoBase.getConnection(true);
+		userdao = new UserDao(conn);
+		try
+		{
+			ArrayList<GroupBean> groups = userdao.queryGroups(stu, false);
+			return new ServRes<>(groups);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ServRes<>(Result.error);
+		}
+		finally
+		{
+			DaoBase.close(conn, null, null);
+		}
+	}
 
 	public ServRes<ArrayList<UserBean>> GetMyApplicants(int uid)
 	{
